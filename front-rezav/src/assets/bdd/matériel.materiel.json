@@ -1,0 +1,451 @@
+[{
+  "_id": {
+    "$oid": "66e91f52a81b36504c2a5aa2"
+  },
+  "name": "Canon 1000 D",
+  "picture": "test.png",
+  "description": "",
+  "categorie": "Boitiers photo",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92019a81b36504c2a5aa3"
+  },
+  "name": "Canon 80 D",
+  "picture": "test.png",
+  "description": "",
+  "categorie": "Boitiers photo",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92079a81b36504c2a5aa4"
+  },
+  "name": "Trépied photo",
+  "picture": "test.png",
+  "description": "",
+  "categorie": "Boitiers photo",
+  "state": "Libre",
+  "isLate": false
+},
+{
+  "_id": {
+    "$oid": "66e920aea81b36504c2a5aa5"
+  },
+  "name": "Carte SD",
+  "picture": "test.png",
+  "description": "",
+  "categorie": "Boitiers photo",
+  "state": "Libre",
+  "isLate": false
+},
+{
+  "_id": {
+    "$oid": "66e92104a81b36504c2a5aa6"
+  },
+  "name": "Carte SD",
+  "picture": "test.png",
+  "description": "",
+  "categorie": "Boitiers photo",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92149a81b36504c2a5aa7"
+  },
+  "name": "Micro cravate HF",
+  "picture": "test2.png",
+  "description": "",
+  "categorie": "Son",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92181a81b36504c2a5aa8"
+  },
+  "name": "Micro canon Rode NTG1",
+  "picture": "test2.png",
+  "description": "",
+  "categorie": "Son",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e921b5a81b36504c2a5aa9"
+  },
+  "name": "Micro de studio Rode NT1A",
+  "picture": "test2.png",
+  "description": "",
+  "categorie": "Son",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e921fba81b36504c2a5aaa"
+  },
+  "name": "Tascam DR-100",
+  "picture": "test2.png",
+  "description": "",
+  "categorie": "Son",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92235a81b36504c2a5aab"
+  },
+  "name": "Casque",
+  "picture": "test2.png",
+  "description": "",
+  "categorie": "Son",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e9232ba81b36504c2a5aac"
+  },
+  "name": "Micro main",
+  "picture": "test2.png",
+  "description": "",
+  "categorie": "Son",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92350a81b36504c2a5aad"
+  },
+  "name": "Rode Videomic",
+  "picture": "test2.png",
+  "description": "",
+  "categorie": "Son",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92387a81b36504c2a5aae"
+  },
+  "name": "Perche + suspension",
+  "picture": "test2.png",
+  "description": "",
+  "categorie": "Son",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e923bfa81b36504c2a5aaf"
+  },
+  "name": "Tascam DR-40",
+  "picture": "test2.png",
+  "description": "",
+  "categorie": "Son",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e9257ca81b36504c2a5ab0"
+  },
+  "name": "Mandarine 800 watts",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e926a9a81b36504c2a5ab1"
+  },
+  "name": "Litedome",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e926e0a81b36504c2a5ab2"
+  },
+  "name": "Trépied",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92745a81b36504c2a5ab3"
+  },
+  "name": "Fresnel LED",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e927a1a81b36504c2a5ab4"
+  },
+  "name": "Trépied",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e927e4a81b36504c2a5ab5"
+  },
+  "name": "Panneau LED rectangle",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e927eda81b36504c2a5ab6"
+  },
+  "name": "Trépied",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e927fea81b36504c2a5ab7"
+  },
+  "name": "Panneau LED carré",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92806a81b36504c2a5ab8"
+  },
+  "name": "Trépied",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92819a81b36504c2a5ab9"
+  },
+  "name": "Panneau LED flexible",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92834a81b36504c2a5aba"
+  },
+  "name": "Trépied",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92848a81b36504c2a5abb"
+  },
+  "name": "Batterie",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92865a81b36504c2a5abc"
+  },
+  "name": "Batterie",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e9287da81b36504c2a5abd"
+  },
+  "name": "Réflecteur",
+  "picture": "test3.png",
+  "description": "",
+  "categorie": "Eclairage",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92886a81b36504c2a5abe"
+  },
+  "name": "Panasonic HD",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e928cda81b36504c2a5abf"
+  },
+  "name": "Carte P2",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e928e4a81b36504c2a5ac0"
+  },
+  "name": "Blackmagic Pocket Cinema",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e928f8a81b36504c2a5ac1"
+  },
+  "name": "Carte SD",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e9290ba81b36504c2a5ac2"
+  },
+  "name": "Moniteur de contrôle",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92920a81b36504c2a5ac3"
+  },
+  "name": "Trépied",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92930a81b36504c2a5ac4"
+  },
+  "name": "Insta 360 X3",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e9293da81b36504c2a5ac5"
+  },
+  "name": "Trépied photo",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Boitiers photo",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92958a81b36504c2a5ac6"
+  },
+  "name": "Optique 12-35mm",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92968a81b36504c2a5ac7"
+  },
+  "name": "Optique 12-60mm",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e9297ca81b36504c2a5ac8"
+  },
+  "name": "Optique 35-100mm",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e92990a81b36504c2a5ac9"
+  },
+  "name": "Slider 1m",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+},
+{
+  "_id": {
+    "$oid": "66e929a3a81b36504c2a5aca"
+  },
+  "name": "Rig épaulière",
+  "picture": "test4.png",
+  "description": "",
+  "categorie": "Cameras",
+  "isLate": false,
+  "state": "Libre"
+}]

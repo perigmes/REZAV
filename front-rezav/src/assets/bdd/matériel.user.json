@@ -1,0 +1,13 @@
+[{
+  "_id": {
+    "$oid": "66f10f5732f6e175c7102156"
+  },
+  "email": "clementine.prouteau.etu@univ-lemans.fr",
+  "admin_id": "1",
+  "reservation_id": [
+    ""
+  ],
+  "affiliation": "student",
+  "firstName": "Clémentine",
+  "lastname": "Prouteau"
+}]

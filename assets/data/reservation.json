@@ -1,0 +1,55 @@
+[  {
+        "_id": "66e93000a81b36504c2a5ac1",
+        "user": "testUser", 
+        "reservationDate": "2024-11-28T09:00:00Z", 
+        "returnDate": "2024-11-30T09:00:00Z", 
+        "projectName": "Film Documentaire", 
+        "projectDescription": "Tournage d'un documentaire sur la nature en milieu urbain",
+        "user_id":1,
+        "groupMembers": [
+          {
+            "firstName": "Charlie",
+            "lastName": "Charron"
+          }
+        ],
+        "audiovisualPlan": "https://example.com/plan-implantation-audiovisuel.pdf",
+        "items": [
+          {
+            "itemId": "66e91f52a81b36504c2a5aa2",
+            "name": "Canon 1000 D",
+            "category": "Boitiers photo",
+            "quantity": 1,
+            "state": "Réservé"
+          },
+          {
+            "itemId": "66e92149a81b36504c2a5aa7",
+            "name": "Micro cravate HF",
+            "category": "Son",
+            "quantity": 2,
+            "state": "Réservé"
+          },
+          {
+            "itemId": "66e9257ca81b36504c2a5ab0",
+            "name": "Mandarine 800 watts",
+            "category": "Eclairage",
+            "quantity": 1,
+            "state": "Réservé"
+          },
+          {
+            "itemId": "66e92886a81b36504c2a5abe",
+            "name": "Panasonic HD",
+            "category": "Cameras",
+            "quantity": 1,
+            "state": "Réservé"
+          }
+        ],
+        "totalItems": 5,
+        "status": "Pending", 
+        "notes": "Réservation pour un tournage de 3 jours, en attente de validation par le professeur",
+        "professor": {
+          "email": "perigmes@gmail.com",
+          "status": "Pending"
+        }
+      }
+      
+]
