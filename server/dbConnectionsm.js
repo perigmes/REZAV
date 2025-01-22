@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-mongoose.connect('mongodb://etudiant:SAE501@localhost/test', {
+mongoose.connect('mongodb://etudiant:SAE501@mongodb_container1:27017/test', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
