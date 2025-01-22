@@ -12,7 +12,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:3000", // Autoriser les requêtes depuis React
+    origin: ["http://localhost:3000","lammi-saes5-01.univ-lemans.fr"], // Autoriser les requêtes depuis React
     methods: ["GET", "POST", "DELETE", "PUT","PATCH"], // Méthodes autorisées
     allowedHeaders: ["Content-Type", "Authorization"], // En-têtes autorisés
   }));
