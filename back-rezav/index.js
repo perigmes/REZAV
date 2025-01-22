@@ -15,7 +15,7 @@ app.use(express.json());
 // Ajouter le middleware CORS
 app.use(cors({
   origin: ["http://localhost:3000", "https://lammi-saes5-01.univ-lemans.fr"], // Autoriser les requêtes depuis React
-  methods: ["GET", "POST", "DELETE", "PUT"], // Méthodes autorisées
+  methods: ["GET", "POST", "DELETE", "PUT","PATCH"], // Méthodes autorisées
   allowedHeaders: ["Content-Type", "Authorization"], // En-têtes autorisés
 }));
 
