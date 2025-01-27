@@ -1,10 +1,10 @@
 import { createSelector } from "reselect";
 
 export const selectObjects = (state) => [...state.demande.objects].sort((a, b) => a.name.localeCompare(b.name));
+export const selectDataDemande = (state) => state.demande.dataDemande;
 export const selectReservations = (state) => state.demande.reservations;
 export const selectObjIsSelectable = (state) => state.demande.objIsSelectable;
 export const selectSelectedObjects = (state) => state.demande.dataDemande.objects;
-export const selectDataDemande = (state) => state.demande.dataDemande;
 export const selectSearchBarre = (state) => state.demande.searchBarre;
 export const selectFilter = (state) => state.demande.filter;
 export const selectErrorFormDemande = (state) => state.demande.errors.errorFormDemande;

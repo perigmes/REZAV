@@ -94,6 +94,9 @@ const demandeSlice = createSlice({
         (selectedId) => selectedId !== id
       );
     },
+    updatedSelectedObjects: (state, action) => {
+      state.dataDemande.objects = action.payload;
+    },
     setInfoObject: (state, action) => {
       state.objInfos = action.payload;
     },
@@ -189,7 +192,7 @@ export const {
   setReturnDT,
   setFormValidation,
   setSelectedObjects,
-  updateSelectedObjects
+  updateSelectedObjects,
 } = demandeSlice.actions;
 
 export default demandeSlice.reducer;
