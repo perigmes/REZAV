@@ -1,0 +1,60 @@
+@use "variables" as *;
+
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  height: fit-content;
+  width: 100%;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  left: 0;
+  background: $white;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
+  z-index: 2;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  box-sizing: border-box;
+  margin-bottom: 25px;
+
+  .app-logo {
+    width: fit-content;
+    max-height: 30px;
+    object-fit: contain;
+  }
+
+  nav {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    
+  }
+  .burger-menu {
+    display: none;
+  }
+}
+
+@media only screen and (max-width : 900px) {
+    .header {
+        .burger-menu {
+            display: flex;
+            background-color: transparent;
+            color: $mauve-rezav-75;
+            border: none;
+            font-size: $font-size-32;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                color: $mauve-rezav;
+                transform: scale(1.05);
+            }
+        }
+        
+        nav {
+            display: none;
+        }
+    }
+    
+}
