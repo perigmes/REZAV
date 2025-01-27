@@ -10,8 +10,6 @@ import { loadMateriel, loadReservation } from './features/demande/reservationsAs
 import { Reservation } from './pages/Reservation';
 import Demarches from './pages/Demarches';
 import NavFormBtns from './components/objects/NavFormBtns';
-import ObjectsResPage from './pages/ObjectsResPage';
-import NavFormBtns2 from './components/objects/NavFormBtns2';
 
 const NavFormBtnsLayout = () => {
   return (
@@ -21,15 +19,6 @@ const NavFormBtnsLayout = () => {
     </>
   );
 };
-
-const NavFormBtns2Layout = () => {
-  return (
-    <>
-      <Outlet />
-      <NavFormBtns2 />
-    </>
-  );
-}
 
 export default function App() {
   const dispatch = useDispatch();
@@ -47,10 +36,6 @@ export default function App() {
           <Route element={<NavFormBtnsLayout />}>
             <Route path="/list-objects" element={<ListObjects />} />
             <Route path="/formulaire-reservation" element={<Formulaire />} />
-          </Route>
-          <Route element={<NavFormBtns2Layout/>}>
-            <Route path='/test' element={<ObjectsResPage/>}/>
-
           </Route>
           <Route path='/reservation-confirmation/:response/:id' element={<Reservation/>}/>
           <Route path='/mes-demarches' element={<Demarches/>}/>

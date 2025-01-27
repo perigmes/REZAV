@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { v4 as uuid } from "uuid";
 import {
   selectDataDemande,
   selectFormStep,
   selectFormValidation,
   selectObjects,
 } from "../features/demande/demandeSelector";
+import { useNavigate } from 'react-router-dom';
+
 import {
   setFormValidation,
   updateDataDemande,
@@ -22,6 +23,18 @@ export const Formulaire = () => {
   const isFormValide = useSelector(selectFormValidation);
   const dispatch = useDispatch();
   const group = useSelector(selectDataDemande).group;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (
+      dataDemande.startDT === "" || 
+      dataDemande.returnDT === "" || 
+      dataDemande.objects.length === 0
+    ) {
+      navigate('/list-objects');
+    }
+  }, []);
+  
 
   const filteredObjects = objects.filter((obj) =>
     dataDemande.objects.includes(obj._id)

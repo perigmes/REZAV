@@ -15,7 +15,7 @@ import '../assets/styles/main-header.scss';
 const MainHeader = () => {
     const dispatch = useDispatch();
     const objIsSelectable = useSelector(selectObjIsSelectable); // Indique si l'objet est sélectionnable
-    const { startDT, returnDT } = useSelector(selectReservationDates); // Dates de réservation depuis le store
+    const { startDT, returnDT } = useSelector(selectReservationDates);
     const location = useLocation();
     const refStartDate = useRef(null);
     const refReturnDate = useRef(null);
