@@ -162,7 +162,7 @@ const demandeSlice = createSlice({
           if (obj._id === action.payload._id) {
             const newObj = {
               ...action.payload,
-              picture: "http://localhost:5000/" + action.payload.picture,
+              picture:  action.payload.picture,
             };
             return newObj;
           } else {
