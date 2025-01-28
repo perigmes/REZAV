@@ -37,7 +37,11 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    setActiveTab(location.pathname);
+    if (location.pathname === "/formulaire-reservation") {
+      setActiveTab("/list-objects");
+    } else {
+      setActiveTab(location.pathname);
+    }
   }, [location.pathname]);
 
   const handleTabChange = (event, newValue) => {
@@ -71,16 +75,15 @@ const Header = () => {
 
   return (
     <header className="header">
-      <img
-        className="app-logo"
+      <Link className="app-logo" to="/"><img
         src={logo}
         alt="Logo de l'application Rezav, application de réservation du matériel audiovisuel du département MMI de l'IUT de Laval"
-      />
+      /></Link>
       <nav>
         <ThemeProvider theme={theme}>
           <Tabs value={activeTab} onChange={handleTabChange} centered>
             <Tab label="Tableau de bord" value="/" />
-            <Tab label="Liste du matériel" value="/list-objects" />
+            <Tab label="Liste du matériel" value={"/list-objects"} />
             <Tab label="Mes démarches" value="/mes-demarches" />
           </Tabs>
         </ThemeProvider>
@@ -101,12 +104,12 @@ const Header = () => {
         anchor="right"
         open={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
+        className="mobile-menu"
         PaperProps={{
           sx: {
             width: "50vw",
             maxWidth: "250px",
             height: "100%",
-            backgroundColor: "#fff",
           },
         }}
         BackdropProps={{
@@ -125,21 +128,17 @@ const Header = () => {
           role="presentation"
         >
           <button
-            className="material-symbols-rounded burger-menu"
+            className="material-symbols-rounded burger-close"
             onClick={() => setIsDrawerOpen(false)}
             onKeyDown={() => setIsDrawerOpen(false)}>close</button>
           <nav>
-            <ul>
-              <li>
-                <Link to="/">Tableau de bor</Link>
-              </li>
-              <li>
-                <Link to="/list-objects">Liste du matériel</Link>
-              </li>
-              <li>
-                <Link to="/mes-demarches">Mes démarches</Link>
-              </li>
-            </ul>
+            <ThemeProvider theme={theme}>
+              <Tabs value={activeTab} onChange={handleTabChange} orientation="vertical" centered>
+                <Tab label="Tableau de bord" value="/" />
+                <Tab label="Liste du matériel" value="/list-objects" />
+                <Tab label="Mes démarches" value="/mes-demarches" />
+              </Tabs>
+            </ThemeProvider>
             <button className="rezav-button-2">
               <span className="material-symbols-rounded">logout</span>
               Déconnexion

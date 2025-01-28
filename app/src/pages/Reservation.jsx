@@ -17,7 +17,7 @@ export const Reservation = () => {
     setIsSended(true)
   };
   return (
-    <div>
+    <div className="main-content reservation-conf">
         {isSended ? (<p>La réponse a bien été envoyée</p>): 
             <><h1>Reservation</h1>
             <form onSubmit={handleSubmit}>

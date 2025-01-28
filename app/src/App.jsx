@@ -9,9 +9,11 @@ import {
   Route,
   Navigate,
   Outlet,
+  useLocation,
 } from "react-router-dom";
 import "./assets/styles/commun.scss";
 import "./assets/styles/card.scss";
+
 import {
   loadMateriel,
   loadReservation,
@@ -20,6 +22,7 @@ import { Reservation } from "./pages/Reservation";
 import Demarches from "./pages/Demarches";
 import NavFormBtns from "./components/objects/NavFormBtns";
 import Header from "./components/Header";
+import TableauBord from "./pages/TableauBord";
 
 const NavFormBtnsLayout = () => {
   return (
@@ -29,6 +32,7 @@ const NavFormBtnsLayout = () => {
     </>
   );
 };
+
 
 export default function App() {
   const dispatch = useDispatch();
@@ -41,9 +45,9 @@ export default function App() {
     <BrowserRouter>
       <Header />
       <main>
-          <MainHeader />
+        <MainHeader />
           <Routes>
-            <Route path="/" element={<Navigate to="/list-objects" replace />} />
+            <Route path="/" element={<TableauBord />} />
             <Route element={<NavFormBtnsLayout />}>
               <Route path="/list-objects" element={<ListObjects />} />
               <Route path="/formulaire-reservation" element={<Formulaire />} />
@@ -55,6 +59,6 @@ export default function App() {
             <Route path="/mes-demarches" element={<Demarches />} />
           </Routes>
       </main>
-      </BrowserRouter>
+    </BrowserRouter>
   );
 }
