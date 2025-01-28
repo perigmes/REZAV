@@ -9,6 +9,7 @@ main {
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr;
   column-gap: 10px;
+  overflow: hidden;
 
   .res-list-obj {
     grid-column: 1/2;
@@ -123,7 +124,7 @@ main {
       height: 100%;
       border: 0;
       padding: 10px 10% 75px 10%;
-      overflow-x: scroll;
+      overflow-x: auto;
 
       h4 {
         font-size: $font-size-18;
