@@ -15,11 +15,8 @@ const ObjectPopup = () => {
   const userInfos = useSelector(selectUSerInfos);
   const [infos, setInfos] = useState(infoObject);
 
-  // Stocker l'aperçu temporaire de l'image
   const [preview, setPreview] = useState(
-    infoObject.picture instanceof File
-      ? null
-      : infoObject.picture // Si c'est une URL, la garder
+    infoObject.picture instanceof File ? null : infoObject.picture
   );
 
   const closePopup = () => {
@@ -29,10 +26,8 @@ const ObjectPopup = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Mettre à jour l'état avec le fichier brut
       setInfos({ ...infos, picture: file });
 
-      // Générer un aperçu temporaire de l'image
       const filePreview = URL.createObjectURL(file);
       setPreview(filePreview);
     }
@@ -40,7 +35,7 @@ const ObjectPopup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
     formData.append("categorie", infos.categorie);
     formData.append("name", infos.name);
@@ -49,7 +44,7 @@ const ObjectPopup = () => {
     if (infos.picture instanceof File) {
       formData.append("picture", infos.picture);
     }
-  
+
     dispatch(updateObject({ id: infos._id, data: formData }));
     closePopup();
   };
@@ -61,13 +56,16 @@ const ObjectPopup = () => {
       isOpen={infos && Object.keys(infos).length > 0}
     >
       <div className="object-popup-content">
-        <button onClick={closePopup} className="btnClose">X</button>
+        <button onClick={closePopup} className="material-symbols-rounded btnClose">
+        close
+        </button>
+        
         {userInfos.role === "admin" ? (
           <>
             <form onSubmit={handleSubmit} method="post">
               <div className="formPopup">
                 <img
-                  src={preview} // Utilisez l'aperçu temporaire ou l'URL d'origine
+                  src={preview}
                   alt={infos.name}
                   className="imgObject"
                 />
@@ -132,7 +130,7 @@ const ObjectPopup = () => {
                       type="file"
                       name="picture"
                       accept="image/webp"
-                      onChange={handleFileChange} // Appelle la fonction handleFileChange
+                      onChange={handleFileChange}
                       className="fileBtn"
                     />
                   </div>
@@ -149,31 +147,32 @@ const ObjectPopup = () => {
             </form>
           </>
         ) : (
- <div className="formPopup">
-                <img
-                  src={preview} // Utilisez l'aperçu temporaire ou l'URL d'origine
-                  alt={infos.name}
-                  className="imgObject"
-                />
-                <div className="object-infos">
-                    <h2 className="objects-filtered-title">{infos.categorie}</h2>
-                    <p
-                      id="name"
-                      name="name"
-                      className="w-100 text1"
-                    >{infos.name}</p>
+          <div className="formPopup">
+            <img
+              src={preview}
+              alt={infos.name}
+              className="imgObject"
+            />
+            <div className="object-infos">
+              <h2 className="objects-filtered-title">{infos.categorie}</h2>
+              <p id="name" name="name" className="w-100 text1">
+                {infos.name}
+              </p>
 
-                  <div className="rezav-input input-txt">
-                    <label htmlFor="description" className="text1">Description</label>
-                    <pre name="description"
-                      id="description" className="w-100 text2">
-                      
-                      {infos.description}
-                      </pre>
-                  </div>
-                
-                </div>
+              <div className="rezav-input input-txt">
+                <label htmlFor="description" className="text1">
+                  Description
+                </label>
+                <pre
+                  name="description"
+                  id="description"
+                  className="w-100 text2"
+                >
+                  {infos.description}
+                </pre>
               </div>
+            </div>
+          </div>
         )}
       </div>
     </Modal>

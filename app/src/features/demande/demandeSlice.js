@@ -16,12 +16,11 @@ const demandeSlice = createSlice({
     formValidation: false,
     user: {
       _id: "test",
-      name: "admin",
       email: "perigmes@gmail.com",
       role: "admin",
       affiliation: "professor",
-      firstName: "Test",
-      lastName: "adminName",
+      firstName: "Pierrick",
+      lastName: "Breaud",
       idUser: "itest",
     },
     dataDemande: {

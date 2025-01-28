@@ -43,7 +43,7 @@ const ListObjects = () => {
     const IsInfos= stateObjInfos._id??'';
 
     return (
-        <div className="objects-list">
+        <div className="main-content list-objects">
             {filters && searchBarre.trim().length === 0 && [...filters].map((filter, index) => (
                 <ObjectsByFilter key={index} filter={filter} />
             ))}

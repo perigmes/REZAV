@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectErrorFormDemande, selectObjIsSelectable, selectReservationDates, selectUSerInfos } from "../features/demande/demandeSelector";
 import { useLocation } from 'react-router-dom';
 import { setErrorFormDemande, setReturnDT, setSearchBarre, setStartDT } from "../features/demande/demandeSlice";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -57,7 +57,6 @@ const MainHeader = () => {
                 dispatch(setErrorFormDemande(true));
                 dispatch(setReturnDT(""));
             }
-            // setErrorMessage(formatErrorMessage(errors));
         } else if (!newValue?.isValid()) {
             if (type === "start") {
                 dispatch(setStartDT(""));
@@ -87,11 +86,32 @@ const MainHeader = () => {
         const search = e.target.value;
         dispatch(setSearchBarre(search));
     };
+    
+    const useDynamicTitle = () => {
+        const dynamicString = useMemo(() => {
+            switch (location.pathname) {
+                case '/' :
+                    return "Tableau de bord";
+                case '/list-objects' :
+                    return "Liste du matériel";
+                case '/formulaire-reservation' :
+                    return "Formulaire de réservation";
+                case '/mes-demarches' :
+                    return "Mes démarches";
+                default:
+                    return "Page non trouvée";
+            }
+        }, [location.pathname]);
+
+        return dynamicString;
+    };
+
+    const dynamicString = useDynamicTitle();
 
     return (
         <header className={`main-hdr${location.pathname === '/list-objects' ? ' list-obj' : ''}${location.pathname === '/list-objects' && objIsSelectable ? ' selectable' : ''}${location.pathname === '/formulaire-reservation' ? ' res-form-hdr' : ''}`}>
             <h2 className="page-title">
-                {location.pathname === '/list-objects' ? "Liste du matériel" : "Formulaire de réservation"}
+                {dynamicString}
             </h2>
             {location.pathname === '/list-objects' && objIsSelectable && (
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
