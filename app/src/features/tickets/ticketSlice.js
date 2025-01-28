@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { loadReservations, loadAllStatusesReservation } from './ticketAsyncAction.js';
 
 const ticketSlice = createSlice({
-  name: "reservations",
+  name: 'reservations',
   initialState: {
     reservations: [],
     selectedReservation: "",
@@ -25,7 +25,6 @@ const ticketSlice = createSlice({
       state.selectedStatus = action.payload
     }
   },
-  extraReducers: (builder) => {
   extraReducers: (builder) => {
     builder
       // Chargement des réservations
