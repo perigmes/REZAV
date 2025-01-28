@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
-import OpenPDFButton from "./OpenPDFButton";
-import { selectStatusReservation } from "../features/tickets/ticketSelector";
-import { selectObjects } from "../features/demande/demandeSelector";
+import OpenPDFButton from "../OpenPDFButton";
+import { selectStatusReservation } from "../../features/tickets/ticketSelector";
+import { selectObjects } from "../../features/demande/demandeSelector";
 
 const TicketDetails = ({ reservation }) => {
   const objects = useSelector(selectObjects);

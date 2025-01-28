@@ -119,6 +119,25 @@ main {
       flex-direction: column;
       gap: 5px;
     }
+    .object-grid{
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      .object-card{
+        width: 75px;
+        height: 75px;
+        border-radius: 10px;
+        box-shadow: -10px 10px 15px 0px rgba(0, 0, 0, 0.17);
+        border-style: solid;
+  border-width: 1px 1px 0 0;
+  border-color: rgb(255, 255, 255);
+        overflow: hidden;
+
+      }
+      img{
+        height: 100%;
+      }
+    }
   }
 
 }
