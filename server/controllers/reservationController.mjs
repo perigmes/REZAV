@@ -50,13 +50,40 @@ export const GetReservationsByUserId = async (req, res) => {
   }
 }
 
-  
+export const GetLast5AcceptedReservationsByUserId = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const reservationsCollection = db.collection('reservations');
+    const userReservations = await reservationsCollection.find({ userId }).toArray();
+
+    const reservationStatuses = [...new Set(userReservations.map(res => res.idStatus))];
+
+    const statusCollection = db.collection('reservation_status');
+    const relevantStatuses = await statusCollection
+      .find({ idStatus: { $in: reservationStatuses } })
+      .toArray();
+
+    const acceptedReservations = userReservations
+      .filter((reservation) => {
+        const status = relevantStatuses.find(stat => stat.idStatus === reservation.idStatus);
+        return status && status.status === 'accepted';
+      })
+      .sort((a, b) => new Date(b.reservationDate) - new Date(a.reservationDate))
+
+    res.status(200).json(acceptedReservations);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erreur lors de la récupération des réservations acceptées de l'utilisateur" });
+  }
+};
+
  export const UpdateReservationStatus= async (req, res) => {
     const id = req.params.id;
     const status = req.body.newData.status;
     const justification = req.body.newData.justification ?? '';
   try{
-     let collection = await db.collection('reservation_status');    
+    let collection = await db.collection('reservation_status');    
     let result = await collection.findOneAndUpdate({idStatus:id},{$set:{status:status}});
 
    sendResponseEmail(justification).catch((emailError) => {

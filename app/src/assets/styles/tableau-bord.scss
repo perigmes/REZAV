@@ -15,7 +15,7 @@
         border-radius: 10px;
         display: grid;
         padding: 15px;
-        grid-template-columns: auto auto;
+        grid-template-columns: max-content max-content 1fr;
         grid-template-rows: auto 1fr 1fr;
         gap: 10px;
 
@@ -30,7 +30,7 @@
             padding: 15px;
             box-sizing: border-box;
             max-width: 500px;
-            width: 100%;
+            min-width: 400px;
 
             &.shared-styles {
                 display: flex;

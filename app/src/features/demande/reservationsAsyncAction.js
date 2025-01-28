@@ -54,10 +54,11 @@ export const loadUser= createAsyncThunk('reservation/loadMaterial', async (_,{re
         return rejectWithValue("L'application est actuellement indisponible, Veuillez réessayer ultérieurement en cas de problème lors du chargement du matériel")
     }
     });
+
 export const updateObject = createAsyncThunk('reservation/updateObject', async ({ id, data }, {rejectWithValue}) => {
 
     try {
-                const response = await axios.patch(`${URL_API_RESERVATIONS}/items/${id}`, data);
+        const response = await axios.patch(`${URL_API_RESERVATIONS}/items/${id}`, data);
         return response.data.result;
     } catch (error) {
         return rejectWithValue(error.response.data.error.message);
@@ -72,6 +73,16 @@ console.log(data.get('name'));
                       'Content-Type': 'multipart/form-data',  // Assure-toi que le type de contenu est bien multipart/form-data
                     }});
         return response.data.item;
+    } catch (error) {
+        return rejectWithValue(error.response.data.error.message);
+    }
+});
+
+export const getLast5ValidReservations = createAsyncThunk('reservation/getLastValidReservations', async ( userId , {rejectWithValue}) => {
+
+    try {
+        const response = await axios.get(`${URL_API_RESERVATIONS}/reservation/user/${userId}/lastValid`);
+        return response.data;
     } catch (error) {
         return rejectWithValue(error.response.data.error.message);
     }
