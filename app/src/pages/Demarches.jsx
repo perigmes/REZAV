@@ -1,17 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  loadReservations,
-  loadAllStatusesReservation
-} from "../features/tickets/ticketAsyncAction.js";
-import {
-  selectReservations,
-  selectIsLoading,
-  selectSelectedReservation,
-  selectAllStatus,
-} from "../features/tickets/ticketSelector";
-import TicketsList from "../components/TicketsList";
-import TicketDetails from "../components/TicketsDetails.jsx";
+import { loadReservations, loadAllStatusesReservation } from "../features/tickets/ticketAsyncAction.js";
+import { selectReservations, selectIsLoading, selectSelectedReservation, selectAllStatus } from "../features/tickets/ticketSelector";
+import TicketsList from "../components/tickets/TicketsList";
+import TicketDetails from "../components/tickets/TicketsDetails.jsx";
 import "../assets/styles/tickets.scss";
 
 const Demarches = () => {

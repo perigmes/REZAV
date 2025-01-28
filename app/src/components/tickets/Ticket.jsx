@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setselectedReservation, setStatus } from "../features/tickets/ticketSlice";
+import { setselectedReservation, setStatus } from "../../features/tickets/ticketSlice";
 
 function Ticket({ reservation, listOfStatuses }) {
   const dispatch = useDispatch();

@@ -134,7 +134,7 @@ const demandeSlice = createSlice({
       .addCase(loadMateriel.fulfilled, (state, action) => {
         state.objects = action.payload;
         state.objects.map(
-          (obj) => (obj.picture = 'http://localhost:5000/'+obj.picture)
+          (obj) => (obj.picture = 'http://localhost:5000/' + obj.picture)
         );
         state.loadingObjects = false;
         state.errors.apiErrorObjectsLoad = null;
