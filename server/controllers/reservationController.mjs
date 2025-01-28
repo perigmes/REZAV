@@ -182,5 +182,23 @@ export const UpdateReservationStatus = async (req, res) => {
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ error: "Erreur lors de la modification du statut" });
+  } 
+      }
+
+
+
+// Route pour récupérer tous les statuts des réservations
+export const getAllStatuses = async (req, res) => {
+  try {
+    const collection = await db.collection('reservation_status');
+    const documents = req.params;
+    const result = await collection.find(documents).toArray();
+    res.status(200).json(result);
+
+  } catch (error) {
+    console.error('Erreur lors de la récupération des statuts :', error);
+    res.status(500).json({ error: "Impossible de récupérer les statuts des réservations." });
+
   }
 };
+

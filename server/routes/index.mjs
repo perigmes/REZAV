@@ -25,7 +25,7 @@ router.get("/reservation/user/:userId", GetReservationsByUserId);
 //routes reservation status
 router.patch("/reservation/requestStatus/:id", UpdateReservationStatus);
 
-//routes pour le tableau de bord
-router.get("/reservation/user/:userId/lastValid", GetLast5AcceptedReservationsByUserId);
-router.get("/reservation/user/:userId/lastInvalid", GetLast3DemandesByUserId)
+// Route pour récupérer tous les statuts des réservations
+router.get('/reservation/statuses', getAllStatuses);
+
 
