@@ -24,3 +24,7 @@ router.get("/reservation/user/:userId", GetReservationsByUserId);
 //routes reservation status
 router.patch("/reservation/requestStatus/:id", UpdateReservationStatus);
 
+// Route pour récupérer tous les statuts des réservations
+router.get('/reservation/statuses', getAllStatuses);
+
+
