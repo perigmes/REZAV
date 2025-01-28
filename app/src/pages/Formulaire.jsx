@@ -15,7 +15,6 @@ export const Formulaire = () => {
         },
     ]);
     const objectSelected = useSelector(selectSelectedObjects);
-    console.log(objectSelected)
     const TD = ["TD11", "TD12", "TD13", "TD21", "TD22", "TD23", "TD31", "TD32", "TD33"];
     const dispatch = useDispatch();
 

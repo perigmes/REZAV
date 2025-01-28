@@ -9,7 +9,7 @@ export const Reservation = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event.target)
+
     dispatch(confirmReservation(
       {reservationId:id,
         status:event.target.response.value,

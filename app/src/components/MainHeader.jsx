@@ -70,7 +70,6 @@ const MainHeader = () => {
 
         const startError = refStartDate.current.parentElement.classList.contains("error");
         const returnError = refReturnDate.current.parentElement.classList.contains("error");
-        console.log(startError, returnError);
 
         if (errorFormDemande && startError && returnError) {
             setErrorMessage("La date d'emprunt doit être minimum au " + dayjs(miniDate).format('DD/MM/YYYY') + " et la date de retour doit être postérieure à la date d'emprunt.");
