@@ -1,8 +1,16 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "../assets/styles/tableau-bord.scss";
-import { selectUSerInfos } from "../features/demande/demandeSelector";
+import { selectLast5ValidReservations, selectUSerInfos } from "../features/demande/demandeSelector";
+import { getLast5ValidReservations } from "../features/demande/reservationsAsyncAction";
+import { useEffect } from "react";
 const TableauBord = () => {
+  const dispatch = useDispatch();
   const user = useSelector(selectUSerInfos);
+  useEffect(() => {
+    dispatch(getLast5ValidReservations("testUser"));
+  }, [dispatch]);
+  const last5ValidReservations = useSelector(selectLast5ValidReservations);
+  console.log(last5ValidReservations);
 
   return (
     <div className="main-content tableau-bord">
@@ -15,6 +23,7 @@ const TableauBord = () => {
             <p>Retrouvez ici toutes vos réservations</p>
           </header>
           <div className="list-reservations">
+            
           </div>
           <button className="tab-sec-btn">Consulter mes réservations</button>
         </div>

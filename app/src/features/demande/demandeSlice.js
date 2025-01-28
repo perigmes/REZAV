@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addReservation, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
+import { addReservation, getLast5ValidReservations, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
 import { getDatePlusDays } from '../../utils/tools';
 
 const demandeSlice = createSlice({
@@ -7,6 +7,7 @@ const demandeSlice = createSlice({
   initialState: {
     objects: [],
     reservations: [],
+    last5ValidReservations: [],
     objIsSelectable: false,
     searchBarre: "",
     loadingObjects: false,
@@ -21,7 +22,7 @@ const demandeSlice = createSlice({
       affiliation: "professor",
       firstName: "Pierrick",
       lastName: "Breaud",
-      idUser: "itest",
+      idUser: "testUser",
     },
     dataDemande: {
       id: "",
@@ -106,7 +107,7 @@ const demandeSlice = createSlice({
       state.dataDemande.startDT = action.payload;
     },
     setReturnDT: (state, action) => {
-      state.dataDemande.returnDT = action.payload; // Pierrick le 19/01/2025
+      state.dataDemande.returnDT = action.payload;
     },
     setFormValidation: (state, action) => {
       state.formValidation = action.payload;
@@ -169,9 +170,10 @@ const demandeSlice = createSlice({
           }
         });
       })
-      .addCase(updateObject.rejected, (state, action) => {
-        state.errors.apiErrorObjectsLoad = action.payload;
-      });
+      .addCase(getLast5ValidReservations.pending, (state) => {})
+      .addCase(getLast5ValidReservations.fulfilled, (state, action) => {
+        state.last5ValidReservations = action.payload;
+      })
   },
 });
 

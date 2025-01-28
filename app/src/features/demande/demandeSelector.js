@@ -10,6 +10,7 @@ export const selectFilter = (state) => state.demande.filter;
 export const selectErrorFormDemande = (state) => state.demande.errors.errorFormDemande;
 export const selectFormStep = (state) => state.demande.formStep;
 export const selectFormValidation = (state) => state.demande.formValidation;
+export const selectLast5ValidReservations = (state) => state.demande.last5ValidReservations;
 
 export const selectReservationDates = createSelector(
     [selectDataDemande],
