@@ -50,6 +50,7 @@ const demandeSlice = createSlice({
       apiErrorReservationLoad: null,
       apiErrorAdd: null,
       errorFormDemande: false,
+      errorSelectionForm:null
     },
   },
   reducers: {
@@ -68,6 +69,9 @@ const demandeSlice = createSlice({
       } else if (state.formStep === 2) {
         state.formStep = 1;
       }
+    },
+    setError: (state, action) => {
+      state.errors[action.payload.field]= action.payload.value;
     },
     setSearchBarre: (state, action) => {
       state.searchBarre = action.payload;
@@ -227,6 +231,7 @@ export const {
   clearDataDemande,
   setStartDT,
   setReturnDT,
+  setError,
   setFormValidation,
   setSelectedObjects,
   updateSelectedObjects,

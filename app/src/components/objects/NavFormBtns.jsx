@@ -8,9 +8,8 @@ import {
     selectDataDemande,
     selectFormValidation
 } from "../../features/demande/demandeSelector";
-import { clearDataDemande, setObjIsSelectable, setFormStep, setErrorFormDemande } from "../../features/demande/demandeSlice";
+import { clearDataDemande, setObjIsSelectable, setFormStep, setErrorFormDemande, setError } from "../../features/demande/demandeSlice";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { formatErrorMessage } from "../../utils/tools";
 import { useState, useEffect } from "react";
 import '../../assets/styles/nav-form-btns.scss';
 import { addReservation } from "../../features/demande/reservationsAsyncAction";
@@ -49,11 +48,11 @@ const NavFormBtns = () => {
 
     const handleNextClick = () => {
         if (location.pathname === '/list-objects') {
+
             if (!objIsSelectable) {
                 dispatch(setObjIsSelectable(true));
             } else {
                 const errors = [];
-                if (errorFormDemande) {
                     if (selectedObjects.length === 0) {
                         errors.push("aucun objet sélectionné");
                     }
@@ -63,14 +62,15 @@ const NavFormBtns = () => {
                     if (returnDT.trim().length === 0) {
                         errors.push("la date de retour est vide ou invalide");
                     }
-                }
+                console.log(errors);
 
                 if (errors.length > 0) {
-                    setErrorMessage(formatErrorMessage(errors));
+                    dispatch(setError({field: "errorSelectionForm", value: errors}));
                     return;
                 }
 
                 dispatch(setObjIsSelectable(false));
+                dispatch(setError({field: "errorSelectionForm", value: null}));
                 navigate('/formulaire-reservation');
             }
         } else if (location.pathname === '/formulaire-reservation' && formStep === 1) {
