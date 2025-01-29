@@ -8,6 +8,7 @@ const demandeSlice = createSlice({
     objects: [],
     reservations: [],
     last5ValidReservations: [],
+    last3Demandes: [],
     objIsSelectable: false,
     searchBarre: "",
     loadingObjects: false,

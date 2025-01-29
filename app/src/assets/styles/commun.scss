@@ -193,6 +193,12 @@ html {
     padding: 5px;
     font-size: $font-size-14;
     font-family: $main-font;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.025);
+    }
 }
 
 /* CSS pour les inputs de l'application*/
