@@ -183,7 +183,7 @@ const demandeSlice = createSlice({
       })
       .addCase(addObject.fulfilled, (state, action) => {
         state.objects.push(action.payload);
-      })
+      })      
       .addCase(addObject.rejected, (state, action) => {
         state.errors.apiErrorAdd = action.payload;
       })

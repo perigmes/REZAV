@@ -65,18 +65,7 @@ export const updateObject = createAsyncThunk('reservation/updateObject', async (
     }
 });
 
-export const addObject = createAsyncThunk('reservation/addObject', async ( {data} , {rejectWithValue}) => {
-console.log(data.get('name'));
-    try {
-                const response = await axios.post(`${URL_API_RESERVATIONS}/items`, data,{
-                    headers:{ 
-                      'Content-Type': 'multipart/form-data',  // Assure-toi que le type de contenu est bien multipart/form-data
-                    }});
-        return response.data.item;
-    } catch (error) {
-        return rejectWithValue(error.response.data.error.message);
-    }
-});
+
 
 export const getLast5ValidReservations = createAsyncThunk('reservation/getLastValidReservations', async ( userId , {rejectWithValue}) => {
 
@@ -97,6 +86,30 @@ export const getLast3Demandes = createAsyncThunk('reservation/getLastDemandes', 
         return rejectWithValue(error.response.data.error.message);
     }
 });
+
+export const addObject = createAsyncThunk('reservation/addObject', async ( {data} , {rejectWithValue}) => {
+console.log(data.get('name'));
+    try {
+                const response = await axios.post(`${URL_API_RESERVATIONS}/items`, data,{
+                    headers:{ 
+                      'Content-Type': 'multipart/form-data',  // Assure-toi que le type de contenu est bien multipart/form-data
+                    }});
+        return response.data.item;
+    } catch (error) {
+
+        return rejectWithValue(error.response.data.error.message);
+    }
+});
+export const deleteObject = createAsyncThunk('reservation/deleteObject', async ( {id} , {rejectWithValue}) => {
+        try {
+                    const response = await axios.delete(`${URL_API_RESERVATIONS}/items/${id}`);
+            return response.data.id;
+        } catch (error) {
+    
+            return rejectWithValue(error.response.data.error.message);
+        }
+    });
+
 
 
 

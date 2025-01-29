@@ -6,16 +6,22 @@ import {
   selectUSerInfos,
 } from "../../features/demande/demandeSelector";
 import "../../assets/styles/popup.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   addObject,
   updateObject,
+  deleteObject
 } from "../../features/demande/reservationsAsyncAction";
+import Button from "@mui/joy/Button";
+import Box from "@mui/joy/Box";
+import {ValidationModal} from "../alertDialog/ValidationModal";
 
 const ObjectPopup = ({ addingMode, closeFunction }) => {
   const dispatch = useDispatch();
   const infoObject = useSelector(selectObjInfos);
   const userInfos = useSelector(selectUSerInfos);
+  const [isConfirmated, setIsConfirmated] = useState(false);
+  const [isConfirmating, setIsConfirmating] = useState(false);
   const [infos, setInfos] = useState(
     addingMode
       ? {
@@ -64,6 +70,16 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
     closePopup();
   };
 
+  const handleDelete = () => {
+    dispatch(deleteObject({ id: infos._id }));
+    closePopup();
+  };
+useEffect(() => {
+  if(isConfirmated){
+    handleDelete()
+  }
+ 
+},[isConfirmated, handleDelete])
   return (
     <Modal
       className="object-popup"
@@ -152,14 +168,25 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
                   </div>
                 </div>
               </div>
-
-              <button
+              <Box
+                display="flex"
+                flexDirection='row'
+                justifyContent={"space-between"}
+                >
+                <Button
                 name="btnFormObject"
                 type="submit"
                 className="rezav-button-1 btnFormObject"
               >
                 {addingMode ? "Ajouter" : "Modifier"}
-              </button>
+              </Button>
+
+              <Button onClick={()=>{setIsConfirmating(true)}}>Supprimer</Button>
+              </Box>
+                {isConfirmating &&
+              <ValidationModal isOpened={isConfirmating} confirmFunction={(response)=>{
+                setIsConfirmated(response);
+                setIsConfirmating(false)}}/>}
             </form>
           </>
         ) : (
