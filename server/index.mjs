@@ -17,7 +17,9 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"], // En-têtes autorisés
   }));
 
+  // app.use('/pictures', express.static(path.join(__dirname,'..', 'pictures')));
   app.use('/uploads', express.static(path.join(__dirname,'..', 'uploads')));
+
   app.use(router);
   app.use('/api', router);
 
@@ -37,7 +39,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-  if (req.path.startsWith("/uploads")) {
+  if (req.path.startsWith("/pictures")) {
     return next(); // Accès autorisé sans authentification
   }
   if (req.isAuthenticated()) {

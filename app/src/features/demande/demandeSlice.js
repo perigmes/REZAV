@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addReservation, getLast5ValidReservations, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
+import { addReservation, getLast3Demandes, getLast5ValidReservations, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
 import { getDatePlusDays } from '../../utils/tools';
 
 const demandeSlice = createSlice({
@@ -125,7 +125,7 @@ const demandeSlice = createSlice({
       .addCase(loadMateriel.fulfilled, (state, action) => {
         state.objects = action.payload;
         state.objects.map(
-          (obj) => (obj.picture = "http://localhost:5000/" + obj.picture)
+          (obj) => (obj.picture = 'http://localhost:5000/'+obj.picture)
         );
         state.loadingObjects = false;
         state.errors.apiErrorObjectsLoad = null;
@@ -162,17 +162,27 @@ const demandeSlice = createSlice({
           if (obj._id === action.payload._id) {
             const newObj = {
               ...action.payload,
-              picture: "http://localhost:5000/" + action.payload.picture,
+              picture:  action.payload.picture,
             };
             return newObj;
           } else {
             return obj;
           }
         });
+      })      
+      .addCase(updateObject.rejected, (state, action) => {
+        state.errors.apiErrorObjectsLoad = action.payload;
+      })
+      .addCase(addObject.fulfilled, (state,action) => {
+        state.objects.push(action.payload);
       })
       .addCase(getLast5ValidReservations.pending, (state) => {})
       .addCase(getLast5ValidReservations.fulfilled, (state, action) => {
         state.last5ValidReservations = action.payload;
+      })
+      .addCase(getLast3Demandes.pending, (state) => {})
+      .addCase(getLast3Demandes.fulfilled, (state, action) => {
+        state.last3Demandes = action.payload;
       })
   },
 });

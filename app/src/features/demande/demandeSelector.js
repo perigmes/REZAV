@@ -1,6 +1,11 @@
 import { createSelector } from "reselect";
-
-export const selectObjects = (state) => [...state.demande.objects].sort((a, b) => a.name.localeCompare(b.name));
+export const selectObjects = (state) => state.demande.objects;
+export const selectSortedObjects = createSelector(
+    [selectObjects],
+    (objects) =>{
+        console.log(objects);
+        [...objects].sort((a, b) => a.name.localeCompare(b.name))}
+);
 export const selectDataDemande = (state) => state.demande.dataDemande;
 export const selectReservations = (state) => state.demande.reservations;
 export const selectObjIsSelectable = (state) => state.demande.objIsSelectable;
@@ -11,6 +16,8 @@ export const selectErrorFormDemande = (state) => state.demande.errors.errorFormD
 export const selectFormStep = (state) => state.demande.formStep;
 export const selectFormValidation = (state) => state.demande.formValidation;
 export const selectLast5ValidReservations = (state) => state.demande.last5ValidReservations;
+export const selectLast3Demandes = (state) => state.demande.last3Demandes;
+
 
 export const selectReservationDates = createSelector(
     [selectDataDemande],
