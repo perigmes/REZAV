@@ -175,7 +175,7 @@ console.log(objectsList)
                     md: "repeat(5, 1fr)", 
                     lg: "repeat(6, 1fr)",
                   },
-                  gap: 1, 
+                  gap: 2, 
                 }}
               >
                 {objectsList[category].map((object) => (

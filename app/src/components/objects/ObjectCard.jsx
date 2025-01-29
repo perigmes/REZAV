@@ -30,11 +30,9 @@ const ObjectCard = ({ object }) => {
     if (objIsSelectable) {
       if (isSelected) {
         setIsSelected(!isSelected);
-
         dispatch(deselectObject(_id));
       } else {
         setIsSelected(!isSelected);
-
         dispatch(selectObject(_id));
       }
     } else {
@@ -43,58 +41,42 @@ const ObjectCard = ({ object }) => {
     }
   };
 
-  //   const highlightText = (text, highlight) => {
-  //     if (!highlight) return text;
-
-  //     const index = normalizeString(text).indexOf(normalizeString(highlight));
-  //     if (index === -1) return text;
-
-  //     const beforeMatch = text.substring(0, index);
-  //     const match = text.substring(index, index + highlight.length);
-  //     const afterMatch = text.substring(index + highlight.length);
-
-  //     return (
-  //       <>
-  //         {beforeMatch}
-  //         <strong className="highlight">{match}</strong>
-  //         {afterMatch}
-  //       </>
-  //     );
-  //   };
   return (
     <Card
-      key={object._id}
+      key={_id}
       sx={{
         position: "relative",
         zIndex: 0,
         maxWidth: "50vw",
         minWidth: "10vw",
         minHeight: "13vh",
-        position: "relative",
-        outline: isSelected ? "solid 2px #6d6b9e" : "",
-        transition: " all 0.3s ease",
+        boxShadow: "0px 1px 4px 0px rgba(11, 1, 41, 0.35)",
+        outline: isSelected ? "solid 2px #6d6b9e" : "solid 2px transparent",
+        transition: "all 0.3s ease",
+        overflow: "hidden",
         "&:hover": {
-          outline:
-            isSelected || objIsSelectable
+          outline: objIsSelectable
+            ? isSelected
               ? "solid 2px #6d6b9e"
-              : "",
+              : "solid 2px rgba(109, 107, 158, 0.5)"
+            : "solid 2px transparent",
           cursor: "pointer",
           transform: !objIsSelectable && "scale(1.05)",
-          transition: " all 0.3s easeout",
+          "& .MuiCheckbox-checkbox": {
+            backgroundColor: isSelected ? "#6d6b9e" : "rgba(109, 107, 158, 0.2)",
+          },
         },
       }}
-      onClick={(e) => {
-        handleClick();
-      }}
+      onClick={handleClick}
     >
-      <CardOverflow>
+      <CardOverflow sx={{ position: "relative", padding: 0 }}>
         {objIsSelectable && (
           <Box
             sx={{
-              position: "relative",
-              top: "5%", // Ajuste la position verticale (ici 5% du haut)
-              right: "5%", // Place la checkbox à 5% du côté droit
-              zIndex: 1, // S'assure que la checkbox est au-dessus du contenu
+              position: "absolute",
+              top: "3%",
+              right: "3%", 
+              zIndex: 1,
             }}
           >
             <Checkbox
@@ -102,33 +84,57 @@ const ObjectCard = ({ object }) => {
               checked={isSelected}
               onChange={handleClick}
               color="#6d6b9e"
+              className="custom-checkbox"
               sx={{
                 ".MuiCheckbox-checkbox": {
-                  border: "#6d6b9e 1px solid",
+                  border: "#6d6b9e 2px solid",
                   backgroundColor: isSelected
                     ? "#6d6b9e"
                     : "#FAFAFA",
                   "--Icon-color": "#FAFAFA",
+                  "&:hover": {
+                    backgroundColor: isSelected ? "#6d6b9e" : "rgba(109, 107, 158, 0.2)",
+                  },
                 },
                 "&.Mui-checked": {
-                  color: "#FAFAFA", // Couleur de la checkbox quand elle est cochée
+                  color: "#FAFAFA",
                 },
               }}
             />
           </Box>
         )}
 
-        <AspectRatio
-          ratio="1"
+        <Box
           sx={{
-            display: "block",
-            mt: "15%",
-            ml: "0.02rem",
-            mr: "1%",
+            width: "100%",
+            height: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            overflow: "hidden",
+            padding: 0,
+            "&::after": {
+              content: "''",
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              width: "100%",
+              height: "10%",
+              background: "linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent)",
+            },
           }}
         >
-          <img src={picture} loading="lazy" alt={name} />
-        </AspectRatio>
+          <img
+            src={picture || "/images/error-img.webp"}            
+            loading="lazy"
+            alt={name}
+            onError={(e) => {
+              e.target.onerror = null; 
+              e.target.src = "/images/error-img.webp"; 
+            }}
+            style={{ width: "100%", height: "auto", objectFit: "cover", margin: 0, padding: 0 }}
+          />
+        </Box>
       </CardOverflow>
       <CardContent>
         <Typography
@@ -143,9 +149,6 @@ const ObjectCard = ({ object }) => {
         </Typography>
       </CardContent>
     </Card>
-
-    //     <span>{searchBarre.trim().length > 0 ? highlightText(name, searchBarre) : name}</span>
-    // </div>
   );
 };
 

@@ -21,7 +21,7 @@ const TableauBord = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUSerInfos);
-  
+
   useEffect(() => {
     dispatch(getLast5ValidReservations(user.idUser));
     dispatch(getLast3Demandes(user.idUser));
@@ -119,7 +119,14 @@ const TableauBord = () => {
                 >
                   {uniqueObjects.map((object) => (
                     <SwiperSlide key={object._id}>
-                      <img src={`${object.picture}`} alt={object.name} />
+                      <img 
+                        src={object.picture || "/images/error-img.webp"} 
+                        onError={(e) => {
+                          e.target.onerror = null; 
+                          e.target.src = "/images/error-img.webp"; 
+                        }}
+                        alt={object.name} 
+                      />
                     </SwiperSlide>
                   ))}
                 </Swiper>

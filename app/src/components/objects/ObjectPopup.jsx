@@ -10,11 +10,11 @@ import { useEffect, useState } from "react";
 import {
   addObject,
   updateObject,
-  deleteObject
+  deleteObject,
 } from "../../features/demande/reservationsAsyncAction";
 import Button from "@mui/joy/Button";
 import Box from "@mui/joy/Box";
-import {ValidationModal} from "../alertDialog/ValidationModal";
+import { ValidationModal } from "../alertDialog/ValidationModal";
 
 const ObjectPopup = ({ addingMode, closeFunction }) => {
   const dispatch = useDispatch();
@@ -35,14 +35,12 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
   );
 
   const [preview, setPreview] = useState(
-
     infoObject.picture instanceof File ? null : infoObject.picture // Si c'est une URL, la garder
   );
 
   const closePopup = () => {
     dispatch(setInfoObject({}));
     closeFunction();
-    
   };
 
   const handleFileChange = (e) => {
@@ -65,12 +63,12 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
     if (infos.picture instanceof File) {
       formData.append("picture", infos.picture);
     }
-    if(!infos.isLate){
+    if (!infos.isLate) {
       formData.append("isLate", false);
     }
     console.log(formData);
     addingMode
-      ? dispatch(addObject({data: formData}))
+      ? dispatch(addObject({ data: formData }))
       : dispatch(updateObject({ id: infos._id, data: formData }));
     closePopup();
   };
@@ -79,28 +77,34 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
     dispatch(deleteObject({ id: infos._id }));
     closePopup();
   };
-useEffect(() => {
-  if(isConfirmated){
-    handleDelete()
-  }
- 
-},[isConfirmated, handleDelete])
+  useEffect(() => {
+    if (isConfirmated) {
+      handleDelete();
+    }
+  }, [isConfirmated, handleDelete]);
   return (
     <Modal
       className="object-popup"
       onRequestClose={closePopup}
-      isOpen={infos  || addingMode}
+      isOpen={infos || addingMode}
     >
       <div className="object-popup-content">
-        <button onClick={closePopup} className="material-symbols-rounded btnClose">
-        close
+        <button
+          onClick={closePopup}
+          className="material-symbols-rounded btnClose"
+        >
+          close
         </button>
         {userInfos.role === "admin" ? (
           <>
             <form onSubmit={handleSubmit} method="post">
               <div className="formPopup">
                 <img
-                  src={preview}
+                  src={preview || "/images/error-img.webp"}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/images/error-img.webp";
+                  }}
                   alt={infos.name}
                   className="imgObject"
                 />
@@ -111,10 +115,14 @@ useEffect(() => {
                       id="categorie"
                       name="categorie"
                       value={infos.categorie}
-                      onChange={(e) =>{
-                        setInfos({ ...infos, categorie: e.currentTarget.value });
-                        console.log(infos)}
-                      }
+                      required
+                      onChange={(e) => {
+                        setInfos({
+                          ...infos,
+                          categorie: e.currentTarget.value,
+                        });
+                        console.log(infos);
+                      }}
                       className="w-100"
                     />
                   </div>
@@ -125,6 +133,7 @@ useEffect(() => {
                       id="name"
                       name="name"
                       type="text"
+                      required
                       value={infos.name}
                       onChange={(e) =>
                         setInfos({ ...infos, name: e.currentTarget.value })
@@ -162,6 +171,7 @@ useEffect(() => {
                     </p>
                     <p className="restrictions">fichier webp uniquement</p>
                     <input
+                      required
                       id="picture"
                       type="file"
                       name="picture"
@@ -174,32 +184,55 @@ useEffect(() => {
               </div>
               <Box
                 display="flex"
-                flexDirection='row'
-                justifyContent={"space-between"}
-                >
-                <Button
-                name="btnFormObject"
-                type="submit"
-                className="rezav-button-1 btnFormObject"
+                flexDirection="row"
+                justifyContent={"flex-end"}
+                gap={"15px"}
               >
-                {addingMode ? "Ajouter" : "Modifier"}
-              </Button>
+                <Button
+                  onClick={() => {
+                    setIsConfirmating(true);
+                  }}
+                  sx={{
+                    backgroundColor: "#A55151", // Vert si ajout, orange si modification
+                    color: "white",
 
-              <Button onClick={()=>{setIsConfirmating(true)}}>Supprimer</Button>
+                    "&:hover": {
+                      backgroundColor: "#A55151",
+                    },
+                  }}
+                >
+                  Supprimer
+                </Button>
+                <Button
+                  name="btnFormObject"
+                  type="submit"
+                  className="rezav-button-1 btnFormObject"
+                  sx={{
+                    backgroundColor: "#6d6b9e", // Vert si ajout, orange si modification
+                    color: "white",
+
+                    "&:hover": {
+                      backgroundColor: "#6d6b9e",
+                    },
+                  }}
+                >
+                  {addingMode ? "Ajouter" : "Modifier"}
+                </Button>
               </Box>
-                {isConfirmating &&
-              <ValidationModal isOpened={isConfirmating} confirmFunction={(response)=>{
-                setIsConfirmated(response);
-                setIsConfirmating(false)}}/>}
+              {isConfirmating && (
+                <ValidationModal
+                  isOpened={isConfirmating}
+                  confirmFunction={(response) => {
+                    setIsConfirmated(response);
+                    setIsConfirmating(false);
+                  }}
+                />
+              )}
             </form>
           </>
         ) : (
           <div className="formPopup">
-            <img
-              src={preview}
-              alt={infos.name}
-              className="imgObject"
-            />
+            <img src={preview} alt={infos.name} className="imgObject" />
             <div className="object-infos">
               <h2 className="objects-filtered-title">{infos.categorie}</h2>
               <p id="name" name="name" className="w-100 text1">
@@ -227,4 +260,3 @@ useEffect(() => {
 };
 
 export default ObjectPopup;
-
