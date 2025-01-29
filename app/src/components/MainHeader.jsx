@@ -30,7 +30,7 @@ const MainHeader = () => {
     useEffect(() => {
         startDT ? setStartValue(dayjs(startDT)) : setStartValue(dayjs(miniDate));
         returnDT ? setReturnValue(dayjs(returnDT)) : setReturnValue(null);
-        dispatch(loadMaterielByDate(startValue,returnValue))
+        if(startDT && returnDT) dispatch(loadMaterielByDate(startDT,returnDT))
     }, [objIsSelectable, startDT, returnDT]);
 
     const [errorMessage, setErrorMessage] = useState("");
