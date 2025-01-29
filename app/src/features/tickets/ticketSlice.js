@@ -2,10 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { loadReservations, loadAllStatusesReservation } from './ticketAsyncAction.js';
 
 const ticketSlice = createSlice({
-  name: 'reservations',
+  name: "reservations",
   initialState: {
     reservations: [],
     selectedReservation: "",
+   
     loadingReservation: false,
     loadingStatus: false,
     errors: {

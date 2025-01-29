@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectDataDemande,
-  selectFormValidation,
   selectObjects,
 } from "../features/demande/demandeSelector";
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +10,7 @@ import { v4 as uuid } from 'uuid';
 import {
    setFormValidation,
   updateDataDemande,
+  clearDataDemande
 } from "../features/demande/demandeSlice";
 import { formatDateToDateHourMinute } from "../utils/tools";
 import "../assets/styles/formulaire.scss";
@@ -102,8 +102,9 @@ export const Formulaire = () => {
 
       // Envoi via Redux
       dispatch(addReservation({ reservation: formData })).unwrap();
-    }
-};
+      navigate('/mes-demarches');
+      dispatch(clearDataDemande());    
+}};
 
   const handleMembersChange = (updatedMembers) => {
     setMembresG(updatedMembers);
