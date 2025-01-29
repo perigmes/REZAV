@@ -71,7 +71,7 @@ console.log(data.get('name'));
                     headers:{ 
                       'Content-Type': 'multipart/form-data',  // Assure-toi que le type de contenu est bien multipart/form-data
                     }});
-        return response.data.result;
+        return response.data.item;
     } catch (error) {
         return rejectWithValue(error.response.data.error.message);
     }
