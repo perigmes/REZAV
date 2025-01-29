@@ -1,6 +1,6 @@
 const OpenPDFButton = ({ pdfUrl }) => {
     const openPDF = () => {
-        window.open(pdfUrl, "_blank"); // Ouvre le PDF dans un nouvel onglet
+        window.open(pdfUrl, "_blank");
     };
 
     return (

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { selectErrorFormDemande, selectObjIsSelectable, selectReservationDates } from "../features/demande/demandeSelector";
+import { selectErrorFormDemande, selectObjIsSelectable, selectReservationDates, selectUSerInfos } from "../features/demande/demandeSelector";
 import { useLocation } from 'react-router-dom';
 import { setErrorFormDemande, setReturnDT, setSearchBarre, setStartDT } from "../features/demande/demandeSlice";
 import { useEffect, useRef, useState } from "react";
@@ -15,12 +15,12 @@ import '../assets/styles/main-header.scss';
 const MainHeader = () => {
     const dispatch = useDispatch();
     const objIsSelectable = useSelector(selectObjIsSelectable); // Indique si l'objet est sélectionnable
-    const { startDT, returnDT } = useSelector(selectReservationDates); // Dates de réservation depuis le store
+    const { startDT, returnDT } = useSelector(selectReservationDates);
     const location = useLocation();
     const refStartDate = useRef(null);
     const refReturnDate = useRef(null);
     const errorFormDemande = useSelector(selectErrorFormDemande)
-
+    const userInfos = useSelector(selectUSerInfos);
     const miniDate = dayjs(getDatePlusDays(2));
     const [startValue, setStartValue] = useState(dayjs(miniDate));
     const [returnValue, setReturnValue] = useState(null);
@@ -125,21 +125,28 @@ const MainHeader = () => {
                 </LocalizationProvider>
             )}
             {location.pathname === '/list-objects' && (
-                <div className="search-filter-container">
-                    <button className="rezav-button-2 filter-btn">
-                        <span className="material-symbols-rounded">tune</span>Filtrer
-                    </button>
-                    <div className="rezav-input search-barre">
-                        <input
-                            type="search"
-                            name="search-objects"
-                            id="searchObj"
-                            placeholder="Rechercher"
-                            onInput={handleSearchBarre}
-                        />
-                        <span className="material-symbols-rounded">search</span>
+                <>
+                    {userInfos.role === "admin" && (
+                        <button className="rezav-button-1 ">
+                            <span className="material-symbols-rounded">add</span>Ajouter
+                        </button>
+                    )}
+                    <div className="search-filter-container">
+                        <button className="rezav-button-2 filter-btn">
+                            <span className="material-symbols-rounded">tune</span>Filtrer
+                        </button>
+                        <div className="rezav-input search-barre">
+                            <input
+                                type="search"
+                                name="search-objects"
+                                id="searchObj"
+                                placeholder="Rechercher"
+                                onInput={handleSearchBarre}
+                            />
+                            <span className="material-symbols-rounded">search</span>
+                        </div>
                     </div>
-                </div>
+                </>
             )}
         </header>
     );

@@ -209,6 +209,54 @@ html {
 
         }
     }
+    &.input-file {
+        padding-left: 20px;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+        column-gap: 10px;
+
+        input {
+           display: none;
+        }
+
+        label {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           cursor: pointer;
+           width: 35px;
+           height: 35px;
+           border: 1.5px dashed $mauve-rezav-75;
+           border-radius: 7.5px;
+           color: $mauve-rezav-75;
+           transition: all 0.3s ease;
+           grid-row: 1/3;
+           grid-column: 1/2;
+
+           &:hover {
+              border: 1.5px dashed $mauve-rezav;
+              color: $mauve-rezav;
+              background-color: $mauve-rezav-10;
+           }
+        }
+        .label {
+           grid-row: 1/2;
+           grid-column: 2/3;
+           font-family: $main-font;
+           font-size: $font-size-14;
+           color: $mauve-rezav;
+           font-weight: $font-weight-500;
+
+        }
+        .restrictions {
+           grid-row: 2/3;
+           grid-column: 2/3;
+           font-size: $font-size-10;
+           color: $mauve-rezav;
+           padding-left: 10px;
+        }
+     }
 
     &.input-txt {
         display: flex;
@@ -378,4 +426,34 @@ html {
 }
 .css-elo8k2-MuiInputAdornment-root {
     margin-left: 0!important;
+}
+//titres de catégories
+.objects-filtered-title {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    font-family: $main-font;
+    font-weight: $font-weight-600;
+    font-size: $font-size-16;
+    color: $mauve-rezav;
+    text-transform: uppercase;
+    gap: 5px;
+    margin: 20px 0 5px 0;
+
+    /* CSS pour les barres du titre de conteneur */
+    &::after,
+    &::before {
+        content: "";
+        flex: 1;
+        border: 1px solid $mauve-rezav;
+        border-radius: 100px;
+    }
+    &::after {
+        width: auto;
+    }
+    &::before {
+        width: 7%;
+        flex: none;
+    }
 }

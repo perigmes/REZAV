@@ -1,5 +1,5 @@
 import express from "express";
-
+import { upload } from "../upload.mjs";
 import { PostReservation, GetReservation, UpdateReservationStatus,GetReservationsByUserId } from "../controllers/reservationController.mjs";
 import { GetItems,GetItemById,EditItem,DeleteItem,AddItem } from "../controllers/itemController.mjs";
 
@@ -9,7 +9,7 @@ export const router = express.Router();
 router.get("/items", GetItems);
 router.get("/items/:id", GetItemById);
 
-router.patch("/items/:id", EditItem);
+router.patch("/items/:id", upload.single("picture"), EditItem);
 
 router.delete("/items/:id", DeleteItem);
 

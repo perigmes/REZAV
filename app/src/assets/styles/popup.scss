@@ -1,0 +1,82 @@
+@import 'commun.scss';
+@import 'variables.scss';
+.ReactModal__Overlay{
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ReactModal__Content{
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 90%;
+    margin: 0 auto;
+    position: relative;
+    box-sizing: border-box;
+    z-index: 1000;
+    @media (max-width: 768px){
+        max-width: 90%;
+    }
+}
+.btnClose{
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    color:$mauve-rezav-10 ;
+    font-size: 1rem;
+    font-family: var($main-font);
+}
+.text1{
+    font-size: 1rem;
+    font-family: $main-font;
+    color: $mauve-rezav;
+    margin-top: 1rem;
+
+}
+.text2{
+    font-size: 0.75rem;
+    font-family: $main-font;
+    color: $mauve-rezav-50;
+    margin-top: 1rem;
+    white-space: pre-wrap;
+}
+.imgObject{
+    width: 40%;
+    height: 40%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.formPopup{
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: space-between;
+    margin-top:1%;
+    margin-bottom: 1%;
+    gap:2%;
+    .object-infos{
+        width: 50%;
+    }
+    .rezav-input{
+        width: 100%;
+        margin-bottom: 5%;
+       .w-100 {
+    width: 100%;
+} 
+
+    }
+
+    .fileBtn{
+        display: none;
+    }
+
+    +.btnFormObject{
+        width: 100%;
+        text-align: center;
+        display: block;
+    }  
+}

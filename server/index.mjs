@@ -50,7 +50,7 @@ app.use((req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  return casLogin(req, res, next);
+  return casLogin(req, res, next); // Redirection vers CAS si non authentifié
 });
 
 // Route de callback CAS

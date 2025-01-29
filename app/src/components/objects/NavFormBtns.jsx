@@ -84,8 +84,11 @@ const NavFormBtns = () => {
             }
         } else if (location.pathname === '/formulaire-reservation' && formStep === 2) {
             if (!isFormValide) {
-                setErrorMessage("Le formulaire n'est pas valide. Veuillez vérifier les informations requises.");
+                dispatch(setErrorFormDemande(true))
+                setErrorMessage("Vous devez remplir tous les champs du formulaire pour valider le formulaire");
                 return;
+            } else {
+                dispatch(setErrorFormDemande(false))
             }
 
             const idStatus = uuid();

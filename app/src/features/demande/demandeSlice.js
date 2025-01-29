@@ -1,10 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {
-  addReservation,
-  loadMateriel,
-  loadReservation,
-} from "./reservationsAsyncAction";
-import { getDatePlusDays } from "../../utils/tools";
+import { createSlice } from '@reduxjs/toolkit';
+import { addReservation, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
+import { getDatePlusDays } from '../../utils/tools';
 
 const demandeSlice = createSlice({
   name: "demande",
@@ -18,7 +14,18 @@ const demandeSlice = createSlice({
     filter: "category",
     formStep: 1,
     formValidation: false,
+    user: {
+      _id: "test",
+      name: "admin",
+      email: "perigmes@gmail.com",
+      role: "admin",
+      affiliation: "professor",
+      firstName: "Test",
+      lastName: "adminName",
+      idUser: "itest",
+    },
     dataDemande: {
+      id: "",
       userId: "",
       startDT: getDatePlusDays(2),
       returnDT: "",
@@ -26,7 +33,13 @@ const demandeSlice = createSlice({
       desc: "",
       justif: "",
       plan: "",
-      group: [],
+      group: [
+        {
+          firstName: "Pierrick",
+          lastName: "Breaud",
+          groupeTd: "TD33",
+        },
+      ],
       objects: [],
     },
     objInfos: {},
@@ -81,6 +94,9 @@ const demandeSlice = createSlice({
         (selectedId) => selectedId !== id
       );
     },
+    updatedSelectedObjects: (state, action) => {
+      state.dataDemande.objects = action.payload;
+    },
     setInfoObject: (state, action) => {
       state.objInfos = action.payload;
     },
@@ -91,10 +107,13 @@ const demandeSlice = createSlice({
       state.dataDemande.startDT = action.payload;
     },
     setReturnDT: (state, action) => {
-      state.dataDemande.returnDT = action.payload;
+      state.dataDemande.returnDT = action.payload; // Pierrick le 19/01/2025
     },
     setFormValidation: (state, action) => {
       state.formValidation = action.payload;
+    },
+    updateSelectedObjects: (state, action) => {
+      state.dataDemande.objects = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -105,6 +124,9 @@ const demandeSlice = createSlice({
       })
       .addCase(loadMateriel.fulfilled, (state, action) => {
         state.objects = action.payload;
+        state.objects.map(
+          (obj) => (obj.picture = obj.picture)
+        );
         state.loadingObjects = false;
         state.errors.apiErrorObjectsLoad = null;
       })
@@ -125,7 +147,7 @@ const demandeSlice = createSlice({
         state.loadingReservations = false;
         state.errors.apiErrorReservationLoad = action.payload;
       })
-      .addCase(addReservation.pending, (state, action) => {
+      .addCase(addReservation.pending, (state) => {
         state.errors.apiErrorAdd = null;
       })
       .addCase(addReservation.fulfilled, (state, action) => {
@@ -133,9 +155,27 @@ const demandeSlice = createSlice({
       })
       .addCase(addReservation.rejected, (state, action) => {
         state.errors.apiErrorAdd = action.payload;
+      })
+      .addCase(updateObject.pending, (state) => {})
+      .addCase(updateObject.fulfilled, (state, action) => {
+        state.objects = state.objects.map((obj) => {
+          if (obj._id === action.payload._id) {
+            const newObj = {
+              ...action.payload,
+              picture:  action.payload.picture,
+            };
+            return newObj;
+          } else {
+            return obj;
+          }
+        });
+      })
+      .addCase(updateObject.rejected, (state, action) => {
+        state.errors.apiErrorObjectsLoad = action.payload;
       });
   },
 });
+
 export const {
   setObjects,
   setFormStep,
@@ -144,7 +184,6 @@ export const {
   setFilter,
   setErrorFormDemande,
   setObjIsSelectable,
-  setobjects,
   selectObject,
   deselectObject,
   setInfoObject,
@@ -152,6 +191,8 @@ export const {
   setStartDT,
   setReturnDT,
   setFormValidation,
+  setSelectedObjects,
+  updateSelectedObjects,
 } = demandeSlice.actions;
 
 export default demandeSlice.reducer;

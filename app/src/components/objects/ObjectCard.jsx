@@ -15,31 +15,17 @@ const ObjectCard = ({ object }) => {
     const searchBarre = useSelector(selectSearchBarre)
 
 
+
     const handleClick = () => {
         if (objIsSelectable) {
             if (isSelected) {
                 dispatch(deselectObject(_id));
             } else {
                 dispatch(selectObject(_id));
-
             }
         } else {
             dispatch(setInfoObject(object));
 
-            const objectsList = document.querySelector('.objects-list') ?? null;
-            const objectPopup = document.querySelector('.object-popup') ?? null;
-        
-            const blurElements = Array.from(objectsList.children).filter(child => child !== objectPopup); // Crée une liste contenant tous les enfants de objects-list à l'exception de la popup
-            const headerElement = document.querySelector('.header') ?? null; // Sélectionne le header de l'application
-            const objectsHdrElement = document.querySelector('.main-hdr') ?? null; // Sélectionne le header du main de l'application
-            blurElements.push(headerElement, objectsHdrElement); // Ajoute les 2 headers à la liste crée précédemment
-            const finalBlurElements = blurElements.filter(element => element !== null); // Filtre les éléments null pour éviter les erreurs
-
-            finalBlurElements.forEach(element => {
-                element.style.filter = 'blur(2.5px)'; // Ajoute le filtre de flou sur les éléments
-                element.style.pointerEvents = 'none';
-            });          
-            document.querySelector('html').style.overflowY = 'hidden'; // Empêche le scroll dans l'application         
         }
     };
 
@@ -91,7 +77,7 @@ const ObjectCard = ({ object }) => {
             onClick={(e) => { e.stopPropagation(); handleClick(); }} 
             style={{
                 height: `${cardHeight}px`,
-                background: `linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.15) 100%), url(/images/${picture})`}}>
+                background: `linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.15) 100%), url(${picture})`}}>
             {objIsSelectable && (
                 <>
                     <input 

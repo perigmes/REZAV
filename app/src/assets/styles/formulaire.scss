@@ -16,6 +16,11 @@ main:has(.res-form) {
         grid-row: 2/3;
         grid-column: 1/2;
         font-family: $main-font;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: visible;
+        padding: 10px;
+        margin: -10px;
 
         header {
          background-color: $white;
@@ -44,7 +49,7 @@ main:has(.res-form) {
          padding-right: 0;
          width: auto;
          background-color: $white;
-         box-shadow: -3px 3px 5px 0px rgba(0, 0, 0, 0.22), -15px 15px 20px 0px rgba(0, 0, 0, 0.17);
+         box-shadow: -3px 3px 5px 0px rgba(0, 0, 0, 0.22), -5px 5px 7.5px 0px rgba(0, 0, 0, 0.17);
          margin-bottom: 15px;
          border-radius: 7.5px;
          position: relative;

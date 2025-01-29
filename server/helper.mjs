@@ -1,6 +1,4 @@
-import nodemailer from 'nodemailer';
-
-console.log(process.env.EMAIL_USER);
+import nodemailer from "nodemailer";
 // Fonction pour envoyer un e-mail
 export const sendConfirmationEmail = async (reservation) => {
     const transporter = nodemailer.createTransport({
@@ -75,4 +73,3 @@ export const sendResponseEmail = async (justification) => {
     // Envoyer l'e-mail
     return transporter.sendMail(mailOptions);
 };
-
