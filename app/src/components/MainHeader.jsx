@@ -11,6 +11,7 @@ import 'dayjs/locale/fr';
 import dayjs from "dayjs";
 import { getDatePlusDays } from "../utils/tools";
 import '../assets/styles/main-header.scss';
+import { loadMaterielByDate } from '../features/demande/reservationsAsyncAction';
 
 
   
@@ -29,6 +30,7 @@ const MainHeader = () => {
     useEffect(() => {
         startDT ? setStartValue(dayjs(startDT)) : setStartValue(dayjs(miniDate));
         returnDT ? setReturnValue(dayjs(returnDT)) : setReturnValue(null);
+        dispatch(loadMaterielByDate(startValue,returnValue))
     }, [objIsSelectable, startDT, returnDT]);
 
     const [errorMessage, setErrorMessage] = useState("");
