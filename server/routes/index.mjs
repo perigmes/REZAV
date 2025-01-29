@@ -13,7 +13,7 @@ router.patch("/items/:id", upload.single("picture"), EditItem);
 
 router.delete("/items/:id", DeleteItem);
 
-router.post("/items", AddItem);
+router.post("/items",upload.single('picture'), AddItem);
 
 //routes reservation
 router.post("/reservation", PostReservation);

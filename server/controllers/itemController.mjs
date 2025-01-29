@@ -55,11 +55,22 @@ export const DeleteItem = async (req, res) => {
 };
 export const AddItem = async (req, res) => {
   let collection = await db.collection("materiel");
+  const filePath = req.file?.path;
+
   let item = req.body;
-  console.log("Item : ", item);
+  // Nouveau chemin pour l'image
+  const newPath = path.normalize(filePath);
+  const normalizedPath = newPath.replace(/\\/g, "/");
+  console.log("Nouvelle image : ", normalizedPath);
+   item = {
+    ...req.body,
+    picture: normalizedPath,
+  }
   try {
     let result = await collection.insertOne(item);
-    res.status(200).json({ message: "Item ajouté avec succès", result });
+    item._id = result.insertedId;
+
+    res.status(200).json({ message: "Item ajouté avec succès", item:item });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Erreur lors de l'ajout de l'item" });
