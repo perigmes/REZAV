@@ -73,9 +73,9 @@ app.get("/cas/callback", (req, res, next) => {
 app.get("/logout", logout);
 
 // Rediriger toutes les photos vides vers une default
-app.get('/pictures/*', (req, res, next) => {
-  res.sendFile('/app/pictures/default.png');
-});
+// app.get('/pictures/*', (req, res, next) => {
+//   res.sendFile('/app/pictures/default.png');
+// });
 // Rediriger toutes les routes vers React après authentification
 app.get('*', (req, res, next) => {
   res.sendFile('/var/www/app/index.html');
