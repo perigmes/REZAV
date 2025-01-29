@@ -30,7 +30,6 @@ export const GetItemById = async (req, res) => {
     // Retourner les données en réponse
     res.send(result).status(200);
   } catch (err) {
-    console.error(err);
     return res
       .status(500)
       .json({
@@ -52,7 +51,6 @@ export const DeleteItem = async (req, res) => {
 
     res.status(200).json({ message: "L'objet a bien été supprimé", id });
   } catch (err) {
-    console.error(err);
     return res
       .status(500)
       .json({ error: "Erreur lors de la suppression de l'objet" });
@@ -136,7 +134,6 @@ export const EditItem = async (req, res) => {
   
     res.status(200).json({ message: "Item modifié avec succès", result });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: "Erreur lors de la modification de l'item" });
   }
 };
@@ -145,10 +142,8 @@ export const EditItem = async (req, res) => {
 export const getItemsByDate = async (req, res) => {
   let collection = db.collection("materiel");
   let reservations = db.collection("reservations");
-  console.log(req.params.startDate);
   let StartDate = req.params.startDate;
   let EndDate = req.params.endDate;
-  console.log(StartDate);
 
   try {
     // Récupérer les réservations qui chevauchent la période donnée
@@ -159,10 +154,8 @@ export const getItemsByDate = async (req, res) => {
         ]
       })
       .toArray();
-      console.log(resultResav);
     // Extraire les IDs des items réservés
     let reservedItemIds = resultResav.flatMap(res => res.items).map(id => new ObjectId(id));
-    console.log(reservedItemIds);
 
     // Récupérer les items qui NE sont PAS dans la liste des réservés
     let result = await collection
