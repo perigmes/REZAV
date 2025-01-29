@@ -110,7 +110,7 @@ mongoose
 
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000","https://lammi-saes5-01.univ-lemans.fr","https://cas.univ-lemans.fr/cas/login"],
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
