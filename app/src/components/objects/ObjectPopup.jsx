@@ -59,6 +59,9 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
     if (infos.picture instanceof File) {
       formData.append("picture", infos.picture);
     }
+    if(!infos.isLate){
+      formData.append("isLate", false);
+    }
     console.log(formData);
     addingMode
       ? dispatch(addObject({data: formData}))
