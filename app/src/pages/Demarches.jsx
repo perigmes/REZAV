@@ -5,17 +5,24 @@ import { selectReservations, selectIsLoading, selectSelectedReservation, selectA
 import TicketsList from "../components/tickets/TicketsList";
 import TicketDetails from "../components/tickets/TicketsDetails.jsx";
 import "../assets/styles/tickets.scss";
+import { selectUSerInfos } from "../features/demande/demandeSelector.js";
 
 const Demarches = () => {
-  const dispatch = useDispatch();
+  const userInfos = useSelector(selectUSerInfos);
   const reservations = useSelector(selectReservations);
+  const filteredReservations = userInfos.role === 'admin' 
+    ? reservations 
+    : reservations.filter((reservation) => reservation.userId === userInfos.idUser);
+    
+
+  const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoading);
   const selectedReservationId = useSelector(selectSelectedReservation);
   const statuses = useSelector(selectAllStatus);
 
 
   // Trouver la réservation sélectionnée
-  const selectedReservation = reservations.find(
+  const selectedReservation = filteredReservations.find(
     (reservation) => reservation._id === selectedReservationId
   );
   
@@ -23,17 +30,17 @@ const Demarches = () => {
     dispatch(loadAllStatusesReservation())
   },[dispatch])
   useEffect(() => {
-    if (reservations.length === 0) {
+    if (filteredReservations.length === 0) {
       dispatch(loadReservations());
     }
-  }, [dispatch, reservations]);
+  }, [dispatch, filteredReservations]);
 
   if (isLoading) {
     return <div>Chargement des réservations...</div>;
   }
   return (
     <div className="reservations-page">
-      <TicketsList reservations={reservations} listOfStatuses={statuses} />
+      <TicketsList reservations={filteredReservations} listOfStatuses={statuses} />
       {selectedReservation ? (
         <TicketDetails reservation={selectedReservation} />
       ) : (
