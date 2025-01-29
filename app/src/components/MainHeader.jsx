@@ -1,17 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
-import { selectErrorFormDemande, selectObjIsSelectable, selectReservationDates, selectUSerInfos } from "../features/demande/demandeSelector";
+import { selectErrorFormDemande, selectObjIsSelectable, selectReservationDates } from "../features/demande/demandeSelector";
 import { useLocation } from 'react-router-dom';
 import { setErrorFormDemande, setReturnDT, setSearchBarre, setStartDT } from "../features/demande/demandeSlice";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { TextField } from "@mui/material";
 import 'dayjs/locale/fr';
 import dayjs from "dayjs";
 import { getDatePlusDays } from "../utils/tools";
 import '../assets/styles/main-header.scss';
+import { loadMaterielByDate } from '../features/demande/reservationsAsyncAction';
 
 
+  
 const MainHeader = () => {
     const dispatch = useDispatch();
     const objIsSelectable = useSelector(selectObjIsSelectable); // Indique si l'objet est sélectionnable
@@ -20,7 +23,6 @@ const MainHeader = () => {
     const refStartDate = useRef(null);
     const refReturnDate = useRef(null);
     const errorFormDemande = useSelector(selectErrorFormDemande)
-    const userInfos = useSelector(selectUSerInfos);
     const miniDate = dayjs(getDatePlusDays(2));
     const [startValue, setStartValue] = useState(dayjs(miniDate));
     const [returnValue, setReturnValue] = useState(null);
@@ -28,7 +30,8 @@ const MainHeader = () => {
     useEffect(() => {
         startDT ? setStartValue(dayjs(startDT)) : setStartValue(dayjs(miniDate));
         returnDT ? setReturnValue(dayjs(returnDT)) : setReturnValue(null);
-    }, [objIsSelectable]);
+        if(startDT && returnDT) dispatch(loadMaterielByDate(startDT,returnDT))
+    }, [objIsSelectable, startDT, returnDT]);
 
     const [errorMessage, setErrorMessage] = useState("");
     const handleDateChange = (type, newValue) => {
@@ -44,6 +47,7 @@ const MainHeader = () => {
                 dispatch(setStartDT(newValueIso));
                 refStartDate.current?.parentElement.classList.remove("error");
             } else if (type === "return") {
+                console.log('test');
                 dispatch(setReturnDT(newValueIso));
                 refReturnDate.current?.parentElement.classList.remove("error");
             }
@@ -57,7 +61,6 @@ const MainHeader = () => {
                 dispatch(setErrorFormDemande(true));
                 dispatch(setReturnDT(""));
             }
-            // setErrorMessage(formatErrorMessage(errors));
         } else if (!newValue?.isValid()) {
             if (type === "start") {
                 dispatch(setStartDT(""));
@@ -87,11 +90,37 @@ const MainHeader = () => {
         const search = e.target.value;
         dispatch(setSearchBarre(search));
     };
+    
+    const useDynamicTitle = () => {
+        const dynamicString = useMemo(() => {
+            if (location.pathname.startsWith("/reservation-confirmation/")) {
+                return "Validation de réservation";
+            }
+
+            switch (location.pathname) {
+                case '/' :
+                    return "Tableau de bord";
+                case '/list-objects' :
+                    return "Liste du matériel";
+                case '/formulaire-reservation' :
+                    return "Formulaire de réservation";
+                case '/mes-demarches' :
+                    return "Mes démarches";
+                default:
+                    return "Page non trouvée";
+            }
+        }, [location.pathname]);
+
+        return dynamicString;
+    };
+
+    const dynamicString = useDynamicTitle();
 
     return (
+      
         <header className={`main-hdr${location.pathname === '/list-objects' ? ' list-obj' : ''}${location.pathname === '/list-objects' && objIsSelectable ? ' selectable' : ''}${location.pathname === '/formulaire-reservation' ? ' res-form-hdr' : ''}`}>
             <h2 className="page-title">
-                {location.pathname === '/list-objects' ? "Liste du matériel" : "Formulaire de réservation"}
+                {dynamicString}
             </h2>
             {location.pathname === '/list-objects' && objIsSelectable && (
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
@@ -99,13 +128,17 @@ const MainHeader = () => {
                         <div className="rezav-input input-date">
                             <label htmlFor="date-du">Du</label>
                             <DateTimePicker
-                                className="input"
-                                id="date-du"
-                                minDate={miniDate}
-                                value={startValue} 
-                                onChange={(newValue) => handleDateChange("start", newValue)}
-                                ref={refStartDate}
-                            />
+                            className="input"
+                            id="date-du"
+                            minDate={miniDate}
+                            value={startValue} 
+                            onChange={(newValue) => handleDateChange("start", newValue)}
+                            ref={refStartDate}
+    renderInput={(props) => <TextField {...props} />}
+  />
+
+
+                            
                         </div>
                         <div className="rezav-input input-date">
                             <label htmlFor="date-au">Au</label>
@@ -116,6 +149,8 @@ const MainHeader = () => {
                                 value={returnValue}
                                 onChange={(newValue) => handleDateChange("return", newValue)}
                                 ref={refReturnDate}
+                                renderInput={(props) => <TextField onBlur={(newValue)=>handleDateChange("return", newValue)} {...props} />}
+
                             />
                         </div>
                         {errorFormDemande && errorMessage.trim().length > 0 ? (
@@ -126,11 +161,7 @@ const MainHeader = () => {
             )}
             {location.pathname === '/list-objects' && (
                 <>
-                    {userInfos.role === "admin" && (
-                        <button className="rezav-button-1 ">
-                            <span className="material-symbols-rounded">add</span>Ajouter
-                        </button>
-                    )}
+                   
                     <div className="search-filter-container">
                         <button className="rezav-button-2 filter-btn">
                             <span className="material-symbols-rounded">tune</span>Filtrer

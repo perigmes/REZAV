@@ -7,6 +7,7 @@ import TicketDetails from "../components/tickets/TicketsDetails.jsx";
 import "../assets/styles/tickets.scss";
 import { selectUSerInfos } from "../features/demande/demandeSelector.js";
 
+
 const Demarches = () => {
   const userInfos = useSelector(selectUSerInfos);
   const reservations = useSelector(selectReservations);
@@ -48,6 +49,7 @@ const Demarches = () => {
       )}
     </div>
   );
+
 };
 
 export default Demarches;
