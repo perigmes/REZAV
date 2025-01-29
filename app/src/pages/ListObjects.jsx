@@ -138,7 +138,7 @@ const ListObjects = () => {
                     md: "repeat(5, 1fr)",
                     lg: "repeat(6, 1fr)",
                   },
-                  gap: 1,
+                  gap: 2, 
                 }}
               >
                 {objectsListFiltered[category]?.map((object) => (
