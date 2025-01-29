@@ -75,21 +75,23 @@ const ListObjects = () => {
       ) : (
         <>
           {userInfos.role === "admin" && (
-            <Button
-              startDecorator={<Add />}
-              onClick={() => setIsAdding(true)}
-              color="#6d6b9e"
-              sx={{
-                bottom: "2vh",
+           <Button className="add-btn" startDecorator={<Add sx={{ fontSize: "1.75rem" }}/>} onClick={()=>setIsAdding(true)} color="#6d6b9e" sx={()=>{
+              return {
+                bottom: "35px",
                 zIndex: 999,
                 position: "fixed",
-                width: "7vw",
+                width: "fit-content",
+                height: "fit-content",
+                padding: "10px 25px",
+                fontSize: "1rem",
+                fontFamily: "Montserrat, sans-serif",
+                fontWeight: 500,
                 backgroundColor: "#6d6b9e",
                 color: "#FAFAFA",
                 "&:hover": {
                   backgroundColor: "#6d6b9e",
                 },
-              }}
+              }}}
             >
               Ajouter
             </Button>
@@ -109,6 +111,7 @@ const ListObjects = () => {
                 sx={{
                   "--Divider-thickness": "2px",
                   "--Divider-lineColor": "#6d6b9e",
+                  "margin": "25px 0 10px 0",
                   "& .MuiDivider-wrapper": {
                     color: "#6d6b9e",
                   },

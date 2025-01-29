@@ -199,6 +199,14 @@ const demandeSlice = createSlice({
       .addCase(addObject.rejected, (state, action) => {
         state.errors.apiErrorAdd = action.payload;
       })
+      .addCase(getLast5ValidReservations.pending, (state) => {})
+      .addCase(getLast5ValidReservations.fulfilled, (state, action) => {
+        state.last5ValidReservations = action.payload;
+      })
+      .addCase(getLast3Demandes.pending, (state) => {})
+      .addCase(getLast3Demandes.fulfilled, (state, action) => {
+        state.last3Demandes = action.payload;
+      })
   },
 });
 

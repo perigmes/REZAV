@@ -4,32 +4,6 @@
         overflow-y: auto;
     }
 
-    /* CSS pour le conteneur boutons de navigations dans le formulaire de reservation */
-    .nav-form-btns {
-        position: fixed;
-        right: 25px;
-        bottom: 25px;
-        display: flex;
-        gap: 15px;
-        flex-flow: row nowrap;
-
-        /* CSS pour les boutons de navigations dans le formulaire de reservation */
-        .rezav-button-1 {
-            width: 207.5px;
-            justify-content: center;
-            transition: all 0.3s ease;
-            
-            &.prev-step {
-                background-color: $dark-red-rezav;
-            }
-        }
-    }
-
- 
-
-    /* CSS Pour les titres des conteneurs filtrants des objets */
-    
-
     /* CSS Pour les conteneurs filtrants des objets */
     .objects-filtered-container {
         width: 100%;
@@ -125,8 +99,12 @@
 
 /* Mode téléphone */
 @media only screen and (max-width : 481px) {
+    .main-content.objects-list {
 
-
+        .add-btn {
+            display: none;
+        }
+    }
         .objects-filtered-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
