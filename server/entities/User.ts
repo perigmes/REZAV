@@ -24,3 +24,30 @@ export const userSchema = new mongoose.Schema({
 });
 
 export const User = mongoose.model('User', userSchema);
+
+// import mongoose from 'mongoose';
+
+// export const userSchema = new mongoose.Schema({
+//   idUser: { type: String, required: true, unique: true },
+//   email: { 
+//     type: String, 
+//     required: true, 
+//     match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Regex pour valider l'email
+//   },
+//   role: { 
+//     type: String, 
+//     enum: ['student', 'admin'], // ✅ Supprime "Non défini"
+//     default: 'student', // ✅ Défaut à student
+//     required: true 
+//   },
+//   edupersonprimaryaffiliation: { 
+//     type: String, 
+//     enum: ['student', 'teacher'], // ✅ Supprime "Non défini"
+//     default: 'student', // ✅ Défaut à student
+//     required: true 
+//   },
+//   givenname: { type: String, required: true, default: "Prénom inconnu" }, // ✅ Ajout d'une valeur par défaut
+//   sn: { type: String, required: true, default: "Nom inconnu" }, // ✅ Ajout d'une valeur par défaut
+// });
+
+// export const User = mongoose.model('User', userSchema);

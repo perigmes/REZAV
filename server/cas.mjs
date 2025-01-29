@@ -33,10 +33,10 @@ passport.use(
     idUser: profile.user,
     username: profile.user,
     email: profile.attributes?.mail || `${profile.user}@univ-lemans.fr`,
-    firstName: profile.attributes?.firstname || undefined, 
-    lastName: profile.attributes?.lastname || undefined, 
+    firstName: profile.attributes?.givenname || undefined, 
+    lastName: profile.attributes?.sn || undefined, 
     role: profile.attributes?.role === "admin" ? "admin" : undefined, 
-    affiliation: profile.attributes?.affiliation === "professor" ? "professor" : undefined, 
+    affiliation: profile.attributes?.edupersonprimaryaffiliation === "teacher" ? "teacher" : undefined, 
 };
         
           console.log("🔎 Vérification de l'utilisateur en base de données :", userData);
