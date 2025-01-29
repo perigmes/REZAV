@@ -7,23 +7,36 @@ import {
 } from "../../features/demande/demandeSelector";
 import "../../assets/styles/popup.scss";
 import { useState } from "react";
-import { updateObject } from "../../features/demande/reservationsAsyncAction";
+import {
+  addObject,
+  updateObject,
+} from "../../features/demande/reservationsAsyncAction";
 
-const ObjectPopup = () => {
+const ObjectPopup = ({ addingMode, closeFunction }) => {
   const dispatch = useDispatch();
   const infoObject = useSelector(selectObjInfos);
   const userInfos = useSelector(selectUSerInfos);
-  const [infos, setInfos] = useState(infoObject);
+  const [infos, setInfos] = useState(
+    addingMode
+      ? {
+          _id: "",
+          categorie: "",
+          description: "",
+          name: "",
+          picture: "",
+        }
+      : infoObject
+  );
 
   // Stocker l'aperçu temporaire de l'image
   const [preview, setPreview] = useState(
-    infoObject.picture instanceof File
-      ? null
-      : infoObject.picture // Si c'est une URL, la garder
+    infoObject.picture instanceof File ? null : infoObject.picture // Si c'est une URL, la garder
   );
 
   const closePopup = () => {
     dispatch(setInfoObject({}));
+    closeFunction();
+    
   };
 
   const handleFileChange = (e) => {
@@ -40,7 +53,7 @@ const ObjectPopup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+    console.log(infos.categorie);
     const formData = new FormData();
     formData.append("categorie", infos.categorie);
     formData.append("name", infos.name);
@@ -49,8 +62,10 @@ const ObjectPopup = () => {
     if (infos.picture instanceof File) {
       formData.append("picture", infos.picture);
     }
-  
-    dispatch(updateObject({ id: infos._id, data: formData }));
+    console.log(formData);
+    addingMode
+      ? dispatch(addObject({data: formData}))
+      : dispatch(updateObject({ id: infos._id, data: formData }));
     closePopup();
   };
 
@@ -58,10 +73,12 @@ const ObjectPopup = () => {
     <Modal
       className="object-popup"
       onRequestClose={closePopup}
-      isOpen={infos && Object.keys(infos).length > 0}
+      isOpen={infos  || addingMode}
     >
       <div className="object-popup-content">
-        <button onClick={closePopup} className="btnClose">X</button>
+        <button onClick={closePopup} className="btnClose">
+          X
+        </button>
         {userInfos.role === "admin" ? (
           <>
             <form onSubmit={handleSubmit} method="post">
@@ -78,8 +95,9 @@ const ObjectPopup = () => {
                       id="categorie"
                       name="categorie"
                       value={infos.categorie}
-                      onChange={(e) =>
-                        setInfos({ ...infos, categorie: e.currentTarget.value })
+                      onChange={(e) =>{
+                        setInfos({ ...infos, categorie: e.currentTarget.value });
+                        console.log(infos)}
                       }
                       className="w-100"
                     />
@@ -144,36 +162,37 @@ const ObjectPopup = () => {
                 type="submit"
                 className="rezav-button-1 btnFormObject"
               >
-                Modifier
+                {addingMode ? "Ajouter" : "Modifier"}
               </button>
             </form>
           </>
         ) : (
- <div className="formPopup">
-                <img
-                  src={preview} // Utilisez l'aperçu temporaire ou l'URL d'origine
-                  alt={infos.name}
-                  className="imgObject"
-                />
-                <div className="object-infos">
-                    <h2 className="objects-filtered-title">{infos.categorie}</h2>
-                    <p
-                      id="name"
-                      name="name"
-                      className="w-100 text1"
-                    >{infos.name}</p>
+          <div className="formPopup">
+            <img
+              src={preview} // Utilisez l'aperçu temporaire ou l'URL d'origine
+              alt={infos.name}
+              className="imgObject"
+            />
+            <div className="object-infos">
+              <h2 className="objects-filtered-title">{infos.categorie}</h2>
+              <p id="name" name="name" className="w-100 text1">
+                {infos.name}
+              </p>
 
-                  <div className="rezav-input input-txt">
-                    <label htmlFor="description" className="text1">Description</label>
-                    <pre name="description"
-                      id="description" className="w-100 text2">
-                      
-                      {infos.description}
-                      </pre>
-                  </div>
-                
-                </div>
+              <div className="rezav-input input-txt">
+                <label htmlFor="description" className="text1">
+                  Description
+                </label>
+                <pre
+                  name="description"
+                  id="description"
+                  className="w-100 text2"
+                >
+                  {infos.description}
+                </pre>
               </div>
+            </div>
+          </div>
         )}
       </div>
     </Modal>
@@ -181,3 +200,4 @@ const ObjectPopup = () => {
 };
 
 export default ObjectPopup;
+

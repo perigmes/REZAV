@@ -64,5 +64,18 @@ export const updateObject = createAsyncThunk('reservation/updateObject', async (
     }
 });
 
+export const addObject = createAsyncThunk('reservation/addObject', async ( {data} , {rejectWithValue}) => {
+console.log(data.get('name'));
+    try {
+                const response = await axios.post(`${URL_API_RESERVATIONS}/items`, data,{
+                    headers:{ 
+                      'Content-Type': 'multipart/form-data',  // Assure-toi que le type de contenu est bien multipart/form-data
+                    }});
+        return response.data.result;
+    } catch (error) {
+        return rejectWithValue(error.response.data.error.message);
+    }
+});
+
 
 
