@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setselectedReservation, setStatus } from "../../features/tickets/ticketSlice";
+import { setselectedReservation, setStatus, setIsActive } from "../../features/tickets/ticketSlice";
 
 function Ticket({ reservation, listOfStatuses }) {
   const dispatch = useDispatch();
@@ -19,8 +19,8 @@ const statusText = currentDateObj > returnDateObj ? 'passed' : reservationStatus
 
   function handleClick() {
     dispatch(setselectedReservation(reservation._id));
-    dispatch(setStatus(statusText))
-    console.log((statusText))
+    dispatch(setStatus(statusText));
+    dispatch(setIsActive(true));
   }
 
   return (

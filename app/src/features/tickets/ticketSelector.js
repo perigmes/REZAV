@@ -13,3 +13,6 @@ export const selectSelectedReservation = (state) => state.ticket.selectedReserva
 export const selectShowDetails = (state) => state.ticket.showDetails;
 
 export const selectStatusReservation = (state) => state.ticket.selectedStatus;
+
+// Permet de savoir si le ticketDetails est actif ou non
+export const selectIsActive = (state) => state.ticket.isActive;
