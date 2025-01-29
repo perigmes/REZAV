@@ -8,8 +8,8 @@ passport.use(
   new CasStrategy(
     {
       version: "CAS3.0",
-      ssoBaseURL: "https://cas.univ-lemans.fr/cas/login", // https://localhost:8443/cas ET https://cas.univ-lemans.fr/cas/login ET /api/cas-login
-      serverBaseURL: "lammi-saes5-01.univ-lemans.fr", // http://localhost:5000
+      ssoBaseURL: "https://cas.univ-lemans.fr/cas", // https://localhost:8443/cas ET https://cas.univ-lemans.fr/cas/login ET /api/cas-login
+      serverBaseURL: "https://lammi-saes5-01.univ-lemans.fr", // http://localhost:5000
       validateURL: "/serviceValidate",
     },
     async (profile, done) => {
@@ -88,8 +88,13 @@ export const casLogin = function(req, res, next) {
   if (!user) {
     return res.redirect('/');
   }
+  req.logIn(user, function (err) {
+      if (err) {
+        return next(err);
+      }
 
-  return res.redirect('/'); // mettre à la racine en prod http://localhost:3000
+    return res.redirect('/'); // mettre à la racine en prod http://localhost:3000
+  });
 })(req, res, next);
 }
 
