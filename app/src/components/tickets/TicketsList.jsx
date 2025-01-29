@@ -1,7 +1,7 @@
 import React from 'react';
 import Ticket from './Ticket';
 
-const TicketsList = ({ reservations, onReservationClick }) => {
+const TicketsList = ({ reservations, listOfStatuses}) => {
   return (
     <div className="tickets-list">
       {reservations.length > 0 ? (
@@ -9,7 +9,7 @@ const TicketsList = ({ reservations, onReservationClick }) => {
           <Ticket
             key={reservation._id}
             reservation={reservation}
-            onClick={() => onReservationClick(reservation)}
+            listOfStatuses={listOfStatuses}
           />
         ))
       ) : (

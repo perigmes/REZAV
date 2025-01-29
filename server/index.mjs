@@ -17,9 +17,8 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"], // En-têtes autorisés
   }));
 
-  // app.use('/pictures', express.static(path.join(__dirname,'..', 'pictures')));
-  app.use('/pictures', express.static(path.join(__dirname,'..', 'pictures')));
-
+  //app.use('/pictures', express.static(path.join(__dirname,'..', 'pictures')));
+  app.use('/uploads', express.static(path.join(__dirname,'..', 'uploads')));
   app.use(router);
   app.use('/api', router);
 

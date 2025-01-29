@@ -1,123 +1,277 @@
-@use 'variables' as *;
-main{
-    height: 100vh;
+@use "variables" as *;
+main {
+  height: 100vh;
 }
-.reservations-page{
-    display: flex;
-    font-family: $main-font;
-    gap: 30px;
-    padding: 25px 0;
-    height: calc(100% - 27px - 25px*2);
-}
+.reservations-page {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  font-family: $main-font;
+  gap: 30px;
+  padding: 25px 0;
 
-.tickets-list{
-    display: flex;
-    width: 30%;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 15px;
-    align-self: stretch;
+  .accepted {
+    background-color: $status-green;
+  }
+  .pending {
+    background-color: $status-blue;
+  }
+  .rejected {
+    background-color: $status-red;
+  }
+  .passed {
+    background-color: $status-gray;
+  }
 }
-.ticket{
-    background-color: #e9e9e9;
-    border-radius: 5px;
-    padding: 20px 20px 20px  25px;
-    display: flex;
+// Liste des tickets et tickets
+.tickets-list {
+  flex: 0 0 425px;
+  height: 100%;
+  scrollbar-width: none;
+  overflow-y: auto;
+  margin-left: -25px;
+  padding-left: 25px;
+  .ticket {
+    cursor: pointer;
+    overflow: hidden;
     position: relative;
+    padding: 15px 35px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    display: flex;
+    height: 65px;
     justify-content: space-between;
     align-items: center;
-    overflow: hidden;
-    .title-ticket{
-        display: flex;
-        width: 78%;
-        flex-direction: column;
-        gap: 3px;
-        h3{
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    box-shadow: -10px 10px 15px 0px rgba(0, 0, 0, 0.17);
+    .title-ticket {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+
+      h3 {
+        font-size: 16px;
+        max-width: 250px; /* Largeur maximale */
+        white-space: nowrap; /* Empêche le retour à la ligne */
+        overflow: hidden; /* Cache le texte qui dépasse */
+        text-overflow: ellipsis;
+      }
+      span {
+        font-size: 14px;
+      }
     }
-    .material-symbols-rounded{
-        display: flex;
-        z-index: 1;
-        align-items: center;
+    .material-symbols-rounded {
+      z-index: 1;
     }
-    .color-status{
-        position: absolute;
-        right: 0;
-        z-index: 0;
-        width: 20%;
-        height: 100%;
-        clip-path: polygon(0 0, 100% 0%, 100% 100%, 40% 100%);
+    .color-status {
+      position: absolute;
+      z-index: -1;
+      right: 0;
+      z-index: 0;
+      width: 125px;
+      height: 100%;
+      clip-path: polygon(0 0, 100% 0%, 100% 100%, 40% 100%);
     }
+  }
 }
-.details-container{
+.tickets-list > *:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+// Ticket details
+.details-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: -10px 10px 15px 0px rgba(0, 0, 0, 0.17);
+  border-style: solid;
+  border-width: 2px 2px 0 0;
+  border-color: rgb(245, 245, 245);
+  // Statut
+  .accepted {
+    background-color: $status-green;
+  }
+  .pending {
+    background-color: $status-blue;
+  }
+  .rejected {
+    background-color: $status-red;
+  }
+  .passed {
+    background-color: $status-gray;
+  }
+  .details-head {
     display: flex;
-    flex-direction: column;
-    width: 70%;
-    background-color: #e9e9e9;
-    border-radius: 5px;
-    overflow: hidden;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 50px;
+    .closeDetails {
+      display: none;
+    }
+    .head-infos {
+      max-width: 70%;
+    }
+    .head-status {
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  .details-body {
     height: 100%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
     overflow-y: auto;
-
-}
-
-.details-head{
-    display: flex;
-    flex-direction: column;
-    padding: 5%;
-    gap: 1vh;
-}
-.details-body{
-    display: flex;
-    flex-direction: column;
-    padding: 5%;
-    gap: 15px;
-    .section-body{
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
+    scrollbar-width: none;
+    gap: 35px;
+    .section-body {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
-    .listOfObjects{
+    .object-grid {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      .object-infos {
         display: flex;
         flex-direction: column;
-        
-        div{
-            display: flex;
-            flex-direction: row;
-            position: relative;
-            gap: 15px;
-            div{
-                gap: 5px;
-                display: flex;
-                flex-direction: column;
-               img{
-                width: 100px;
-                height: 100px;
-                max-width: 150px;
-                border-radius: 10px;
-            }
-            p {
-                white-space: wrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                font-weight: $font-weight-600;
-                font-size: 12px;
-                width: 100px;
-                
-            } 
-            }
-            
+        width: 100px;
+        gap: 5px;
+        .object-card {
+          width: 100px;
+          height: 100px;
+          border-radius: 10px;
+          box-shadow: -6px 6px 15px 0px rgba(0, 0, 0, 0.17);
+          border-style: solid;
+          border-width: 1.5px 1.5px 0 0;
+          border-color: rgb(255, 255, 255);
+          overflow: hidden;
+          img {
+            height: 100%;
+          }
         }
+        p {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-size: 0.8rem;
+        }
+      }
     }
+  }
 }
-@media only screen and (max-width : 481px) {
-    .reservations-page{
-        flex-direction: column;
+
+@media only screen and (max-width: 481px) {
+  .reservations-page {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px 0; /* Padding en haut/bas de 15px et sur les côtés de 25px */
+    gap: 15px; /* Réduire l'espace entre les éléments */
+    .mobile-details{
+      display: none;
     }
-    .tickets-list{
+    // Liste des tickets
+    .tickets-list {
+      flex: 1; /* Prendre tout l'espace disponible */
+      padding: 0; /* Supprimer le padding gauche */
+      margin-left: 0; /* Supprimer la marge négative */
+      width: 100%; /* Prendre toute la largeur */
+
+      .ticket {
         width: 100%;
+        height: 85px;
+        padding: 15px; 
+        box-sizing: border-box;
+
+        .title-ticket {
+          max-width: 85%;
+          h3 {
+            font-size: 14px;
+            max-width: 85%; 
+          }
+
+          span {
+            font-size: 13px;
+            max-width: 175px;
+            white-space: nowrap;
+          }
+        }
+      }
     }
+
+    // Détails du ticket
+    .details-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0; 
+      z-index: 1; 
+      margin: 0;
+      padding: 20px 20px;
+      box-sizing: border-box;
+      overflow: hidden;
+
+      &.details-active {
+        transition: all 200ms ease;
+        transform: translateX(0%);
+      }
+
+      &.details-not-active {
+        transition: all 200ms ease;
+        transform: translateX(120%);
+      }
+
+      .details-head{
+        position: relative;
+       display: flex;
+       flex-direction: column;
+       padding: 10px 25px 25px 25px;
+       gap: 15px;
+       border-radius: 5px 5px 0 0;
+          .closeDetails{
+            position: absolute;
+            background-color: transparent;
+            border: none;
+            top: 15px;
+            left: 15px;
+            display: block;
+
+       .head-infos{
+        max-width: 100%;
+        width: 100%;
+        justify-content: start;
+        
+        }
+        
+       }
+       
+      }
+      .details-body{
+        border-radius: 0 0 5px 5px ;
+      }
+    }
+
+    // Overlay pour les détails
+    .details-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+      z-index: 5; /* En dessous du details-container */
+      display: none; /* Masqué par défaut */
+    }
+
+    .details-container.details-active + .details-overlay {
+      display: block; /* Afficher l'overlay lorsque le details-container est actif */
+    }
+  }
 }
