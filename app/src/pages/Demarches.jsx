@@ -39,7 +39,7 @@ const Demarches = () => {
     return <div>Chargement des réservations...</div>;
   }
   return (
-    <div className="reservations-page">
+    <div className="main-content demarches">
       <TicketsList reservations={filteredReservations} listOfStatuses={statuses} />
       {selectedReservation ? (
         <TicketDetails reservation={selectedReservation} />
