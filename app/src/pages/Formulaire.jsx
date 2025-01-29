@@ -5,9 +5,8 @@ import {
   selectFormValidation,
   selectObjects,
 } from "../features/demande/demandeSelector";
-import { useNavigate } from 'react-router-dom';
-import { addReservation } from "../features/demande/reservationsAsyncAction";
-import { v4 as uuid } from 'uuid';
+import { useNavigate } from "react-router-dom";
+
 import {
    setFormValidation,
   updateDataDemande,
@@ -15,7 +14,7 @@ import {
 import { formatDateToDateHourMinute } from "../utils/tools";
 import "../assets/styles/formulaire.scss";
 import MembreManager from "../components/formulaire/MembreManager";
-import { Button } from "@mui/base";
+import { Box, Modal } from "@mui/joy";
 
 export const Formulaire = () => {
   const objects = useSelector(selectObjects);
@@ -23,14 +22,24 @@ export const Formulaire = () => {
   const dispatch = useDispatch();
   const group = useSelector(selectDataDemande).group;
   const navigate = useNavigate();
-  const [formStep, setFormStep] = useState(1);
+
+  useEffect(() => {
+    if (
+      dataDemande.startDT === "" ||
+      dataDemande.returnDT === "" ||
+      dataDemande.objects.length === 0
+    ) {
+      navigate("/list-objects");
+    }
+  }, []);
+
   const filteredObjects = objects.filter((obj) =>
     dataDemande.objects.includes(obj._id)
   );
   const [fileName, setFileName] = useState("Déposez votre plan ici"); // État pour le nom du fichier
   const [checkboxResp, setCheckboxResp] = useState(false);
   const [luApprouve, setLuApprouve] = useState("");
-  const [reservation,setReservation]= useState(dataDemande);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const TD = [
     { id: 0, grp: "-" },
@@ -119,7 +128,8 @@ export const Formulaire = () => {
     );
 
     const checkboxRespValid = checkboxResp;
-    const luApprouveValid = luApprouve.trim().toLowerCase() === "lu et approuvé";
+    const luApprouveValid =
+      luApprouve.trim().toLowerCase() === "lu et approuvé";
 
     const isValid = allMembersValid && checkboxRespValid && luApprouveValid;
 
@@ -144,7 +154,7 @@ export const Formulaire = () => {
         <header>
           <h3 className="titre-3">Mes articles sélectionnés</h3>
           <span>
-            Du {formatDateToDateHourMinute(dataDemande.startDT)} au {" "}
+            Du {formatDateToDateHourMinute(dataDemande.startDT)} au{" "}
             {formatDateToDateHourMinute(dataDemande.returnDT)}
           </span>
         </header>
@@ -164,7 +174,14 @@ export const Formulaire = () => {
         <header>
           <h3 className="titre-3">Formulaire de demande</h3>
         </header>
-
+        <span
+          className="rezav-button-2 list-btn-popup"
+          onClick={() => setIsModalOpen(true)}
+          onKeyDown={() => setIsModalOpen(true)}
+        >
+          <span className="material-symbols-rounded">fact_check</span>
+          Matériel selectionné
+        </span>
         <fieldset className="step-field-1">
           <h4>Votre Projet</h4>
           <div className="rezav-input input-txt">
@@ -232,7 +249,10 @@ export const Formulaire = () => {
               checked={checkboxResp}
               onChange={(e) => setCheckboxResp(e.target.checked)}
             />
-            <label className="rezav-checkbox-label" htmlFor="checkboxResp"></label>
+            <label
+              className="rezav-checkbox-label"
+              htmlFor="checkboxResp"
+            ></label>
             <p>
               En cochant cette case, je déclare prendre le matériel désigné en
               charge, en bon état. Je certifie également que ce matériel ne sera
@@ -263,6 +283,55 @@ export const Formulaire = () => {
         >Précédent</Button>
         <Button onClick={handleSubmit}>{formStep===2?'Valider':'Suivant'}</Button>
       </form>
+      <Modal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            width: "75%",
+            maxWidth: "none",
+            height: "75%",
+            backgroundColor: "#FAFAFA",
+            padding: 2,
+            display: "flex",
+            flexDirection: "column",
+            boxShadow: 24,
+            borderRadius: 10,
+          }}
+        >
+          <button
+            className="material-symbols-rounded btnClose"
+            onClick={() => setIsModalOpen(false)}
+          >
+            close
+          </button>
+          <div className="res-list-obj">
+            <header>
+              <h3 className="titre-3">Mes articles sélectionnés</h3>
+              <span>
+                Du {formatDateToDateHourMinute(dataDemande.startDT)} au{" "}
+                {formatDateToDateHourMinute(dataDemande.returnDT)}
+              </span>
+            </header>
+            <div>
+              {filteredObjects.map((object) => (
+                <div className="object-list-item" key={object._id}>
+                  <span className="title">{object.name}</span>
+                  <span className="status">Disponible</span>
+                  <span className="material-symbols-rounded icon">check</span>
+                  <div className="color-status"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 };

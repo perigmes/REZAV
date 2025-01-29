@@ -6,8 +6,9 @@ import {
   selectSearchBarre,
   selectObjectsFiltered,
   selectLoadingObjects,
-  selectErrors
+  selectObjIsSelectable,
 } from "../features/demande/demandeSelector";
+
 import ObjectCard from "../components/objects/ObjectCard";
 import ObjectPopup from "../components/objects/ObjectPopup";
 import "../assets/styles/card.scss";
@@ -18,8 +19,6 @@ import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
 import Add from "@mui/icons-material/Add";
-import Alert from "@mui/joy/Alert";
-import ReportIcon from '@mui/icons-material/Report';
 
 const ListObjects = () => {
   const objects = useSelector(selectObjects);
@@ -28,13 +27,16 @@ const ListObjects = () => {
   const isLoading = useSelector(selectLoadingObjects);
   const stateObjInfos = useSelector(selectObjInfos);
   const userInfos = useSelector(selectUSerInfos);
-  const errors = useSelector(selectErrors);
+  const objIsSelectable = useSelector(selectObjIsSelectable);
+  
+
   const IsInfos = stateObjInfos._id ?? "";
   const [isAdding, setIsAdding] = useState(false);
   const [objectsListFiltered, setObjectsListFiltered] = useState({});
 
   // Déterminer la source des objets : `objectsFiltered` si disponible, sinon `objects`
   const baseObjects = objectsFiltered.length > 0 ? objectsFiltered : objects;
+
   // Regroupement des objets par catégorie
   useEffect(() => {
     const groupedObjects = baseObjects.reduce((acc, objet) => {
@@ -65,17 +67,6 @@ const ListObjects = () => {
 
       setObjectsListFiltered(groupedFilteredObjects);
     }
-    else{
-      const groupedFilteredObjects = baseObjects.reduce((acc, objet) => {
-        if (!acc[objet.categorie]) {
-          acc[objet.categorie] = [];
-        }
-        acc[objet.categorie].push(objet);
-        return acc;
-      }, {});
-      setObjectsListFiltered(groupedFilteredObjects);
-
-    }
   }, [searchBarre, baseObjects]);
 
   console.log(objectsListFiltered);
@@ -86,7 +77,8 @@ const ListObjects = () => {
         <p>Chargement en cours...</p>
       ) : (
         <>
-          {userInfos.role === "admin" && (
+          {userInfos.role === "admin" && !objIsSelectable && (
+
            <Button className="add-btn" startDecorator={<Add sx={{ fontSize: "1.75rem" }}/>} onClick={()=>setIsAdding(true)} color="#6d6b9e" sx={()=>{
               return {
                 bottom: "35px",
@@ -116,22 +108,6 @@ const ListObjects = () => {
               />
             </ErrorBoundary>
           )}
-          {errors.errorSelectionForm &&
-          <Alert
-         
-          sx={{ alignItems: 'flex-start', position:'absolute', top: '5%', left: '60%', transform: 'translateX(-50%)', width: 'fit-content', padding: '10px 15px', borderRadius: '5px', backgroundColor: '#f8d7da', color: '#721c24', border: '1px solid #f5c6cb', zIndex: 9999 }}
-          startDecorator={<ReportIcon />}
-          variant="soft"
-          color='danger'
-        >
-          <div>
-            <div>Erreur</div>
-            <Typography level="body-sm" color='danger'>
-              {errors.errorSelectionForm}
-            </Typography>
-          </div>
-        </Alert>
-}
           {Object.keys(objectsListFiltered).map((category) => (
             <Box key={category} sx={{ marginBottom: "2vh", position: "relative", zIndex: 0 }}>
               <Divider
@@ -166,6 +142,7 @@ const ListObjects = () => {
                     md: "repeat(5, 1fr)",
                     lg: "repeat(6, 1fr)",
                   },
+
                   gap: 2, 
                 }}
               >
