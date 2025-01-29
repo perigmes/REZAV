@@ -15,6 +15,7 @@ export const selectSelectedObjects = (state) => state.demande.dataDemande.object
 export const selectSearchBarre = (state) => state.demande.searchBarre;
 export const selectFilter = (state) => state.demande.filter;
 export const selectErrorFormDemande = (state) => state.demande.errors.errorFormDemande;
+export const selectErrors = (state) => state.demande.errors;
 export const selectFormStep = (state) => state.demande.formStep;
 export const selectFormValidation = (state) => state.demande.formValidation;
 export const selectLast5ValidReservations = (state) => state.demande.last5ValidReservations;

@@ -6,8 +6,8 @@ import {
   selectSearchBarre,
   selectObjectsFiltered,
   selectLoadingObjects,
+  selectErrors
 } from "../features/demande/demandeSelector";
-
 import ObjectCard from "../components/objects/ObjectCard";
 import ObjectPopup from "../components/objects/ObjectPopup";
 import "../assets/styles/card.scss";
@@ -18,6 +18,8 @@ import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
 import Add from "@mui/icons-material/Add";
+import Alert from "@mui/joy/Alert";
+import ReportIcon from '@mui/icons-material/Report';
 
 const ListObjects = () => {
   const objects = useSelector(selectObjects);
@@ -26,7 +28,7 @@ const ListObjects = () => {
   const isLoading = useSelector(selectLoadingObjects);
   const stateObjInfos = useSelector(selectObjInfos);
   const userInfos = useSelector(selectUSerInfos);
-
+  const errors = useSelector(selectErrors);
   const IsInfos = stateObjInfos._id ?? "";
   const [isAdding, setIsAdding] = useState(false);
   const [objectsListFiltered, setObjectsListFiltered] = useState({});
@@ -115,6 +117,22 @@ const ListObjects = () => {
               />
             </ErrorBoundary>
           )}
+          {errors.errorSelectionForm &&
+          <Alert
+         
+          sx={{ alignItems: 'flex-start', position:'absolute', top: '5%', left: '60%', transform: 'translateX(-50%)', width: 'fit-content', padding: '10px 15px', borderRadius: '5px', backgroundColor: '#f8d7da', color: '#721c24', border: '1px solid #f5c6cb', zIndex: 9999 }}
+          startDecorator={<ReportIcon />}
+          variant="soft"
+          color='danger'
+        >
+          <div>
+            <div>Erreur</div>
+            <Typography level="body-sm" color='danger'>
+              {errors.errorSelectionForm}
+            </Typography>
+          </div>
+        </Alert>
+}
           {Object.keys(objectsListFiltered).map((category) => (
             <Box key={category} sx={{ marginBottom: "2vh", position: "relative", zIndex: 0 }}>
               <Divider
