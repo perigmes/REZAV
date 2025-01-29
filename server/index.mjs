@@ -18,7 +18,7 @@ app.use(cors({
   }));
 
   // app.use('/pictures', express.static(path.join(__dirname,'..', 'pictures')));
-  app.use('/documents', express.static(path.join(__dirname,'..', 'documents')));
+  app.use('/pictures', express.static(path.join(__dirname,'..', 'pictures')));
 
   app.use(router);
   app.use('/api', router);

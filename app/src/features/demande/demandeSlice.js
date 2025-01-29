@@ -20,7 +20,7 @@ const demandeSlice = createSlice({
     user: {
       _id: "test",
       email: "perigmes@gmail.com",
-      role: "admin",
+      role: "testUser",
       affiliation: "professor",
       firstName: "Pierrick",
       lastName: "Breaud",

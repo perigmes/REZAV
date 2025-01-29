@@ -174,9 +174,11 @@ html {
   border: none;
   font-size: $font-size-14;
   font-weight: $font-weight-500;
+  font-family: $main-font;
   padding: 5px;
   border-radius: 2.5px;
   transition: all 0.3s ease;
+  cursor: pointer;
 
   .material-symbols-rounded {
     font-size: $font-size-22;

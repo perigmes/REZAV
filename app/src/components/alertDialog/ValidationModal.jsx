@@ -37,11 +37,28 @@ export  const ValidationModal= ({ isOpened,confirmFunction }) =>{
           <Box display="flex" flexDirection="row" justifyContent="space-between">
             <Button onClick={()=>{confirmFunction(false);
               setOpen(false)
-              }}>Annuler</Button>
+              }}
+              sx={{
+                backgroundColor: "#A55151", // Vert si ajout, orange si modification
+                color: "white",
+
+                "&:hover": {
+                  backgroundColor: "#A55151",
+                },
+              }}
+              >Annuler</Button>
               <Button onClick={()=>{confirmFunction(true)
               setOpen(false)
-              }}>Oui</Button>
-             
+              }}
+              sx={{
+                backgroundColor: "#6d6b9e", // Vert si ajout, orange si modification
+                color: "white",
+
+                "&:hover": {
+                  backgroundColor: "#6d6b9e",
+                },
+              }}
+              >Valider</Button>
             </Box>
         </Sheet>
       </Modal>

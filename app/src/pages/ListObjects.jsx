@@ -6,7 +6,8 @@ import {
   selectSearchBarre,
   selectObjectsFiltered,
   selectLoadingObjects,
-  selectErrors
+  selectErrors,
+  selectObjIsSelectable,
 } from "../features/demande/demandeSelector";
 import ObjectCard from "../components/objects/ObjectCard";
 import ObjectPopup from "../components/objects/ObjectPopup";
@@ -29,6 +30,9 @@ const ListObjects = () => {
   const stateObjInfos = useSelector(selectObjInfos);
   const userInfos = useSelector(selectUSerInfos);
   const errors = useSelector(selectErrors);
+  const objIsSelectable = useSelector(selectObjIsSelectable);
+  
+
   const IsInfos = stateObjInfos._id ?? "";
   const [isAdding, setIsAdding] = useState(false);
   const [objectsListFiltered, setObjectsListFiltered] = useState({});
@@ -86,7 +90,7 @@ const ListObjects = () => {
         <p>Chargement en cours...</p>
       ) : (
         <>
-          {userInfos.role === "admin" && (
+          {userInfos.role === "admin" && !objIsSelectable && (
 
            <Button className="add-btn" startDecorator={<Add sx={{ fontSize: "1.75rem" }}/>} onClick={()=>setIsAdding(true)} color="#6d6b9e" sx={()=>{
               return {
