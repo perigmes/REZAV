@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addObject, addReservation, getLast3Demandes, getLast5ValidReservations, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
+import { addObject, addReservation, deleteObject, getLast3Demandes, getLast5ValidReservations, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
 import { getDatePlusDays } from '../../utils/tools';
 
 const demandeSlice = createSlice({
@@ -179,9 +179,17 @@ const demandeSlice = createSlice({
       })
       .addCase(addObject.fulfilled, (state, action) => {
         state.objects.push(action.payload);
-      })
+      })      
       .addCase(addObject.rejected, (state, action) => {
-        state.errors.apiErrorAdd = action.payload;
+        state.errors.apiErrorAdd = action.payload;})
+
+      .addCase(deleteObject.fulfilled, (state, action) => {
+          state.objects = state.objects.filter((obj) => obj._id !== action.payload);
+      })
+      .addCase(deleteObject.rejected, (state, action) => {
+        state.errors.apiErrorObjectsDelete = action.payload;
+      })
+
       .addCase(getLast5ValidReservations.pending, (state) => {})
       .addCase(getLast5ValidReservations.fulfilled, (state, action) => {
         state.last5ValidReservations = action.payload;
