@@ -8,8 +8,8 @@ passport.use(
   new CasStrategy(
     {
       version: "CAS3.0",
-      ssoBaseURL: "https://localhost:8443/cas", // prod : cas du mans
-      serverBaseURL: "http://localhost:5000", // lammi-saes5-01.univ-lemans.fr
+      ssoBaseURL: "https://cas.univ-lemans.fr/cas/login", // https://localhost:8443/cas
+      serverBaseURL: "lammi-saes5-01.univ-lemans.fr", // http://localhost:5000
       validateURL: "/serviceValidate",
     },
     async (profile, done) => {
@@ -19,16 +19,6 @@ passport.use(
         console.error("❌ Aucune donnée utilisateur reçue de CAS !");
         return done(null, false);
       }
-
-      // const userData = {
-      //   idUser: profile.user,
-      //   username: profile.user,
-      //   email: profile.attributes?.mail || `${profile.user}@univ-lemans.fr`,
-      //   firstname: profile.attributes?.firstname || "Non défini",
-      //   lastname: profile.attributes?.lastname || "Non défini",
-      //   role: profile.attributes?.role || "Non défini",
-      //   affiliation: profile.attributes?.affiliation || "Non défini",
-      // };
 
       //Si compte utilisateur en BD n'existe pas, le créer. Et si il existe le mettre a jour
       
@@ -99,7 +89,7 @@ export const casLogin = function(req, res, next) {
     return res.redirect('/');
   }
 
-  return res.redirect('http://localhost:3000'); // mettre à la racine en prod
+  return res.redirect('/'); // mettre à la racine en prod http://localhost:3000
 })(req, res, next);
 }
 
