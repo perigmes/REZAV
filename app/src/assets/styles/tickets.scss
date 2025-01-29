@@ -2,7 +2,7 @@
 main {
   height: 100vh;
 }
-.reservations-page {
+.main-content.demarches {
   height: 100%;
   display: flex;
   flex-direction: row;
@@ -43,6 +43,10 @@ main {
     justify-content: space-between;
     align-items: center;
     box-shadow: -10px 10px 15px 0px rgba(0, 0, 0, 0.17);
+
+    &.active {
+      
+    }
     .title-ticket {
       display: flex;
       flex-direction: column;
@@ -168,7 +172,7 @@ main {
 }
 
 @media only screen and (max-width: 481px) {
-  .reservations-page {
+  .main-content.demarches {
     box-sizing: border-box;
     width: 100%;
     padding: 15px 0; /* Padding en haut/bas de 15px et sur les côtés de 25px */

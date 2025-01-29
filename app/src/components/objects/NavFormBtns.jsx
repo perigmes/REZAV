@@ -100,7 +100,8 @@ const NavFormBtns = () => {
                 projectName: dataDemande.name,
                 projectDescription: dataDemande.desc,
                 groupMembers: dataDemande.group,
-                implementationPlan: dataDemande.plan, 
+                implementationPlan: dataDemande.plan,
+                justification: dataDemande.justif, 
                 items: dataDemande.objects,
                 idStatus: idStatus,
             };

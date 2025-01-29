@@ -9,9 +9,7 @@ import {
   selectObject,
   setInfoObject,
 } from "../../features/demande/demandeSlice";
-import { normalizeString } from "../../utils/tools";
 import Checkbox from "@mui/joy/Checkbox";
-import AspectRatio from "@mui/joy/AspectRatio";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
