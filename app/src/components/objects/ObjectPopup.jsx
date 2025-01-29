@@ -6,33 +6,48 @@ import {
   selectUSerInfos,
 } from "../../features/demande/demandeSelector";
 import "../../assets/styles/popup.scss";
-import { useState } from "react";
-import { updateObject } from "../../features/demande/reservationsAsyncAction";
+import { useEffect, useState } from "react";
+import {
+  addObject,
+  updateObject,
+  deleteObject,
+} from "../../features/demande/reservationsAsyncAction";
+import Button from "@mui/joy/Button";
+import Box from "@mui/joy/Box";
+import { ValidationModal } from "../alertDialog/ValidationModal";
 
-const ObjectPopup = () => {
+const ObjectPopup = ({ addingMode, closeFunction }) => {
   const dispatch = useDispatch();
   const infoObject = useSelector(selectObjInfos);
   const userInfos = useSelector(selectUSerInfos);
-  const [infos, setInfos] = useState(infoObject);
+  const [isConfirmated, setIsConfirmated] = useState(false);
+  const [isConfirmating, setIsConfirmating] = useState(false);
+  const [infos, setInfos] = useState(
+    addingMode
+      ? {
+          _id: "",
+          categorie: "",
+          description: "",
+          name: "",
+          picture: "",
+        }
+      : infoObject
+  );
 
-  // Stocker l'aperçu temporaire de l'image
   const [preview, setPreview] = useState(
-    infoObject.picture instanceof File
-      ? null
-      : infoObject.picture // Si c'est une URL, la garder
+    infoObject.picture instanceof File ? null : infoObject.picture // Si c'est une URL, la garder
   );
 
   const closePopup = () => {
     dispatch(setInfoObject({}));
+    closeFunction();
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Mettre à jour l'état avec le fichier brut
       setInfos({ ...infos, picture: file });
 
-      // Générer un aperçu temporaire de l'image
       const filePreview = URL.createObjectURL(file);
       setPreview(filePreview);
     }
@@ -40,7 +55,7 @@ const ObjectPopup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
     formData.append("categorie", infos.categorie);
     formData.append("name", infos.name);
@@ -49,25 +64,49 @@ const ObjectPopup = () => {
     if (infos.picture instanceof File) {
       formData.append("picture", infos.picture);
     }
-  
-    dispatch(updateObject({ id: infos._id, data: formData }));
+    if (!infos.isLate) {
+      formData.append("isLate", false);
+    }
+    console.log(formData);
+    addingMode
+      ? dispatch(addObject({ data: formData }))
+      : dispatch(updateObject({ id: infos._id, data: formData }));
     closePopup();
   };
 
+  const handleDelete = () => {
+    dispatch(deleteObject({ id: infos._id }));
+    closePopup();
+  };
+  useEffect(() => {
+    if (isConfirmated) {
+      handleDelete();
+    }
+  }, [isConfirmated, handleDelete]);
   return (
     <Modal
       className="object-popup"
       onRequestClose={closePopup}
-      isOpen={infos && Object.keys(infos).length > 0}
+      isOpen={infos || addingMode}
     >
       <div className="object-popup-content">
-        <button onClick={closePopup} className="btnClose">X</button>
+        <button
+          onClick={closePopup}
+          className="material-symbols-rounded btnClose"
+        >
+          close
+        </button>
+        
         {userInfos.role === "admin" ? (
           <>
             <form onSubmit={handleSubmit} method="post">
               <div className="formPopup">
                 <img
-                  src={preview} // Utilisez l'aperçu temporaire ou l'URL d'origine
+                  src={preview || "/images/error-img.webp"}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/images/error-img.webp";
+                  }}
                   alt={infos.name}
                   className="imgObject"
                 />
@@ -78,9 +117,14 @@ const ObjectPopup = () => {
                       id="categorie"
                       name="categorie"
                       value={infos.categorie}
-                      onChange={(e) =>
-                        setInfos({ ...infos, categorie: e.currentTarget.value })
-                      }
+                      required
+                      onChange={(e) => {
+                        setInfos({
+                          ...infos,
+                          categorie: e.currentTarget.value,
+                        });
+                        console.log(infos);
+                      }}
                       className="w-100"
                     />
                   </div>
@@ -91,6 +135,7 @@ const ObjectPopup = () => {
                       id="name"
                       name="name"
                       type="text"
+                      required
                       value={infos.name}
                       onChange={(e) =>
                         setInfos({ ...infos, name: e.currentTarget.value })
@@ -128,52 +173,88 @@ const ObjectPopup = () => {
                     </p>
                     <p className="restrictions">fichier webp uniquement</p>
                     <input
+                      required
                       id="picture"
                       type="file"
                       name="picture"
                       accept="image/webp"
-                      onChange={handleFileChange} // Appelle la fonction handleFileChange
+                      onChange={handleFileChange}
                       className="fileBtn"
                     />
                   </div>
                 </div>
               </div>
-
-              <button
-                name="btnFormObject"
-                type="submit"
-                className="rezav-button-1 btnFormObject"
+              <Box
+                display="flex"
+                flexDirection="row"
+                justifyContent={"flex-end"}
+                gap={"15px"}
               >
-                Modifier
-              </button>
+                <Button
+                  onClick={() => {
+                    setIsConfirmating(true);
+                  }}
+                  sx={{
+                    backgroundColor: "#A55151", // Vert si ajout, orange si modification
+                    color: "white",
+
+                    "&:hover": {
+                      backgroundColor: "#A55151",
+                    },
+                  }}
+                >
+                  Supprimer
+                </Button>
+                <Button
+                  name="btnFormObject"
+                  type="submit"
+                  className="rezav-button-1 btnFormObject"
+                  sx={{
+                    backgroundColor: "#6d6b9e", // Vert si ajout, orange si modification
+                    color: "white",
+
+                    "&:hover": {
+                      backgroundColor: "#6d6b9e",
+                    },
+                  }}
+                >
+                  {addingMode ? "Ajouter" : "Modifier"}
+                </Button>
+              </Box>
+              {isConfirmating && (
+                <ValidationModal
+                  isOpened={isConfirmating}
+                  confirmFunction={(response) => {
+                    setIsConfirmated(response);
+                    setIsConfirmating(false);
+                  }}
+                />
+              )}
             </form>
           </>
         ) : (
- <div className="formPopup">
-                <img
-                  src={preview} // Utilisez l'aperçu temporaire ou l'URL d'origine
-                  alt={infos.name}
-                  className="imgObject"
-                />
-                <div className="object-infos">
-                    <h2 className="objects-filtered-title">{infos.categorie}</h2>
-                    <p
-                      id="name"
-                      name="name"
-                      className="w-100 text1"
-                    >{infos.name}</p>
+          <div className="formPopup">
+            <img src={preview} alt={infos.name} className="imgObject" />
+            <div className="object-infos">
+              <h2 className="objects-filtered-title">{infos.categorie}</h2>
+              <p id="name" name="name" className="w-100 text1">
+                {infos.name}
+              </p>
 
-                  <div className="rezav-input input-txt">
-                    <label htmlFor="description" className="text1">Description</label>
-                    <pre name="description"
-                      id="description" className="w-100 text2">
-                      
-                      {infos.description}
-                      </pre>
-                  </div>
-                
-                </div>
+              <div className="rezav-input input-txt">
+                <label htmlFor="description" className="text1">
+                  Description
+                </label>
+                <pre
+                  name="description"
+                  id="description"
+                  className="w-100 text2"
+                >
+                  {infos.description}
+                </pre>
               </div>
+            </div>
+          </div>
         )}
       </div>
     </Modal>
@@ -181,3 +262,4 @@ const ObjectPopup = () => {
 };
 
 export default ObjectPopup;
+

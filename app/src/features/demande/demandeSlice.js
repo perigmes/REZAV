@@ -1,12 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addReservation, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
+import { addObject,loadMaterielByDate, addReservation, deleteObject, getLast3Demandes, getLast5ValidReservations, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
 import { getDatePlusDays } from '../../utils/tools';
 
 const demandeSlice = createSlice({
   name: "demande",
   initialState: {
     objects: [],
+    objectsFiltered: [],
     reservations: [],
+    last5ValidReservations: [],
+    last3Demandes: [],
     objIsSelectable: false,
     searchBarre: "",
     loadingObjects: false,
@@ -16,15 +19,14 @@ const demandeSlice = createSlice({
     formValidation: false,
     user: {
       _id: "test",
-      name: "admin",
       email: "perigmes@gmail.com",
       role: "admin",
       affiliation: "professor",
-      firstName: "Test",
-      lastName: "adminName",
-      idUser: "itest",
+      firstName: "Pierrick",
+      lastName: "Breaud",
+      idUser: "testUser",
     },
-    dataDemande: {
+    dataDemande: {  
       id: "",
       userId: "",
       startDT: getDatePlusDays(2),
@@ -32,7 +34,7 @@ const demandeSlice = createSlice({
       name: "",
       desc: "",
       justif: "",
-      plan: "",
+      plan: null,
       group: [
         {
           firstName: "Pierrick",
@@ -48,6 +50,7 @@ const demandeSlice = createSlice({
       apiErrorReservationLoad: null,
       apiErrorAdd: null,
       errorFormDemande: false,
+      errorSelectionForm:null
     },
   },
   reducers: {
@@ -66,6 +69,12 @@ const demandeSlice = createSlice({
       } else if (state.formStep === 2) {
         state.formStep = 1;
       }
+    },
+    setFileData: (state, action) => {
+      state.dataDemande.plan = action.payload;
+    },
+    setError: (state, action) => {
+      state.errors[action.payload.field]= action.payload.value;
     },
     setSearchBarre: (state, action) => {
       state.searchBarre = action.payload;
@@ -107,7 +116,7 @@ const demandeSlice = createSlice({
       state.dataDemande.startDT = action.payload;
     },
     setReturnDT: (state, action) => {
-      state.dataDemande.returnDT = action.payload; // Pierrick le 19/01/2025
+      state.dataDemande.returnDT = action.payload;
     },
     setFormValidation: (state, action) => {
       state.formValidation = action.payload;
@@ -125,7 +134,7 @@ const demandeSlice = createSlice({
       .addCase(loadMateriel.fulfilled, (state, action) => {
         state.objects = action.payload;
         state.objects.map(
-          (obj) => (obj.picture = obj.picture)
+          (obj) => (obj.picture = 'http://localhost:5000/'+obj.picture)
         );
         state.loadingObjects = false;
         state.errors.apiErrorObjectsLoad = null;
@@ -134,6 +143,14 @@ const demandeSlice = createSlice({
         state.loadingObjects = false;
         state.errors.apiErrorObjectsLoad = action.payload;
       })
+      .addCase(loadMaterielByDate.pending, (state) => {
+        state.errors.apiErrorObjectsLoad = null;
+      })
+      .addCase(loadMaterielByDate.fulfilled, (state, action) => {
+          state.objectsFiltered = action.payload;
+      }
+    )
+
       .addCase(loadReservation.pending, (state) => {
         state.loadingReservations = true;
         state.errors.apiErrorReservationLoad = null;
@@ -147,6 +164,7 @@ const demandeSlice = createSlice({
         state.loadingReservations = false;
         state.errors.apiErrorReservationLoad = action.payload;
       })
+
       .addCase(addReservation.pending, (state) => {
         state.errors.apiErrorAdd = null;
       })
@@ -156,6 +174,7 @@ const demandeSlice = createSlice({
       .addCase(addReservation.rejected, (state, action) => {
         state.errors.apiErrorAdd = action.payload;
       })
+
       .addCase(updateObject.pending, (state) => {})
       .addCase(updateObject.fulfilled, (state, action) => {
         state.objects = state.objects.map((obj) => {
@@ -172,7 +191,35 @@ const demandeSlice = createSlice({
       })
       .addCase(updateObject.rejected, (state, action) => {
         state.errors.apiErrorObjectsLoad = action.payload;
-      });
+      })
+
+      .addCase(addObject.pending, (state) => {
+        state.errors.apiErrorAdd = null;
+      })
+      .addCase(addObject.fulfilled, (state, action) => {
+        state.objects.push(action.payload);
+      })      
+      .addCase(addObject.rejected, (state, action) => {
+        state.errors.apiErrorAdd = action.payload;
+      })
+
+      .addCase(deleteObject.pending, (state) => {})
+      .addCase(deleteObject.fulfilled, (state, action) => {
+        state.objects = state.objects.filter((obj) => obj._id !== action.payload);
+      })
+      .addCase(deleteObject.rejected, (state, action) => {
+        state.errors.apiErrorObjectsLoad = action.payload;
+      })
+
+      .addCase(getLast5ValidReservations.pending, (state) => {})
+      .addCase(getLast5ValidReservations.fulfilled, (state, action) => {
+        state.last5ValidReservations = action.payload;
+      })
+      
+      .addCase(getLast3Demandes.pending, (state) => {})
+      .addCase(getLast3Demandes.fulfilled, (state, action) => {
+        state.last3Demandes = action.payload;
+      })
   },
 });
 
@@ -183,6 +230,7 @@ export const {
   setSearchBarre,
   setFilter,
   setErrorFormDemande,
+  setFileData,
   setObjIsSelectable,
   selectObject,
   deselectObject,
@@ -190,6 +238,7 @@ export const {
   clearDataDemande,
   setStartDT,
   setReturnDT,
+  setError,
   setFormValidation,
   setSelectedObjects,
   updateSelectedObjects,
