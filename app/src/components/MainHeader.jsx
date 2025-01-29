@@ -89,6 +89,10 @@ const MainHeader = () => {
     
     const useDynamicTitle = () => {
         const dynamicString = useMemo(() => {
+            if (location.pathname.startsWith("/reservation-confirmation/")) {
+                return "Validation de réservation";
+            }
+
             switch (location.pathname) {
                 case '/' :
                     return "Tableau de bord";

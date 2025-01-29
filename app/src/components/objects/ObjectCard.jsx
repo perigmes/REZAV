@@ -91,7 +91,7 @@ const ObjectCard = ({ object }) => {
                     <label 
                         htmlFor={`checkbox-${_id}`} 
                         className="rezav-checkbox-label" 
-                        onClick={(e) => e.stopPropagation()} // Empêcher la propagation du clic
+                        onClick={(e) => e.stopPropagation()}
                     ></label>
                 </>
             )}

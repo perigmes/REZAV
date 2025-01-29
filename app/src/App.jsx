@@ -57,6 +57,7 @@ export default function App() {
               element={<Reservation />}
             />
             <Route path="/mes-demarches" element={<Demarches />} />
+            <Route path="/reservation-confirmation/test" element={<Reservation/>}/>
           </Routes>
       </main>
     </BrowserRouter>
