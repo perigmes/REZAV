@@ -21,10 +21,12 @@ const TableauBord = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUSerInfos);
+  
   useEffect(() => {
     dispatch(getLast5ValidReservations(user.idUser));
     dispatch(getLast3Demandes(user.idUser));
   }, [dispatch, user.idUser]);
+
   const last5ValidReservations = useSelector(selectLast5ValidReservations);
   const last3Demandes = useSelector(selectLast3Demandes);
   const allObjects = useSelector(selectObjects);
