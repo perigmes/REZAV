@@ -17,7 +17,7 @@ export const selectFormStep = (state) => state.demande.formStep;
 export const selectFormValidation = (state) => state.demande.formValidation;
 export const selectLast5ValidReservations = (state) => state.demande.last5ValidReservations;
 export const selectLast3Demandes = (state) => state.demande.last3Demandes;
-
+export const selectLoadingObjects = (state) => state.demande.loadingObjects;
 
 export const selectReservationDates = createSelector(
     [selectDataDemande],

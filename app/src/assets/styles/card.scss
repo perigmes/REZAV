@@ -1,5 +1,8 @@
 @use 'variables' as *;
 
+    .main-content.objects-list {
+        overflow-y: auto;
+    }
 
     /* CSS pour le conteneur boutons de navigations dans le formulaire de reservation */
     .nav-form-btns {

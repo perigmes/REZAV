@@ -85,16 +85,6 @@ export const getLast3Demandes = createAsyncThunk('reservation/getLastDemandes', 
     }
 });
 
-export const getLast3Demandes = createAsyncThunk('reservation/getLastDemandes', async ( userId , {rejectWithValue}) => {
-
-    try {
-        const response = await axios.get(`${URL_API_RESERVATIONS}/reservation/user/${userId}/lastInvalid`);
-        return response.data;
-    } catch (error) {
-        return rejectWithValue(error.response.data.error.message);
-    }
-});
-
 export const addObject = createAsyncThunk('reservation/addObject', async ( {data} , {rejectWithValue}) => {
 console.log(data.get('name'));
     try {
