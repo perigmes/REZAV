@@ -56,6 +56,7 @@ export const DeleteItem = async (req, res) => {
 export const AddItem = async (req, res) => {
   let collection = await db.collection("materiel");
   let item = req.body;
+  console.log("Item : ", item);
   try {
     let result = await collection.insertOne(item);
     res.status(200).json({ message: "Item ajouté avec succès", result });
