@@ -37,7 +37,7 @@ const Demarches = () => {
       {selectedReservation ? (
         <TicketDetails reservation={selectedReservation} />
       ) : (
-        <div>Sélectionnez une réservation pour voir les détails</div>
+        <div className='mobile-details'>Sélectionnez une réservation pour voir les détails</div>
       )}
     </div>
   );

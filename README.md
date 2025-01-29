@@ -56,6 +56,6 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 
 - **Clémentine Prouteau** - *Développeur principal* - [perigmes](https://github.com/perigmes)
 - **Pierrick Breaud** - *Développeur principal* - [Pierrickbrd](https://github.com/Pierrickbrd)
-- **Charlie Charron** - *Développeur après-secondaire* - [perigmes](https://github.com/perigmes)
+- **Charlie Charron** - *Développeur principal* - [QW6D3](https://github.com/perigmes)
 - **Thomas Blanchard** - *Développeur principal* - [Blathox](https://github.com/Blathox)
 

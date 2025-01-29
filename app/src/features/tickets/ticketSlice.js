@@ -13,6 +13,7 @@ const ticketSlice = createSlice({
     },
     statusReservations: [],
     selectedStatus: "",
+    isActive: false,
   },
   reducers: {
     setReservations: (state, action) => {
@@ -23,6 +24,9 @@ const ticketSlice = createSlice({
     },
     setStatus: (state, action) => {
       state.selectedStatus = action.payload
+    },
+    setIsActive: (state, action) => {
+      state.isActive = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -59,5 +63,5 @@ const ticketSlice = createSlice({
   }
 });
 
-export const { setReservations, setselectedReservation, setShowDetails, setStatus } = ticketSlice.actions;
+export const { setReservations, setselectedReservation, setIsActive, setStatus } = ticketSlice.actions;
 export default ticketSlice.reducer;
