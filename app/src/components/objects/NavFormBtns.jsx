@@ -74,7 +74,8 @@ const NavFormBtns = () => {
                 navigate('/formulaire-reservation');
             }
         } else if (location.pathname === '/formulaire-reservation' && formStep === 1) {
-            if (dataDemande.name.trim().length === 0 ||dataDemande.desc.trim().length === 0 || dataDemande.plan.trim().length === 0 || dataDemande.justif.trim().length === 0) {
+            console.log(dataDemande);
+            if (dataDemande.name === '' || dataDemande.desc.trim().length === 0 || Object.keys(dataDemande.plan).length === 0 || dataDemande.justif.trim().length === 0) {
                 dispatch(setErrorFormDemande(true))
                 setErrorMessage("Vous devez remplir tous les champs du formulaire pour passer à l'étape suivante");
                 return;
@@ -90,7 +91,8 @@ const NavFormBtns = () => {
             } else {
                 dispatch(setErrorFormDemande(false))
             }
-
+            const formData = new FormData();
+            
             const idStatus = uuid();
             const reservation = {
                 _id: uuid(),
@@ -104,16 +106,34 @@ const NavFormBtns = () => {
                 items: dataDemande.objects,
                 idStatus: idStatus,
             };
+            console.log(reservation);
+            Object.keys(reservation).forEach((key) => {
+                // Si la valeur est un objet ou un tableau, on la convertit en JSON
+                if (key === "implementationPlan") {
+                        const file = reservation[key];
+                        console.log(file);
+                        formData.append('file', new File([], file.name, { type: file.type,size:file.size })); // Remplacer [] par le fichier réel lorsque tu l'as
+                        console.log(formData.get('file'));
+                                      }
+                  else{
+                if (typeof reservation[key] === "object") {
 
+                    
+                  formData.append(key, JSON.stringify(reservation[key]));
+                } else {
+                  formData.append(key, reservation[key]);
+                }}
+                console.log(formData.get(key));
+              });
             const reservation_status = {
                 idStatus: idStatus,
                 status: "pending",
             };
 
-            dispatch(addReservation({ reservation, reservation_status })).unwrap();
+             dispatch(addReservation({ formData, reservation_status })).unwrap();
             // navigate(`/reservation-confirmation/pending/${reservation._id}`);
-            navigate('/mes-demarches');
-            dispatch(clearDataDemande());
+            //navigate('/mes-demarches');
+            //dispatch(clearDataDemande());
         }
     };
 
