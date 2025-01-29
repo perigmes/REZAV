@@ -71,6 +71,7 @@ html {
     background-color: $mauve-rezav;
 }
 
+
 .rezav-checkbox-label {
     width: 14px;
     height: 14px;
@@ -456,4 +457,8 @@ html {
         width: 7%;
         flex: none;
     }
+}
+
+.label{
+    color: $mauve-rezav;
 }

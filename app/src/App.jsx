@@ -32,7 +32,7 @@ export default function App() {
       <BrowserRouter>
       <MainHeader/>
         <Routes>
-          <Route path="/" element={<Navigate to="/list-objects" replace />} />
+          <Route path="/" element={<ListObjects />} />
           <Route element={<NavFormBtnsLayout />}>
             <Route path="/list-objects" element={<ListObjects />} />
             <Route path="/formulaire-reservation" element={<Formulaire />} />
