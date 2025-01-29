@@ -1,26 +1,54 @@
 import { sendResponseEmail, sendConfirmationEmail } from "../helper.js";
 import db from "../db/conn.mjs";
-
+import path from "path";
 export const PostReservation = async (req, res) => {
-  // Lire les fichiers JSON en parallèle
   let collection = db.collection("reservations");
   let collection2 = db.collection("reservation_status");
 
   try {
-    let newDocument = req.body.reservation;
-    let newStatus = req.body.reservation_status;
+    // Vérification du fichier
+    const filePath = req.file?.path;
+    console.log("📂 Fichier reçu :", filePath);
+
+    // Parsing des données JSON
+    let newDocument = {
+      projectName: req.body.projectName,
+      projectDescription: req.body.projectDescription,
+      projectJustification: req.body.projectJustification,
+      reservationDate: req.body.reservationDate,
+      returnDate: req.body.returnDate,
+      groupMembers: JSON.parse(req.body.groupMembers),
+      items: JSON.parse(req.body.items),
+      idStatus: req.body.idStatus,
+      implementationPlan: null,
+    };
+    console.log("📄 Nouvelle réservation :", newDocument);
+
+    let newStatus = JSON.parse(req.body.reservation_status);
+    console.log("📄 Nouveaux status :", newStatus);
+
+    // Ajout du fichier si présent
+    if (filePath) {
+      const normalizedPath = path.normalize(filePath).replace(/\\/g, "/");
+      
+      newDocument.implementationPlan = normalizedPath;
+    }
+    // Enregistrement en base de données
     await collection.insertOne(newDocument);
     await collection2.insertOne(newStatus);
+
+    // Envoi de l'e-mail de confirmation
+    sendConfirmationEmail(newDocument).catch((emailError) => {
+      console.error("❌ Erreur lors de l'envoi de l'e-mail:", emailError.message);
+    });
+
     res.status(200).json({
-      message: "Réservation ajoutée avec succès",
+      message: "✅ Réservation ajoutée avec succès",
       newDocument,
       newStatus,
     });
-    sendConfirmationEmail(newDocument).catch((emailError) => {
-      console.error("Erreur lors de l'envoi de l'e-mail:", emailError.message);
-    });
   } catch (err) {
-    res.status(500).json({ error: "Erreur lors de l'ajout de la réservation" });
+    res.status(500).json({ error: "❌ Erreur lors de l'ajout de la réservation" });
   }
 };
 

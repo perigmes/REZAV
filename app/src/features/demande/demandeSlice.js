@@ -26,7 +26,7 @@ const demandeSlice = createSlice({
       lastName: "Breaud",
       idUser: "testUser",
     },
-    dataDemande: {
+    dataDemande: {  
       id: "",
       userId: "",
       startDT: getDatePlusDays(2),
@@ -34,7 +34,7 @@ const demandeSlice = createSlice({
       name: "",
       desc: "",
       justif: "",
-      plan: "",
+      plan: null,
       group: [
         {
           firstName: "Pierrick",
@@ -69,6 +69,9 @@ const demandeSlice = createSlice({
       } else if (state.formStep === 2) {
         state.formStep = 1;
       }
+    },
+    setFileData: (state, action) => {
+      state.dataDemande.plan = action.payload;
     },
     setError: (state, action) => {
       state.errors[action.payload.field]= action.payload.value;
@@ -224,6 +227,7 @@ export const {
   setSearchBarre,
   setFilter,
   setErrorFormDemande,
+  setFileData,
   setObjIsSelectable,
   selectObject,
   deselectObject,
