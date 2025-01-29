@@ -12,6 +12,7 @@ catch (error){
     return rejectWithValue("L'application est actuellement indisponible, Veuillez réessayer ultérieurement en cas de problème lors du chargement du matériel")
 }
 });
+
 export const loadMaterielByDate= createAsyncThunk('reservation/loadMaterialByDate', async ({startDate,endDate},{rejectWithValue}) => {
     try{
         const response = await axios.get(`${URL_API_RESERVATIONS}/items/dates/${startDate}/${endDate}`);
@@ -31,15 +32,31 @@ export const loadReservation= createAsyncThunk('reservation/loadReservation', as
     }
 });
 
-export const addReservation= createAsyncThunk('reservation/addReservation', async ({reservation,reservation_status},{rejectWithValue}) => {
-try{
-    const response = await axios.post(`${URL_API_RESERVATIONS}/reservation`, {reservation,reservation_status});
-    return response.data;
-}
-catch (error){
-    return rejectWithValue(error.response.data.error.message);
-}
-});
+export const addReservation = createAsyncThunk(
+    "reservation/addReservation",
+    async ({ reservation }, { rejectWithValue }) => {
+      try {
+        console.log("🔹 Test envoi FormData...");
+        console.log("🔹 Projet :", reservation.get("projectName"));
+        console.log("🔹 Fichier :", reservation.get("implementationPlan"));
+  
+        const response = await axios.post(
+          `${URL_API_RESERVATIONS}/reservation`,
+          reservation,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+  
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response?.data?.error?.message || "Erreur inconnue");
+      }
+    }
+  );
+  
 
 export const confirmReservation= createAsyncThunk('reservation/confirmReservation', async ({reservationId,status,justification},{rejectWithValue}) => {
     try{

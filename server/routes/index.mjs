@@ -1,7 +1,8 @@
 import express from "express";
+import { upload } from "../upload.mjs";
 
-import { PostReservation, GetReservation, UpdateReservationStatus,GetReservationsByUserId, getAllStatuses } from "../controllers/reservationController.mjs";
-import { GetItems,GetItemById,EditItem,DeleteItem,AddItem } from "../controllers/itemController.mjs";
+import { PostReservation, GetReservation, UpdateReservationStatus,GetReservationsByUserId, GetLast5AcceptedReservationsByUserId, GetLast3DemandesByUserId, getAllStatuses } from "../controllers/reservationController.mjs";
+import { GetItems,GetItemById,EditItem,DeleteItem,AddItem,getItemsByDate } from "../controllers/itemController.mjs";
 
 export const router = express.Router();
 
@@ -28,5 +29,7 @@ router.patch("/reservation/requestStatus/:id", UpdateReservationStatus);
 // Route pour récupérer tous les statuts des réservations
 router.get('/reservation/statuses', getAllStatuses);
 
-
+//routes pour le tableau de bord
+router.get("/reservation/user/:userId/lastValid", GetLast5AcceptedReservationsByUserId);
+router.get("/reservation/user/:userId/lastInvalid", GetLast3DemandesByUserId)
 

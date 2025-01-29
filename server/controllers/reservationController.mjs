@@ -1,4 +1,4 @@
-import  { sendResponseEmail,sendConfirmationEmail } from "../helper.mjs";
+import { sendResponseEmail, sendConfirmationEmail } from "../helper.js";
 import db from "../db/conn.mjs";
 import path from "path";
 export const PostReservation = async (req, res) => {
@@ -201,4 +201,3 @@ export const getAllStatuses = async (req, res) => {
 
   }
 };
-
