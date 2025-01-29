@@ -98,6 +98,15 @@ console.log(data.get('name'));
         return rejectWithValue(error.response.data.error.message);
     }
 });
+export const deleteObject = createAsyncThunk('reservation/deleteObject', async ( {id} , {rejectWithValue}) => {
+        try {
+                    const response = await axios.delete(`${URL_API_RESERVATIONS}/items/${id}`);
+            return response.data.id;
+        } catch (error) {
+    
+            return rejectWithValue(error.response.data.error.message);
+        }
+    });
 
 
 

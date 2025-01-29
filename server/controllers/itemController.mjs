@@ -44,8 +44,13 @@ export const DeleteItem = async (req, res) => {
   let collection = await db.collection("materiel");
   let id = req.params.id;
   try {
-    let result = await collection.deleteOne({ _id: id }, {});
-    res.status(200).json({ message: "L'objet a bien été supprimé", result });
+    let result = await collection.deleteOne({ _id: new ObjectId(id) }); 
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Aucun objet trouvé avec cet ID" });
+    }
+
+    res.status(200).json({ message: "L'objet a bien été supprimé", id });
   } catch (err) {
     console.error(err);
     return res
