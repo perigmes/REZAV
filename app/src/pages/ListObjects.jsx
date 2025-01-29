@@ -96,7 +96,7 @@ useEffect(() => {
   // }
 console.log(objectsList)
   return (
-    <div className="objects-list">
+    <div className="main-content objects-list">
       {isLoading ? (
         <p>Chargement en cours...</p>
       ) : (
@@ -115,6 +115,7 @@ console.log(objectsList)
                 },
               }
            }}>Ajouter</Button>
+
 
           )}
           {/* {filters && searchBarre === '' && [...filters].map((filter, index) => (

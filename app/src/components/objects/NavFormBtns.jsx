@@ -111,7 +111,9 @@ const NavFormBtns = () => {
             };
 
             dispatch(addReservation({ reservation, reservation_status })).unwrap();
-            navigate(`/reservation-confirmation/pending/${reservation._id}`);
+            // navigate(`/reservation-confirmation/pending/${reservation._id}`);
+            navigate('/mes-demarches');
+            dispatch(clearDataDemande());
         }
     };
 

@@ -28,8 +28,8 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
       : infoObject
   );
 
-  // Stocker l'aperçu temporaire de l'image
   const [preview, setPreview] = useState(
+
     infoObject.picture instanceof File ? null : infoObject.picture // Si c'est une URL, la garder
   );
 
@@ -42,10 +42,8 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Mettre à jour l'état avec le fichier brut
       setInfos({ ...infos, picture: file });
 
-      // Générer un aperçu temporaire de l'image
       const filePreview = URL.createObjectURL(file);
       setPreview(filePreview);
     }
@@ -53,7 +51,6 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(infos.categorie);
     const formData = new FormData();
     formData.append("categorie", infos.categorie);
     formData.append("name", infos.name);
@@ -79,15 +76,15 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
       isOpen={infos  || addingMode}
     >
       <div className="object-popup-content">
-        <button onClick={closePopup} className="btnClose">
-          X
+        <button onClick={closePopup} className="material-symbols-rounded btnClose">
+        close
         </button>
         {userInfos.role === "admin" ? (
           <>
             <form onSubmit={handleSubmit} method="post">
               <div className="formPopup">
                 <img
-                  src={preview} // Utilisez l'aperçu temporaire ou l'URL d'origine
+                  src={preview}
                   alt={infos.name}
                   className="imgObject"
                 />
@@ -153,7 +150,7 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
                       type="file"
                       name="picture"
                       accept="image/webp"
-                      onChange={handleFileChange} // Appelle la fonction handleFileChange
+                      onChange={handleFileChange}
                       className="fileBtn"
                     />
                   </div>
@@ -172,7 +169,7 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
         ) : (
           <div className="formPopup">
             <img
-              src={preview} // Utilisez l'aperçu temporaire ou l'URL d'origine
+              src={preview}
               alt={infos.name}
               className="imgObject"
             />

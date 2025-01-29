@@ -101,10 +101,10 @@ export const Formulaire = () => {
   };
 
   return (
-    <>
+    <div className="main-content formulaire">
       <div className="res-list-obj">
         <header>
-          <h3>Mes articles sélectionnés</h3>
+          <h3 className="titre-3">Mes articles sélectionnés</h3>
           <span>
             Du {formatDateToDateHourMinute(dataDemande.startDT)} au {" "}
             {formatDateToDateHourMinute(dataDemande.returnDT)}
@@ -124,7 +124,7 @@ export const Formulaire = () => {
 
       <form className={`res-form form-step-${formStep}`}>
         <header>
-          <h3>Formulaire de demande</h3>
+          <h3 className="titre-3">Formulaire de demande</h3>
         </header>
 
         <fieldset className="step-field-1">
@@ -217,6 +217,6 @@ export const Formulaire = () => {
           </div>
         </fieldset>
       </form>
-    </>
+    </div>
   );
 };

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addObject, addReservation, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
+import { addObject, addReservation, getLast3Demandes, getLast5ValidReservations, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
 import { getDatePlusDays } from '../../utils/tools';
 
 const demandeSlice = createSlice({
@@ -7,6 +7,8 @@ const demandeSlice = createSlice({
   initialState: {
     objects: [],
     reservations: [],
+    last5ValidReservations: [],
+    last3Demandes: [],
     objIsSelectable: false,
     searchBarre: "",
     loadingObjects: false,
@@ -16,13 +18,12 @@ const demandeSlice = createSlice({
     formValidation: false,
     user: {
       _id: "test",
-      name: "admin",
       email: "perigmes@gmail.com",
       role: "admin",
       affiliation: "professor",
-      firstName: "Test",
-      lastName: "adminName",
-      idUser: "itest",
+      firstName: "Pierrick",
+      lastName: "Breaud",
+      idUser: "testUser",
     },
     dataDemande: {
       id: "",
@@ -107,7 +108,7 @@ const demandeSlice = createSlice({
       state.dataDemande.startDT = action.payload;
     },
     setReturnDT: (state, action) => {
-      state.dataDemande.returnDT = action.payload; // Pierrick le 19/01/2025
+      state.dataDemande.returnDT = action.payload;
     },
     setFormValidation: (state, action) => {
       state.formValidation = action.payload;
@@ -169,7 +170,7 @@ const demandeSlice = createSlice({
             return obj;
           }
         });
-      })
+      })      
       .addCase(updateObject.rejected, (state, action) => {
         state.errors.apiErrorObjectsLoad = action.payload;
       })
@@ -181,6 +182,13 @@ const demandeSlice = createSlice({
       })
       .addCase(addObject.rejected, (state, action) => {
         state.errors.apiErrorAdd = action.payload;
+      .addCase(getLast5ValidReservations.pending, (state) => {})
+      .addCase(getLast5ValidReservations.fulfilled, (state, action) => {
+        state.last5ValidReservations = action.payload;
+      })
+      .addCase(getLast3Demandes.pending, (state) => {})
+      .addCase(getLast3Demandes.fulfilled, (state, action) => {
+        state.last3Demandes = action.payload;
       })
   },
 });
