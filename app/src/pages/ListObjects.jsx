@@ -6,7 +6,7 @@ import {
   selectSearchBarre,
   selectObjectsFiltered,
   selectLoadingObjects,
-  selectErrors
+  selectErrors,
   selectObjIsSelectable,
 } from "../features/demande/demandeSelector";
 import ObjectCard from "../components/objects/ObjectCard";
