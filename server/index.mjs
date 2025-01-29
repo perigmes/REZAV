@@ -40,11 +40,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-  console.log(`📢 Requête reçue : ${req.method} ${req.url}`);
   next();
 });
 
-// Vérification CAS avant tout sauf pour les fichiers statiques
 app.use((req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
@@ -52,20 +50,16 @@ app.use((req, res, next) => {
   return casLogin(req, res, next);
 });
 
-// Fixe __dirname pour les modules ES
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Servir les fichiers statiques de React (Exception au CAS)
+// Servir les fichiers statiques de React 
 // app.use(express.static(path.join(__dirname, '../app/build')));
 app.use(express.static('/var/www/app'));
 app.use('/pictures', express.static('/app/pictures'));
 
 // Route de callback CAS
 app.get("/cas/callback", (req, res, next) => {
-  console.log("✅ Route /cas/callback atteinte");
-  console.log("🎟 Ticket reçu :", req.query.ticket);
-
   casCallback(req, res, next);
 });
 
@@ -73,9 +67,10 @@ app.get("/cas/callback", (req, res, next) => {
 app.get("/logout", logout);
 
 // Rediriger toutes les photos vides vers une default
-// app.get('/pictures/*', (req, res, next) => {
-//   res.sendFile('/app/pictures/default.png');
-// });
+app.get('/pictures/*', (req, res, next) => {
+  res.sendFile('/app/pictures/error-img.webp');
+});
+
 // Rediriger toutes les routes vers React après authentification
 app.get('*', (req, res, next) => {
   res.sendFile('/var/www/app/index.html');
@@ -85,7 +80,3 @@ app.get('*', (req, res, next) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on ${PORT}`);
 });
-
-export function sendConfirmationEmail() {
-  console.log("sendConfirmationEmail function executed");
-}
