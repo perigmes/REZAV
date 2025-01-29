@@ -126,7 +126,7 @@ const demandeSlice = createSlice({
       .addCase(loadMateriel.fulfilled, (state, action) => {
         state.objects = action.payload;
         state.objects.map(
-          (obj) => (obj.picture = "http://localhost:5000/" + obj.picture)
+          (obj) => (obj.picture = 'http://localhost:5000/'+obj.picture)
         );
         state.loadingObjects = false;
         state.errors.apiErrorObjectsLoad = null;
@@ -163,13 +163,19 @@ const demandeSlice = createSlice({
           if (obj._id === action.payload._id) {
             const newObj = {
               ...action.payload,
-              picture: "http://localhost:5000/" + action.payload.picture,
+              picture:  action.payload.picture,
             };
             return newObj;
           } else {
             return obj;
           }
         });
+      })      
+      .addCase(updateObject.rejected, (state, action) => {
+        state.errors.apiErrorObjectsLoad = action.payload;
+      })
+      .addCase(addObject.fulfilled, (state,action) => {
+        state.objects.push(action.payload);
       })
       .addCase(getLast5ValidReservations.pending, (state) => {})
       .addCase(getLast5ValidReservations.fulfilled, (state, action) => {

@@ -105,6 +105,7 @@ html {
   }
 }
 
+
 .rezav-checkbox-label {
   width: 14px;
   height: 14px;
@@ -480,31 +481,35 @@ html {
 }
 //titres de catégories
 .objects-filtered-title {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  position: relative;
-  font-family: $main-font;
-  font-weight: $font-weight-600;
-  font-size: $font-size-16;
-  color: $mauve-rezav;
-  text-transform: uppercase;
-  gap: 5px;
-  margin: 15px 0 5px 0;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    font-family: $main-font;
+    font-weight: $font-weight-600;
+    font-size: $font-size-16;
+    color: $mauve-rezav;
+    text-transform: uppercase;
+    gap: 5px;
+    margin: 20px 0 5px 0;
 
-  /* CSS pour les barres du titre de conteneur */
-  &::after,
-  &::before {
-    content: "";
-    flex: 1;
-    border: 1px solid $mauve-rezav;
-    border-radius: 100px;
-  }
-  &::after {
-    width: auto;
-  }
-  &::before {
-    width: 7%;
-    flex: none;
-  }
+    /* CSS pour les barres du titre de conteneur */
+    &::after,
+    &::before {
+        content: "";
+        flex: 1;
+        border: 1px solid $mauve-rezav;
+        border-radius: 100px;
+    }
+    &::after {
+        width: auto;
+    }
+    &::before {
+        width: 7%;
+        flex: none;
+    }
+}
+
+.label{
+    color: $mauve-rezav;
 }

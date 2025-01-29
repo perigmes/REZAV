@@ -70,6 +70,16 @@ export const getLast5ValidReservations = createAsyncThunk('reservation/getLastVa
     try {
         const response = await axios.get(`${URL_API_RESERVATIONS}/reservation/user/${userId}/lastValid`);
         return response.data;
+          } catch (error) {
+        return rejectWithValue(error.response.data.error.message);
+    }
+});
+
+export const getLast3Demandes = createAsyncThunk('reservation/getLastDemandes', async ( userId , {rejectWithValue}) => {
+
+    try {
+        const response = await axios.get(`${URL_API_RESERVATIONS}/reservation/user/${userId}/lastInvalid`);
+        return response.data;
     } catch (error) {
         return rejectWithValue(error.response.data.error.message);
     }
@@ -84,6 +94,20 @@ export const getLast3Demandes = createAsyncThunk('reservation/getLastDemandes', 
         return rejectWithValue(error.response.data.error.message);
     }
 });
+
+export const addObject = createAsyncThunk('reservation/addObject', async ( {data} , {rejectWithValue}) => {
+console.log(data.get('name'));
+    try {
+                const response = await axios.post(`${URL_API_RESERVATIONS}/items`, data,{
+                    headers:{ 
+                      'Content-Type': 'multipart/form-data',  // Assure-toi que le type de contenu est bien multipart/form-data
+                    }});
+        return response.data.result;
+          } catch (error) {
+        return rejectWithValue(error.response.data.error.message);
+    }
+});
+
 
 
 
