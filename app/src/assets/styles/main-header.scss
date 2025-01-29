@@ -2,6 +2,15 @@
 
 .main-hdr {
     row-gap: 5px;
+    padding: 5px 0;
+
+    .page-title {
+        font-family: $main-font;
+        font-size: $font-size-22;
+        color: $mauve-rezav;
+        font-weight: $font-weight-700;
+    }
+
     &.list-obj {
         display: flex;
         flex-flow: column;
@@ -21,6 +30,7 @@
         .page-title {
             grid-row: 1 / 2;
             grid-column: 1 / 2;
+
         }
 
         .search-filter-container {
@@ -54,6 +64,7 @@
         }
     }
 }
+
 
 @media only screen and (max-width : 794px) {
     .main-hdr {

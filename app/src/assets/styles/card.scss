@@ -1,14 +1,5 @@
 @use 'variables' as *;
 
-/* CSS pour le main-header spécifique à la page ListObjects */
-
-
-/* CSS pour la liste des objets complète */
-.objects-list {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-flow: column;
 
     /* CSS pour le conteneur boutons de navigations dans le formulaire de reservation */
     .nav-form-btns {
@@ -127,12 +118,11 @@
             }
         }
     }
-}
+
 
 /* Mode téléphone */
 @media only screen and (max-width : 481px) {
 
-    .objects-list {
 
         .objects-filtered-container {
             display: grid;
@@ -153,4 +143,3 @@
         }
     }
 
-}

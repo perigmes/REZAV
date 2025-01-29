@@ -116,6 +116,7 @@ console.log(objectsList)
               }
            }}>Ajouter</Button>
 
+
           )}
           {/* {filters && searchBarre === '' && [...filters].map((filter, index) => (
                     <ObjectsByFilter key={index} filter={filter} />
