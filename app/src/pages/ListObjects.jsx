@@ -37,7 +37,6 @@ const ListObjects = () => {
 
   // Déterminer la source des objets : `objectsFiltered` si disponible, sinon `objects`
   const baseObjects = objectsFiltered.length > 0 ? objectsFiltered : objects;
-
   // Regroupement des objets par catégorie
   useEffect(() => {
     const groupedObjects = baseObjects.reduce((acc, objet) => {
@@ -67,6 +66,17 @@ const ListObjects = () => {
       }, {});
 
       setObjectsListFiltered(groupedFilteredObjects);
+    }
+    else{
+      const groupedFilteredObjects = baseObjects.reduce((acc, objet) => {
+        if (!acc[objet.categorie]) {
+          acc[objet.categorie] = [];
+        }
+        acc[objet.categorie].push(objet);
+        return acc;
+      }, {});
+      setObjectsListFiltered(groupedFilteredObjects);
+
     }
   }, [searchBarre, baseObjects]);
 
