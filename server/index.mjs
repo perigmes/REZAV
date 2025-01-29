@@ -87,94 +87,6 @@
 //   console.log("sendConfirmationEmail function executed");
 // }
 
-// import express from "express";
-// import session from "express-session";
-// import passport from "passport";
-// import { casLogin, casCallback, logout } from "./cas.mjs";
-// import "./loadEnvironment.mjs";
-// import { router } from "./routes/index.mjs";
-// import cors from "cors";
-// import mongoose from "mongoose";
-// import path from "path";
-// import { fileURLToPath } from "url";
-
-// const PORT = process.env.PORT || 5000;
-// const app = express();
-
-// const ATLAS_URI = process.env.ATLAS_URI;
-
-// mongoose
-//   .connect(ATLAS_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(() => console.log("✅ Connecté à MongoDB"))
-//   .catch((err) => console.error("❌ Erreur de connexion MongoDB :", err));
-
-// app.use(express.json());
-// app.use(cors({
-//     origin: ["http://localhost:3000","https://lammi-saes5-01.univ-lemans.fr","https://cas.univ-lemans.fr/cas/login"],
-//     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
-//     allowedHeaders: ["Content-Type", "Authorization"],
-// }));
-
-// app.use(router);
-
-// app.use(
-//   session({
-//     secret: "secret-key",
-//     resave: false,
-//     saveUninitialized: true,
-//   })
-// );
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// app.use((req, res, next) => {
-//   console.log(`📢 Requête reçue : ${req.method} ${req.url}`);
-//   next();
-// });
-
-// // Vérification CAS avant tout sauf pour les fichiers statiques
-// app.use((req, res, next) => {
-//   if (req.isAuthenticated() || req.path.startsWith("/static")) {
-//     return next();
-//   }
-//   return casLogin(req, res, next);
-// });
-
-// // Fixe __dirname pour les modules ES
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-// // Servir les fichiers statiques de React (Exception au CAS)
-// app.use(express.static(path.join(__dirname, '../app/build')));
-
-// // Route de callback CAS
-// app.get("/cas/callback", (req, res, next) => {
-//   console.log("✅ Route /cas/callback atteinte");
-//   console.log("🎟 Ticket reçu :", req.query.ticket);
-
-//   casCallback(req, res, next);
-// });
-
-// // Route de déconnexion
-// app.get("/logout", logout);
-
-// // Rediriger toutes les routes vers React après authentification
-// app.get('*', (req, res, next) => {
-//   if (!req.isAuthenticated()) {
-//     return casLogin(req, res, next); // CAS gère l'authentification
-//   }
-//   res.sendFile(path.join(__dirname, '../app/build', 'index.html'));
-// });
-
-// // Lancer le serveur
-// app.listen(PORT, () => {
-//   console.log(`🚀 Server is running on ${PORT}`);
-// });
-
-// export function sendConfirmationEmail() {
-//   console.log("sendConfirmationEmail function executed");
-// }
 import express from "express";
 import session from "express-session";
 import passport from "passport";
@@ -186,37 +98,49 @@ import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// Configuration du CORS
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");  // Autorise toutes les origines (tu peux restreindre si besoin)
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);  // Réponse rapide aux requêtes préliminaires CORS
+  }
+  
+  next();
+});
+
 const PORT = process.env.PORT || 5000;
 const app = express();
 
-// Connexion MongoDB
 const ATLAS_URI = process.env.ATLAS_URI;
+
 mongoose
   .connect(ATLAS_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("✅ Connecté à MongoDB"))
   .catch((err) => console.error("❌ Erreur de connexion MongoDB :", err));
 
-// Configuration du CORS
+app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:3000", "https://lammi-saes5-01.univ-lemans.fr", "https://cas.univ-lemans.fr"],
+    origin: ["http://localhost:3000","https://lammi-saes5-01.univ-lemans.fr","https://cas.univ-lemans.fr/cas/login","https://cas.univ-lemans.fr/"],
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
-app.use(express.json());
 app.use(router);
 
-// Configuration des sessions
-app.use(session({
+app.use(
+  session({
     secret: "secret-key",
     resave: false,
     saveUninitialized: true,
-}));
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Middleware pour log des requêtes
 app.use((req, res, next) => {
   console.log(`📢 Requête reçue : ${req.method} ${req.url}`);
   next();
@@ -230,25 +154,18 @@ app.use((req, res, next) => {
   return casLogin(req, res, next);
 });
 
-// Fixer __dirname pour ES Modules
+// Fixe __dirname pour les modules ES
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Servir les fichiers statiques de React
+// Servir les fichiers statiques de React (Exception au CAS)
 app.use(express.static(path.join(__dirname, '../app/build')));
-
-// Route d'authentification CAS
-app.get("/api/cas-login", (req, res) => {
-  const casURL = `https://cas.univ-lemans.fr/cas/login?service=${encodeURIComponent("https://lammi-saes5-01.univ-lemans.fr/cas/callback")}`;
-  console.log("🔄 Redirection vers CAS:", casURL);
-  res.redirect(casURL);
-});
 
 // Route de callback CAS
 app.get("/cas/callback", (req, res, next) => {
   console.log("✅ Route /cas/callback atteinte");
   console.log("🎟 Ticket reçu :", req.query.ticket);
-  
+
   casCallback(req, res, next);
 });
 
@@ -258,14 +175,14 @@ app.get("/logout", logout);
 // Rediriger toutes les routes vers React après authentification
 app.get('*', (req, res, next) => {
   if (!req.isAuthenticated()) {
-    return casLogin(req, res, next);
+    return casLogin(req, res, next); // CAS gère l'authentification
   }
   res.sendFile(path.join(__dirname, '../app/build', 'index.html'));
 });
 
 // Lancer le serveur
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(`🚀 Server is running on ${PORT}`);
 });
 
 export function sendConfirmationEmail() {
