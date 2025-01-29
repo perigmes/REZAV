@@ -1,4 +1,4 @@
-import  { sendResponseEmail,sendConfirmationEmail } from "../helper.js";
+import  { sendResponseEmail,sendConfirmationEmail } from "../helper.mjs";
 import db from "../db/conn.mjs";
 
 export const PostReservation = async (req, res) => {
