@@ -262,3 +262,4 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
 };
 
 export default ObjectPopup;
+
