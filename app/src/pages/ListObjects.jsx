@@ -6,6 +6,7 @@ import {
   selectSearchBarre,
   selectObjectsFiltered,
   selectLoadingObjects,
+  selectErrors,
   selectObjIsSelectable,
 } from "../features/demande/demandeSelector";
 
