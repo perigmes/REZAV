@@ -6,6 +6,8 @@ export const selectSortedObjects = createSelector(
         console.log(objects);
         [...objects].sort((a, b) => a.name.localeCompare(b.name))}
 );
+
+export const selectObjectsFiltered = (state)=> state.demande.objectsFiltered;
 export const selectDataDemande = (state) => state.demande.dataDemande;
 export const selectReservations = (state) => state.demande.reservations;
 export const selectObjIsSelectable = (state) => state.demande.objIsSelectable;

@@ -11,6 +11,14 @@ catch (error){
     return rejectWithValue("L'application est actuellement indisponible, Veuillez réessayer ultérieurement en cas de problème lors du chargement du matériel")
 }
 });
+export const loadMaterielByDate= createAsyncThunk('reservation/loadMaterialByDate', async ({startDate,endDate},{rejectWithValue}) => {
+    try{
+        const response = await axios.get(`${URL_API_RESERVATIONS}/items/dates/${startDate}/${endDate}`);
+        return response.data;
+    }
+    catch(e){
+        return rejectWithValue("L'application est actuellement indisponible, Veuillez réessayer ultérieurement en cas de problème lors du chargement du matériel")
+    }});
 
 export const loadReservation= createAsyncThunk('reservation/loadReservation', async (_,{rejectWithValue}) => {
     try{
