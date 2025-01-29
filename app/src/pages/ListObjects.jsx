@@ -6,6 +6,7 @@ import {
   selectSearchBarre,
   selectObjectsFiltered,
   selectLoadingObjects,
+  selectObjIsSelectable,
 } from "../features/demande/demandeSelector";
 
 import ObjectCard from "../components/objects/ObjectCard";
@@ -26,6 +27,8 @@ const ListObjects = () => {
   const isLoading = useSelector(selectLoadingObjects);
   const stateObjInfos = useSelector(selectObjInfos);
   const userInfos = useSelector(selectUSerInfos);
+  const objIsSelectable = useSelector(selectObjIsSelectable);
+  
 
   const IsInfos = stateObjInfos._id ?? "";
   const [isAdding, setIsAdding] = useState(false);
@@ -74,7 +77,7 @@ const ListObjects = () => {
         <p>Chargement en cours...</p>
       ) : (
         <>
-          {userInfos.role === "admin" && (
+          {userInfos.role === "admin" && !objIsSelectable && (
 
            <Button className="add-btn" startDecorator={<Add sx={{ fontSize: "1.75rem" }}/>} onClick={()=>setIsAdding(true)} color="#6d6b9e" sx={()=>{
               return {
@@ -92,7 +95,7 @@ const ListObjects = () => {
                 "&:hover": {
                   backgroundColor: "#6d6b9e",
                 },
-              }}
+              }}}
             >
               Ajouter
             </Button>
