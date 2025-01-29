@@ -173,8 +173,14 @@ const demandeSlice = createSlice({
       .addCase(updateObject.rejected, (state, action) => {
         state.errors.apiErrorObjectsLoad = action.payload;
       })
-      .addCase(addObject.fulfilled, (state,action) => {
+      .addCase(addObject.pending, (state) => {
+        state.errors.apiErrorAdd = null;
+      })
+      .addCase(addObject.fulfilled, (state, action) => {
         state.objects.push(action.payload);
+      })
+      .addCase(addObject.rejected, (state, action) => {
+        state.errors.apiErrorAdd = action.payload;
       })
   },
 });
