@@ -1,13 +1,14 @@
 import express from "express";
 import { upload } from "../upload.mjs";
 import { PostReservation, GetReservation, UpdateReservationStatus,GetReservationsByUserId, GetLast5AcceptedReservationsByUserId, GetLast3DemandesByUserId } from "../controllers/reservationController.mjs";
-import { GetItems,GetItemById,EditItem,DeleteItem,AddItem } from "../controllers/itemController.mjs";
+import { GetItems,GetItemById,EditItem,DeleteItem,AddItem,getItemsByDate } from "../controllers/itemController.mjs";
 
 export const router = express.Router();
 
 //routes materiel
 router.get("/items", GetItems);
 router.get("/items/:id", GetItemById);
+router.get('/items/dates/:startDate/:endDate', getItemsByDate);
 
 router.patch("/items/:id", upload.single("picture"), EditItem);
 
