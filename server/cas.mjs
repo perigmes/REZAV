@@ -8,7 +8,7 @@ passport.use(
   new CasStrategy(
     {
       version: "CAS3.0",
-      ssoBaseURL: "https://cas.univ-lemans.fr/cas/login", // https://localhost:8443/cas
+      ssoBaseURL: "/api/cas-login", // https://localhost:8443/cas
       serverBaseURL: "lammi-saes5-01.univ-lemans.fr", // http://localhost:5000
       validateURL: "/serviceValidate",
     },
