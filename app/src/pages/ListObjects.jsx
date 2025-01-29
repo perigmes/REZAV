@@ -1,10 +1,10 @@
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   selectObjects,
   selectObjInfos,
   selectUSerInfos,
   selectSearchBarre,
- 
+  selectObjectsFiltered,
   selectLoadingObjects,
 } from "../features/demande/demandeSelector";
 
@@ -20,81 +20,54 @@ import Button from "@mui/joy/Button";
 import Add from "@mui/icons-material/Add";
 
 const ListObjects = () => {
-  // const dispatch = useDispatch();
   const objects = useSelector(selectObjects);
+  const objectsFiltered = useSelector(selectObjectsFiltered); // Liste filtrée par date (backend)
   const searchBarre = useSelector(selectSearchBarre);
- 
   const isLoading = useSelector(selectLoadingObjects);
   const stateObjInfos = useSelector(selectObjInfos);
-  const IsInfos = stateObjInfos._id ?? "";
-
   const userInfos = useSelector(selectUSerInfos);
-  const [isAdding, setIsAdding] = useState(false);
-  const [objectsList, setObjectsList] = useState({});
 
+  const IsInfos = stateObjInfos._id ?? "";
+  const [isAdding, setIsAdding] = useState(false);
+  const [objectsListFiltered, setObjectsListFiltered] = useState({});
+
+  // Déterminer la source des objets : `objectsFiltered` si disponible, sinon `objects`
+  const baseObjects = objectsFiltered.length > 0 ? objectsFiltered : objects;
+
+  // Regroupement des objets par catégorie
   useEffect(() => {
-    setObjectsList(objects.reduce((acc, objet) => {
+    const groupedObjects = baseObjects.reduce((acc, objet) => {
       if (!acc[objet.categorie]) {
         acc[objet.categorie] = [];
       }
       acc[objet.categorie].push(objet);
       return acc;
-    }, {}));
-  }, [objects]);
+    }, {});
 
+    setObjectsListFiltered(groupedObjects);
+  }, [baseObjects]);
 
+  // Appliquer la recherche si un texte est saisi
+  useEffect(() => {
+    if (searchBarre !== "") {
+      const filteredObjects = baseObjects.filter((object) =>
+        object.name?.toLowerCase().includes(searchBarre.toLowerCase())
+      );
 
-useEffect(() => {
-    if (searchBarre !== '' && objects.length > 0) {
-      // Filtrage des objets en fonction de la recherche
-      const objectsFiltered = objects.filter((object) => { 
-            return object.name?.toLowerCase().includes(searchBarre.toLowerCase());
-        
-      });
-  
-      // Regroupement des objets par catégorie
-      setObjectsList(objectsFiltered.reduce((acc, objet) => {
+      const groupedFilteredObjects = filteredObjects.reduce((acc, objet) => {
         if (!acc[objet.categorie]) {
           acc[objet.categorie] = [];
         }
         acc[objet.categorie].push(objet);
         return acc;
-      }, {}));
-    } else{
-        setObjectsList(objects.reduce((acc, objet) => {
-            if (!acc[objet.categorie]) {
-              acc[objet.categorie] = [];
-            }
-            acc[objet.categorie].push(objet);
-            return acc;
-          }, {}));
+      }, {});
+
+      setObjectsListFiltered(groupedFilteredObjects);
     }
-  }, [searchBarre, objects]);
-  
+  }, [searchBarre, baseObjects]);
 
-  // useEffect(() => {
-  //     if (selectedObjects.length === 0 || startDT.trim().length === 0 || returnDT.trim().length === 0) {
-  //         dispatch(setErrorFormDemande(true));
-  //     } else {
-  //         dispatch(setErrorFormDemande(false));
-  //     }
-  // }, [selectedObjects, startDT, returnDT, dispatch])
+  console.log(objectsListFiltered);
 
-  // useEffect(() => {
-  //     if (filterType !== "category" && filterType !== "alphabet" && filterType!== "alphabet-reverse") {
-  //         console.log('filterType')
-  //         dispatch(setFilter("category"));
-  //     }
-  // }, [filterType, dispatch])
-
-  // if (filterType === "category") {
-  //     setFilters ( [...new Set([...objects].map((object) => object.categorie))]);
-  // } else if (filterType === "alphabet-reverse") {
-  //     setFilters ( Array.from({ length: 26 }, (_, i) => String.fromCharCode(122 - i)));
-  // } else if (filterType === "alphabet") {
-  //     setFilters ( Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i)));
-  // }
-console.log(objectsList)
   return (
     <div className="main-content objects-list">
       {isLoading ? (
@@ -102,8 +75,11 @@ console.log(objectsList)
       ) : (
         <>
           {userInfos.role === "admin" && (
-           <Button startDecorator={<Add />} onClick={()=>setIsAdding(true)} color="#6d6b9e" sx={()=>{
-              return {
+            <Button
+              startDecorator={<Add />}
+              onClick={() => setIsAdding(true)}
+              color="#6d6b9e"
+              sx={{
                 bottom: "2vh",
                 zIndex: 999,
                 position: "fixed",
@@ -113,17 +89,11 @@ console.log(objectsList)
                 "&:hover": {
                   backgroundColor: "#6d6b9e",
                 },
-              }
-           }}>Ajouter</Button>
-
-
+              }}
+            >
+              Ajouter
+            </Button>
           )}
-          {/* {filters && searchBarre === '' && [...filters].map((filter, index) => (
-                    <ObjectsByFilter key={index} filter={filter} />
-                ))} 
-               {searchBarre !== ''&& (
-                    <ObjectsByFilter filter={searchBarre} />
-                )}  */}
           {(IsInfos !== "" || isAdding) && (
             <ErrorBoundary>
               <ObjectPopup
@@ -132,11 +102,8 @@ console.log(objectsList)
               />
             </ErrorBoundary>
           )}
-          {Object.keys(objectsList).map((category) => (
-            <Box key={category} sx={{ marginBottom: "2vh",
-              position: "relative",
-              zIndex: 0,
-             }} >
+          {Object.keys(objectsListFiltered).map((category) => (
+            <Box key={category} sx={{ marginBottom: "2vh", position: "relative", zIndex: 0 }}>
               <Divider
                 textAlign="left"
                 sx={{
@@ -147,7 +114,6 @@ console.log(objectsList)
                   },
                 }}
               >
-                {" "}
                 <Typography
                   level="h4"
                   sx={{
@@ -165,14 +131,14 @@ console.log(objectsList)
                   display: "grid",
                   gridTemplateColumns: {
                     xs: "repeat(2, 1fr)",
-                    sm: "repeat(3, 1fr)", 
-                    md: "repeat(5, 1fr)", 
+                    sm: "repeat(3, 1fr)",
+                    md: "repeat(5, 1fr)",
                     lg: "repeat(6, 1fr)",
                   },
-                  gap: 1, 
+                  gap: 1,
                 }}
               >
-                {objectsList[category].map((object) => (
+                {objectsListFiltered[category]?.map((object) => (
                   <ObjectCard key={object._id} object={object} />
                 ))}
               </Box>

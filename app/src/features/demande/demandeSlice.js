@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addObject, addReservation, deleteObject, getLast3Demandes, getLast5ValidReservations, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
+import { addObject,loadMaterielByDate, addReservation, deleteObject, getLast3Demandes, getLast5ValidReservations, loadMateriel, loadReservation, updateObject } from './reservationsAsyncAction';
 import { getDatePlusDays } from '../../utils/tools';
 
 const demandeSlice = createSlice({
   name: "demande",
   initialState: {
     objects: [],
+    objectsFiltered: [],
     reservations: [],
     last5ValidReservations: [],
     last3Demandes: [],
@@ -135,6 +136,14 @@ const demandeSlice = createSlice({
         state.loadingObjects = false;
         state.errors.apiErrorObjectsLoad = action.payload;
       })
+      .addCase(loadMaterielByDate.pending, (state) => {
+        state.errors.apiErrorObjectsLoad = null;
+      })
+      .addCase(loadMaterielByDate.fulfilled, (state, action) => {
+          state.objectsFiltered = action.payload;
+      }
+    )
+
       .addCase(loadReservation.pending, (state) => {
         state.loadingReservations = true;
         state.errors.apiErrorReservationLoad = null;
@@ -148,6 +157,7 @@ const demandeSlice = createSlice({
         state.loadingReservations = false;
         state.errors.apiErrorReservationLoad = action.payload;
       })
+
       .addCase(addReservation.pending, (state) => {
         state.errors.apiErrorAdd = null;
       })
@@ -157,6 +167,7 @@ const demandeSlice = createSlice({
       .addCase(addReservation.rejected, (state, action) => {
         state.errors.apiErrorAdd = action.payload;
       })
+
       .addCase(updateObject.pending, (state) => {})
       .addCase(updateObject.fulfilled, (state, action) => {
         state.objects = state.objects.map((obj) => {
@@ -174,6 +185,7 @@ const demandeSlice = createSlice({
       .addCase(updateObject.rejected, (state, action) => {
         state.errors.apiErrorObjectsLoad = action.payload;
       })
+
       .addCase(addObject.pending, (state) => {
         state.errors.apiErrorAdd = null;
       })
