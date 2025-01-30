@@ -134,5 +134,15 @@ export const deleteObject = createAsyncThunk('reservation/deleteObject', async (
         }
     });
 
+export const getUser = createAsyncThunk('user',async ({},{rejectWithValue})=>{
+    try{
+        const response = await axios.get(`${URL_API_RESERVATIONS}/user`);
+        console.log(response.data);
+        return response.data;
+    } catch(e){
+        return rejectWithValue(error.response.data.error.message);
+    }
+});
+
 
 

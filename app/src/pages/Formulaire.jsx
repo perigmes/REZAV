@@ -80,7 +80,7 @@ export const Formulaire = () => {
       formData.append("returnDate", reservation.returnDT);
 
       // Ajout des objets JSON sous forme de string
-      formData.append("groupMembers", JSON.stringify(reservation.group));
+      formData.append("groupMembers", JSON.stringify(membresG));
       formData.append("items", JSON.stringify(reservation.objects));
 
       // Ajout du fichier PDF
