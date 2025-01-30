@@ -129,7 +129,7 @@ const ObjectCard = ({ object }) => {
           }}
         >
           <img
-            src={picture || "/images/error-img.webp"}            
+            src={picture }            
             loading="lazy"
             alt={name}
             onError={(e) => {
