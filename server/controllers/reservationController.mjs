@@ -32,13 +32,14 @@ export const PostReservation = async (req, res) => {
       const normalizedPath = path.normalize(filePath).replace(/\\/g, "/");
       
       newDocument.implementationPlan = normalizedPath;
+      console.log(newDocument)
     }
     // Enregistrement en base de données
     await collection.insertOne(newDocument);
     await collection2.insertOne(newStatus);
 
     // Envoi de l'e-mail de confirmation
-    sendConfirmationEmail(newDocument,user).catch((emailError) => {
+    sendConfirmationEmail(newDocument).catch((emailError) => {
       console.error("❌ Erreur lors de l'envoi de l'e-mail:", emailError.message);
     });
 
