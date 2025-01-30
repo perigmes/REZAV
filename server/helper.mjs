@@ -12,8 +12,8 @@ export const sendConfirmationEmail = async (reservation) => {
         tls: { rejectUnauthorized: false }
     });
 
-const acceptUrl = `http://localhost:3000/reservation-confirmation/accept/${reservation.idStatus}`;
-const rejectUrl = `http://localhost:3000/reservation-confirmation/reject/${reservation.idStatus}`;
+const acceptUrl = `/reservation-confirmation/accept/${reservation.idStatus}`;
+const rejectUrl = `/reservation-confirmation/reject/${reservation.idStatus}`;
 
 const mailOptions = {
     from: 'clementine.prouteau.etu@univ-lemans.fr',
