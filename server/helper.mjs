@@ -17,7 +17,7 @@ const rejectUrl = `http://localhost:3000/reservation-confirmation/reject/${reser
 
 const mailOptions = {
     from: user.email,
-    to: "eric.houliere@univ-lemans.fr", // Remplacez par l'e-mail de l'étudiant
+    to: "perigmes@gmail.com", // Remplacez par l'e-mail de l'étudiant
     subject: "Confirmation de réservation",
     text: `Une nouvelle réservation a été soumise. Projet: ${reservation.projectName}`,
     html: `
@@ -67,7 +67,7 @@ export const sendResponseEmail = async (justification) => {
         },
     });
      const mailOptions = {
-        from: "clementine.prouteau.etu@univ-lemans.fr",
+        from: "perigmes@gmail.com",
         to: user.email, 
         subject: "Confirmation de réservation",
         html: `
