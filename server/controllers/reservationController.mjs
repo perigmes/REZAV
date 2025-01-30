@@ -2,7 +2,7 @@ import { sendResponseEmail, sendConfirmationEmail } from "../helper.mjs";
 import db from "../db/conn.mjs";
 import path from "path";
 export const PostReservation = async (req, res) => {
-  const user= req.user;
+  const user= app.locals.currentUser;
   console.log(user);
   let collection = db.collection("reservations");
   let collection2 = db.collection("reservation_status");
