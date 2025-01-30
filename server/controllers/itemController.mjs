@@ -30,7 +30,6 @@ export const GetItemById = async (req, res) => {
     // Retourner les données en réponse
     res.send(result).status(200);
   } catch (err) {
-    console.error(err);
     return res
       .status(500)
       .json({
@@ -44,10 +43,14 @@ export const DeleteItem = async (req, res) => {
   let collection = await db.collection("materiel");
   let id = req.params.id;
   try {
-    let result = await collection.deleteOne({ _id: id }, {});
-    res.status(200).json({ message: "L'objet a bien été supprimé", result });
+    let result = await collection.deleteOne({ _id: new ObjectId(id) }); 
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Aucun objet trouvé avec cet ID" });
+    }
+
+    res.status(200).json({ message: "L'objet a bien été supprimé", id });
   } catch (err) {
-    console.error(err);
     return res
       .status(500)
       .json({ error: "Erreur lors de la suppression de l'objet" });
@@ -55,10 +58,22 @@ export const DeleteItem = async (req, res) => {
 };
 export const AddItem = async (req, res) => {
   let collection = await db.collection("materiel");
+  const filePath = req.file?.path;
+
   let item = req.body;
+  // Nouveau chemin pour l'image
+  const newPath = path.normalize(filePath);
+  const normalizedPath = newPath.replace(/\\/g, "/");
+  console.log("Nouvelle image : ", normalizedPath);
+   item = {
+    ...req.body,
+    picture: normalizedPath,
+  }
   try {
     let result = await collection.insertOne(item);
-    res.status(200).json({ message: "Item ajouté avec succès", result });
+    item._id = result.insertedId;
+
+    res.status(200).json({ message: "Item ajouté avec succès", item:item });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Erreur lors de l'ajout de l'item" });
@@ -119,7 +134,39 @@ export const EditItem = async (req, res) => {
   
     res.status(200).json({ message: "Item modifié avec succès", result });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: "Erreur lors de la modification de l'item" });
   }
 };
+
+
+export const getItemsByDate = async (req, res) => {
+  let collection = db.collection("materiel");
+  let reservations = db.collection("reservations");
+  let StartDate = req.params.startDate;
+  let EndDate = req.params.endDate;
+
+  try {
+    // Récupérer les réservations qui chevauchent la période donnée
+    let resultResav = await reservations
+      .find({ 
+        $or: [
+          { reservationDate: { $lte: EndDate }, returnDate: { $gte: StartDate } } // Réservations qui chevauchent la période
+        ]
+      })
+      .toArray();
+    // Extraire les IDs des items réservés
+    let reservedItemIds = resultResav.flatMap(res => res.items).map(id => new ObjectId(id));
+
+    // Récupérer les items qui NE sont PAS dans la liste des réservés
+    let result = await collection
+      .find({ _id: { $nin: reservedItemIds } }) // $nin = Not In
+      .toArray();
+
+    res.status(200).json(result);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Erreur lors de la récupération des items" });
+  }
+};
+
+

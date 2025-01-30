@@ -9,6 +9,7 @@ export const Reservation = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     dispatch(confirmReservation(
       {reservationId:id,
         status:event.target.response.value,
@@ -17,11 +18,10 @@ export const Reservation = () => {
     setIsSended(true)
   };
   return (
-    <div>
+    <div className="main-content reservation-conf">
         {isSended ? (<p>La réponse a bien été envoyée</p>): 
-            <><h1>Reservation</h1>
+            <>
             <form onSubmit={handleSubmit}>
-
               {response === "accept" ? (
                   <><label htmlFor="response">J'accepte la réservation</label>
                       <input type="checkbox" name="response" value="accepted" />
@@ -31,7 +31,7 @@ export const Reservation = () => {
                       <label htmlFor="response">Je refuse la réservation</label>
                       <input type="checkbox" name="response" value="rejected" />
                       <label htmlFor="justification" required>
-                          Veuillez justifier la raison du refus (cela sera envoyé par mail à l'élève)
+                          Veuillez justifier la raison du refus (transmise par email à l'étudiant)
                       </label>
                       <textarea name="justification" id="justification"></textarea></>
               )}

@@ -1,60 +1,190 @@
-import { useDispatch, useSelector } from "react-redux";
-import { selectObjects, selectObjInfos, selectFilter, selectSearchBarre, selectSelectedObjects, selectReservationDates, selectDataDemande } from "../features/demande/demandeSelector";
-import ObjectsByFilter from "../components/objects/ObjectsByFilter";
-import { setErrorFormDemande, setFilter } from "../features/demande/demandeSlice";
+import { useSelector } from "react-redux";
+import {
+  selectObjects,
+  selectObjInfos,
+  selectUSerInfos,
+  selectSearchBarre,
+  selectObjectsFiltered,
+  selectLoadingObjects,
+  selectErrors,
+  selectObjIsSelectable,
+} from "../features/demande/demandeSelector";
+import ObjectCard from "../components/objects/ObjectCard";
 import ObjectPopup from "../components/objects/ObjectPopup";
-import '../assets/styles/card.scss';
-import { useEffect } from "react";
+import "../assets/styles/card.scss";
+import { useEffect, useState } from "react";
 import ErrorBoundary from "../components/ErrorBoundary";
-
+import { Box } from "@mui/material";
+import Divider from "@mui/joy/Divider";
+import Typography from "@mui/joy/Typography";
+import Button from "@mui/joy/Button";
+import Add from "@mui/icons-material/Add";
+import Alert from "@mui/joy/Alert";
+import ReportIcon from '@mui/icons-material/Report';
 
 const ListObjects = () => {
-    const dispatch = useDispatch();
-    const objects = useSelector(selectObjects);
-    const filterType = useSelector(selectFilter)
-    const searchBarre = useSelector(selectSearchBarre)
-    const {startDT, returnDT} = useSelector(selectReservationDates);
-    const selectedObjects = useSelector(selectSelectedObjects);
+  const objects = useSelector(selectObjects);
+  const objectsFiltered = useSelector(selectObjectsFiltered); // Liste filtrée par date (backend)
+  const searchBarre = useSelector(selectSearchBarre);
+  const isLoading = useSelector(selectLoadingObjects);
+  const stateObjInfos = useSelector(selectObjInfos);
+  const userInfos = useSelector(selectUSerInfos);
+  const errors = useSelector(selectErrors);
+  const objIsSelectable = useSelector(selectObjIsSelectable);
+  
 
-    useEffect(() => {
-        if (selectedObjects.length === 0 || startDT.trim().length === 0 || returnDT.trim().length === 0) {
-            dispatch(setErrorFormDemande(true));
-        } else {
-            dispatch(setErrorFormDemande(false));
-        }
-    }, [selectedObjects, startDT, returnDT, dispatch])
+  const IsInfos = stateObjInfos._id ?? "";
+  const [isAdding, setIsAdding] = useState(false);
+  const [objectsListFiltered, setObjectsListFiltered] = useState({});
 
-    useEffect(() => {
-        if (filterType !== "category" && filterType !== "alphabet" && filterType!== "alphabet-reverse") {
-            dispatch(setFilter("category"));
+  // Déterminer la source des objets : `objectsFiltered` si disponible, sinon `objects`
+  const baseObjects = objectsFiltered.length > 0 ? objectsFiltered : objects;
+  // Regroupement des objets par catégorie
+  useEffect(() => {
+    const groupedObjects = baseObjects.reduce((acc, objet) => {
+      if (!acc[objet.categorie]) {
+        acc[objet.categorie] = [];
+      }
+      acc[objet.categorie].push(objet);
+      return acc;
+    }, {});
+
+    setObjectsListFiltered(groupedObjects);
+  }, [baseObjects]);
+
+  // Appliquer la recherche si un texte est saisi
+  useEffect(() => {
+    if (searchBarre !== "") {
+      const filteredObjects = baseObjects.filter((object) =>
+        object.name?.toLowerCase().includes(searchBarre.toLowerCase())
+      );
+
+      const groupedFilteredObjects = filteredObjects.reduce((acc, objet) => {
+        if (!acc[objet.categorie]) {
+          acc[objet.categorie] = [];
         }
-    }, [filterType, dispatch])
-    
-    let filters
-    if (filterType === "category") {
-        filters = [...new Set([...objects].map((object) => object.categorie))];
-    } else if (filterType === "alphabet-reverse") {
-        filters = Array.from({ length: 26 }, (_, i) => String.fromCharCode(122 - i));
-    } else if (filterType === "alphabet") {
-        filters = Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i));
+        acc[objet.categorie].push(objet);
+        return acc;
+      }, {});
+
+      setObjectsListFiltered(groupedFilteredObjects);
     }
+    else{
+      const groupedFilteredObjects = baseObjects.reduce((acc, objet) => {
+        if (!acc[objet.categorie]) {
+          acc[objet.categorie] = [];
+        }
+        acc[objet.categorie].push(objet);
+        return acc;
+      }, {});
+      setObjectsListFiltered(groupedFilteredObjects);
 
-    const stateObjInfos = useSelector(selectObjInfos);
-    const IsInfos= stateObjInfos._id??'';
+    }
+  }, [searchBarre, baseObjects]);
 
-    return (
-        <div className="objects-list">
-            {filters && searchBarre.trim().length === 0 && [...filters].map((filter, index) => (
-                <ObjectsByFilter key={index} filter={filter} />
-            ))}
-            {searchBarre.trim().length > 0 && (
-                <ObjectsByFilter filter={searchBarre} />)}
-            { IsInfos!==""&& (
-                <ErrorBoundary>
-                <ObjectPopup  /></ErrorBoundary>
-            )}
-        </div>
-    );
+  console.log(objectsListFiltered);
+
+  return (
+    <div className="main-content objects-list">
+      {isLoading ? (
+        <p>Chargement en cours...</p>
+      ) : (
+        <>
+          {userInfos.role === "admin" && !objIsSelectable && (
+
+           <Button className="add-btn" startDecorator={<Add sx={{ fontSize: "1.75rem" }}/>} onClick={()=>setIsAdding(true)} color="#6d6b9e" sx={()=>{
+              return {
+                bottom: "35px",
+                zIndex: 999,
+                position: "fixed",
+                width: "fit-content",
+                height: "fit-content",
+                padding: "10px 25px",
+                fontSize: "1rem",
+                fontFamily: "Montserrat, sans-serif",
+                fontWeight: 500,
+                backgroundColor: "#6d6b9e",
+                color: "#FAFAFA",
+                "&:hover": {
+                  backgroundColor: "#6d6b9e",
+                },
+              }}}
+            >
+              Ajouter
+            </Button>
+          )}
+          {(IsInfos !== "" || isAdding) && (
+            <ErrorBoundary>
+              <ObjectPopup
+                addingMode={isAdding}
+                closeFunction={() => setIsAdding(false)}
+              />
+            </ErrorBoundary>
+          )}
+          {errors.errorSelectionForm &&
+          <Alert
+         
+          sx={{ alignItems: 'flex-start', position:'absolute', top: '5%', left: '60%', transform: 'translateX(-50%)', width: 'fit-content', padding: '10px 15px', borderRadius: '5px', backgroundColor: '#f8d7da', color: '#721c24', border: '1px solid #f5c6cb', zIndex: 9999 }}
+          startDecorator={<ReportIcon />}
+          variant="soft"
+          color='danger'
+        >
+          <div>
+            <div>Erreur</div>
+            <Typography level="body-sm" color='danger'>
+              {errors.errorSelectionForm}
+            </Typography>
+          </div>
+        </Alert>
+}
+          {Object.keys(objectsListFiltered).map((category) => (
+            <Box key={category} sx={{ marginBottom: "2vh", position: "relative", zIndex: 0 }}>
+              <Divider
+                textAlign="left"
+                sx={{
+                  "--Divider-thickness": "2px",
+                  "--Divider-lineColor": "#6d6b9e",
+                  "margin": "25px 0 10px 0",
+                  "& .MuiDivider-wrapper": {
+                    color: "#6d6b9e",
+                  },
+                }}
+              >
+                <Typography
+                  level="h4"
+                  sx={{
+                    color: "#6d6b9e",
+                    textTransform: "uppercase",
+                    fontFamily: "Montserrat",
+                  }}
+                >
+                  {category}
+                </Typography>
+              </Divider>
+              <Box
+                container
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: {
+                    xs: "repeat(2, 1fr)",
+                    sm: "repeat(3, 1fr)",
+                    md: "repeat(5, 1fr)",
+                    lg: "repeat(6, 1fr)",
+                  },
+
+                  gap: 2, 
+                }}
+              >
+                {objectsListFiltered[category]?.map((object) => (
+                  <ObjectCard key={object._id} object={object} />
+                ))}
+              </Box>
+            </Box>
+          ))}
+        </>
+      )}
+    </div>
+  );
 };
 
 export default ListObjects;

@@ -1,333 +1,327 @@
-@use 'variables' as *;
+@use "variables" as *;
 
-main:has(.res-form) {
-    height: calc(100vh - 50px);
-    padding: 25px!important;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    grid-template-rows: auto 1fr;
-    gap: 20px;
-    
-    .main-hdr {
-        grid-row: 1/2;
-        grid-column: 1/3;
+main {
+   padding: 0;
+}
+
+.res-list-obj {
+  grid-column: 1/2;
+  font-family: $main-font;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: visible;
+  padding: 10px;
+  margin: -10px;
+
+  header {
+    background-color: $white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0;
+
+    span {
+      font-size: $font-size-14;
+      text-align: center;
     }
-     .res-list-obj {
-        grid-row: 2/3;
+  }
+  div {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 15px;
+
+    .object-list-item {
+      display: grid;
+      grid-template-columns: 84% 15%;
+      column-gap: 1%;
+      grid-template-rows: auto auto;
+      padding: 20px;
+      padding-right: 0;
+      width: auto;
+      background-color: $white;
+      box-shadow: -3px 3px 5px 0px rgba(0, 0, 0, 0.22),
+        -5px 5px 7.5px 0px rgba(0, 0, 0, 0.17);
+      border-radius: 7.5px;
+      position: relative;
+      overflow: hidden;
+
+      span.title {
+        font-size: $font-size-14;
+        font-weight: $font-weight-600;
         grid-column: 1/2;
-        font-family: $main-font;
+        grid-row: 1/2;
+      }
+      span.status {
+        font-size: $font-size-12;
+        font-weight: $font-weight-500;
+        grid-column: 1/2;
+        grid-row: 2/3;
+        color: $dark-green-rezav;
+      }
+      span.icon {
+        grid-column: 2/3;
+        grid-row: 1/3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+        font-size: $font-size-28;
+        color: $dark-green-rezav;
+      }
+
+      .color-status {
+        position: absolute;
+        right: 0;
+        z-index: 0;
+        width: 20%;
         height: 100%;
-        overflow-y: auto;
-        overflow-x: visible;
-        padding: 10px;
-        margin: -10px;
+        clip-path: polygon(0 0, 100% 0%, 100% 100%, 40% 100%);
+        background-color: $status-green;
+      }
+    }
+  }
+}
 
-        header {
-         background-color: $white;
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         justify-content: center;
-         padding: 15px 0;
+.main-content.formulaire {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr;
+  column-gap: 10px;
+  overflow: hidden;
 
-         h3 {
-            color: $mauve-rezav;
-            font-size: $font-size-20;
-            font-family: $main-font;
-         }
-         span {
-            font-size: $font-size-14;
-         }
+  .res-form {
+    grid-column: 2/3;
+    background-color: $white;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25),
+      -15px 15px 20px 0px rgba(0, 0, 0, 0.17);
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 5px;
+    width: 100%;
+
+    .list-btn-popup {
+      display: none;
+    }
+    header {
+      background-color: $mauve-rezav;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px 0;
+      width: 100%;
+
+      .titre-3 {
+        color: $white;
+      }
+    }
+
+    fieldset {
+      display: flex;
+      flex-flow: column nowrap;
+      font-family: $main-font;
+      gap: 5px;
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      padding: 0 10% 75px 10%;
+      overflow-x: auto;
+
+      h4 {
+        font-size: $font-size-18;
+        color: $mauve-rezav;
+        margin-bottom: 15px;
+        margin-top: 10px;
+      }
+
+      .rezav-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: 10px;
+        margin-bottom: 10px;
+
+        &.input-txt input {
+          width: calc(100% - 10px);
+          box-sizing: border-box;
         }
 
-        .object-list-item {
-         display: grid;
-         grid-template-columns: 84% 15%;
-         column-gap: 1%;
-         grid-template-rows: auto auto;
-         padding: 20px;
-         padding-right: 0;
-         width: auto;
-         background-color: $white;
-         box-shadow: -3px 3px 5px 0px rgba(0, 0, 0, 0.22), -5px 5px 7.5px 0px rgba(0, 0, 0, 0.17);
-         margin-bottom: 15px;
-         border-radius: 7.5px;
-         position: relative;
-         overflow: hidden;
+        &.input-file {
+          padding-left: 20px;
+          display: grid;
+          grid-template-columns: auto 1fr;
+          grid-template-rows: auto auto;
+          column-gap: 10px;
 
-         span.title {
-            font-size:  $font-size-14;
-            font-weight: $font-weight-600;
-            grid-column: 1/2;
-            grid-row: 1/2;
-         }
-         span.status {
-            font-size: $font-size-12;
-            font-weight: $font-weight-500;
-            grid-column: 1/2;
-            grid-row: 2/3;
-            color: $dark-green-rezav;
-         }
-         span.icon {
-            grid-column: 2/3;
-            grid-row: 1/3;
+          input {
+            display: none;
+          }
+
+          label {
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            z-index: 1;
-            font-size: $font-size-28;
-            color: $dark-green-rezav;
-         }
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            border: 1.5px dashed $mauve-rezav-75;
+            border-radius: 7.5px;
+            color: $mauve-rezav-75;
+            transition: all 0.3s ease;
+            grid-row: 1/3;
+            grid-column: 1/2;
 
-
-         .color-status{
-            position: absolute;
-            right: 0;
-            z-index: 0;
-            width: 20%;
-            height: 100%;
-            clip-path: polygon(0 0, 100% 0%, 100% 100%, 40% 100%);
-            background-color: $status-green;
-        }
-         
-        }
-     }
-
-     .res-form {
-        grid-row: 2/3;
-        grid-column: 2/3;
-        background-color: $white;
-        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), -15px 15px 20px 0px rgba(0, 0, 0, 0.17);
-        border-radius: 15px;
-        overflow: hidden;
-        display: flex;
-        flex-flow: column nowrap;
-        gap: 10px;
-        
-        header {
-         background-color: $mauve-rezav;
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         padding: 15px 0;
-         width: 100%;
-
-         h3 {
-            color: $white;
-            font-size: $font-size-20;
+            &:hover {
+              border: 1.5px dashed $mauve-rezav;
+              color: $mauve-rezav;
+              background-color: $mauve-rezav-10;
+            }
+          }
+          .label {
+            grid-row: 1/2;
+            grid-column: 2/3;
             font-family: $main-font;
-         }
-        }
-        
-        fieldset {
-         display: flex;
-         flex-flow: column nowrap;
-         font-family: $main-font;
-         gap: 5px;
-         box-sizing: border-box;
-         width: 100%;
-         height: 100%;
-         border: 0;
-         padding: 10px 10%;
-
-         h4 {
-            font-size: $font-size-18;
+            font-size: $font-size-14;
             color: $mauve-rezav;
-            margin-bottom: 15px;
-            margin-top: 10px;
-         }
-
-         .rezav-input {
-            width: 100%;
-            box-sizing: border-box;
+            font-weight: $font-weight-500;
+          }
+          .restrictions {
+            grid-row: 2/3;
+            grid-column: 2/3;
+            font-size: $font-size-10;
+            color: $mauve-rezav;
             padding-left: 10px;
-            margin-bottom: 10px;
+          }
+        }
+      }
+    }
 
-            &.input-txt input {
-               width: calc(100% - 10px);
-               box-sizing: border-box;
-            }
-
-            &.input-file {
-               padding-left: 20px;
-               display: grid;
-               grid-template-columns: auto 1fr;
-               grid-template-rows: auto auto;
-               column-gap: 10px;
-
-               input {
-                  display: none;
-               }
-
-               label {
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  cursor: pointer;
-                  width: 35px;
-                  height: 35px;
-                  border: 1.5px dashed $mauve-rezav-75;
-                  border-radius: 7.5px;
-                  color: $mauve-rezav-75;
-                  transition: all 0.3s ease;
-                  grid-row: 1/3;
-                  grid-column: 1/2;
-
-                  &:hover {
-                     border: 1.5px dashed $mauve-rezav;
-                     color: $mauve-rezav;
-                     background-color: $mauve-rezav-10;
-                  }
-               }
-               .label {
-                  grid-row: 1/2;
-                  grid-column: 2/3;
-                  font-family: $main-font;
-                  font-size: $font-size-14;
-                  color: $mauve-rezav;
-                  font-weight: $font-weight-500;
-
-               }
-               .restrictions {
-                  grid-row: 2/3;
-                  grid-column: 2/3;
-                  font-size: $font-size-10;
-                  color: $mauve-rezav;
-                  padding-left: 10px;
-               }
-            }
-         }
+    &.form-step-1 {
+      .step-field-2 {
+        display: none;
+      }
+    }
+    &.form-step-2 {
+      .step-field-1 {
+        display: none;
       }
 
-        &.form-step-1 {
+      .step-field-2 {
+        .groupe {
+          display: flex;
+          flex-flow: column;
+          gap: 5px;
+          padding: 10px;
+          margin-bottom: 10px;
+          border-radius: 5px;
+          box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.35);
+          max-height: 40%;
+          overflow-y: auto;
 
-         .step-field-2 {
-            display: none;
-         }
-        }
-        &.form-step-2 {
+          .membre {
+            display: flex;
+            align-items: center;
 
-         .step-field-1 {
-            display: none;
-            
-         }
+            .input-txt {
+              width: fit-content;
 
-         .step-field-2 {
+              :first-child {
+                margin-left: 0;
+              }
 
-            .groupe {
-               display: flex;
-               flex-flow: column;
-               gap: 5px;
-               padding: 10px;
-               margin-bottom: 10px;
-               border-radius: 5px;
-               box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.35);
-               max-height: 40%;
-               overflow-y: auto;
-
-               .membre {
-                  display: flex;
-                  align-items: center;
-
-                  .input-txt {
-                     width: fit-content;
-
-                     :first-child {
-                        margin-left: 0;
-                     }
-      
-                     input {
-                        max-width: 150px;
-                     }
-                  }
-
-                  .input-select {
-                     width: fit-content;
-
-                     select {
-                        max-width: 150px;
-                     }
-                  }
-                  .close {
-                     width: 30px;
-                     height: 30px;
-                     display: flex;
-                     align-items: center;
-                     justify-content: center;
-                     align-self: flex-end;
-                     justify-self: flex-end;
-                     margin-bottom: 10px;
-                     color: $mauve-rezav;
-                     transition: all 0.3s ease;
-
-                     &:hover {
-                        color: $dark-red-rezav;
-                        transform: scale(1.1);
-
-                     }
-                  }
-               }
-               button {
-                  width: fit-content;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  gap: 5px;
-                  color: $mauve-rezav;
-                  width: fit-content;
-                  height: 30px;
-                  padding: 5px;
-                  border: 0;
-                  box-shadow: 0;
-                  background-color: $white;
-                  font-size: $font-size-14;
-                  font-family: $main-font;
-                  font-weight: $font-weight-500;
-                  cursor: default;
-                  border-radius: 5px;
-                  transition: all 0.3s ease;
-                  margin-left: 20px;
-                  
-                  &:hover {
-                     background-color: $mauve-rezav-10;
-                  }
-               }
-            }
-    
-
-            .div-responsabilite {
-               display: flex;
-               gap: 5px;
-               padding-left: 10px;
-               margin-bottom: 10px;
-
-               p {
-                  color: $mauve-rezav;
-                  font-size: $font-size-14;
-                  width: calc(100% - 19px);
-                  user-select: none;
-               }
-
+              input {
+                max-width: 150px;
+              }
             }
 
-         }
+            .input-select {
+              width: fit-content;
+
+              select {
+                max-width: 150px;
+              }
+            }
+            .close {
+              width: 30px;
+              height: 30px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              align-self: flex-end;
+              justify-self: flex-end;
+              margin-bottom: 10px;
+              color: $mauve-rezav;
+              transition: all 0.3s ease;
+
+              &:hover {
+                color: $dark-red-rezav;
+                transform: scale(1.1);
+              }
+            }
+          }
+          button {
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            color: $mauve-rezav;
+            width: fit-content;
+            height: 30px;
+            padding: 5px;
+            border: 0;
+            box-shadow: 0;
+            background-color: $white;
+            font-size: $font-size-14;
+            font-family: $main-font;
+            font-weight: $font-weight-500;
+            cursor: default;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            margin-left: 20px;
+
+            &:hover {
+              background-color: $mauve-rezav-10;
+            }
+          }
         }
-     }
+
+        .div-responsabilite {
+          display: flex;
+          gap: 5px;
+          padding-left: 10px;
+          margin-bottom: 10px;
+
+          p {
+            color: $mauve-rezav;
+            font-size: $font-size-14;
+            width: calc(100% - 19px);
+            user-select: none;
+          }
+        }
+      }
+    }
+  }
 }
 
-@media only screen and (max-width : 745px) {
-   main:has(.res-form) {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
+@media only screen and (max-width: 745px) {
+  .main-content.formulaire {
+    display: flex;
 
-      .res-list-obj {
-         display: none;
-      }
-      .res-form {
-         grid-column: 1/3;
-         width: 100%;
-      }
+    .res-list-obj {
+      display: none;
+    }
+    .res-form {
 
-   }
+      .list-btn-popup {
+        display: flex;
+        font-size: $font-size-12;
+        width: fit-content;
+        margin: 0 10px 0 auto;
+      }
+    }
+  }
 }

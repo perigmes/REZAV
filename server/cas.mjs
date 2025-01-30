@@ -8,6 +8,8 @@ passport.use(
       version: "CAS3.0",
       ssoBaseURL: "https://cas.univ-lemans.fr/cas", 
       serverBaseURL: "https://lammi-saes5-01.univ-lemans.fr", 
+      // serverBaseURL: "http://localhost:5000", 
+
       validateURL: "/serviceValidate",
     },
     async (profile, done) => {
