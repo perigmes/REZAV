@@ -8,7 +8,8 @@ export const PostReservation = async (req, res) => {
   try {
     // Vérification du fichier
     const filePath = req.file?.path;
-
+    console.log(filePath);
+    console.log(req.body);
     // Parsing des données JSON
     let newDocument = {
       projectName: req.body.projectName,

@@ -68,7 +68,7 @@ export const Formulaire = () => {
     setReservation({ ...reservation, implementationPlan: file });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formStep === 1) {
       if (!dataDemande.name || !dataDemande.desc || !dataDemande.justif) {
@@ -108,7 +108,7 @@ export const Formulaire = () => {
       formData.append("reservation_status", JSON.stringify(reservation_status));
 
       // Envoi via Redux
-      dispatch(addReservation({ reservation: formData })).unwrap();
+      await dispatch(addReservation({ reservation: formData })).unwrap();
       navigate("/mes-demarches");
       dispatch(clearDataDemande());
     }
