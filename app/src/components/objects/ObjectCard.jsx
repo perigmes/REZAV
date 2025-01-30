@@ -129,7 +129,7 @@ const ObjectCard = ({ object }) => {
           }}
         >
           <img
-            src={`https://lammi-saes5-01.univ-lemans.fr/pictures/${picture}`}            
+            src={`https://lammi-saes5-01.univ-lemans.fr/${picture}`}            
             loading="lazy"
             alt={name}
             // onError={(e) => {
