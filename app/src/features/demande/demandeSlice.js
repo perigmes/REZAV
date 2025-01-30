@@ -254,7 +254,7 @@ const demandeSlice = createSlice({
       .addCase(loadMaterielByIds.rejected, (state, action) => {
         state.loadingObjects = false;
         state.errors.apiErrorObjectsLoad = action.payload;
-
+      })
       .addCase(getUser.fulfilled,(state,action)=>{
         state.user = action.payload;
       })
