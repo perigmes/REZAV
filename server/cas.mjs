@@ -59,11 +59,14 @@ passport.use(
   );
 
 passport.serializeUser((user, done) => done(null, user.id));
-passport.deserializeUser((id, done) => {
-  User.findById(id,(err,user)=>{
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);  // Utilisation de async/await au lieu du callback
     done(null, user);
-
-  })
+  } catch (error) {
+    console.error("❌ Erreur lors de la désérialisation de l'utilisateur :", error);
+    done(error);
+  }
 });
 
 export const casLogin = function(req, res, next) { 
