@@ -160,7 +160,7 @@ export const getUser = createAsyncThunk('user',async ({},{rejectWithValue})=>{
         console.log(response.data);
         return response.data;
     } catch(e){
-        return rejectWithValue(error.response.data.error.message);
+        return rejectWithValue(e.response.data.error.message);
     }
 });
 
