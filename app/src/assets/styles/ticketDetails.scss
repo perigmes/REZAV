@@ -1,0 +1,142 @@
+@use "variables" as *;
+
+.ticket-details {
+  margin: 15px 15px 0 15px;
+  border-radius: 10px;
+  box-shadow: -7px 7px 10px 0px rgba(0, 0, 0, 0.15),
+    2px -2px 6px 0px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  box-sizing: border-box;
+  font-family: $main-font;
+  background-color: $white;
+  height: calc(100% - 25px);
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-flow: row wrap;
+    color: $white;
+    width: 100%;
+    height: 20%;
+    box-sizing: border-box;
+    padding: 0 6%;
+
+    &.accepted {
+      color: $dark-green-rezav;
+      background-color: $status-green;
+    }
+    &.rejected {
+      color: $dark-red-rezav;
+      background-color: $status-red;
+    }
+    &.pending {
+      color: $dark-blue-rezav;
+      background-color: $status-blue;
+    }
+    &.finished {
+      color: black;
+      background-color: $status-gray;
+    }
+
+    .ticket-name {
+      font-size: $font-size-22;
+      font-weight: $font-weight-700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ticket-status {
+        font-size: $font-size-20;
+        font-weight: $font-weight-600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .ticket-date {
+        font-size: $font-size-14;
+        font-weight: $font-weight-500;
+        
+    }
+
+  }
+  .ticket-details-main {
+    width: 100%;
+    height: 80%;
+    box-sizing: border-box;
+    padding: 25px 6%;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 30px;
+    overflow-y: auto;
+
+    .ticket-details-section {
+      display: flex;
+      flex-flow: column nowrap;
+      width: 100%;
+      gap: 15px;
+
+      h5 {
+        font-size: $font-size-18;
+        font-weight: $font-weight-700;
+      }
+      p {
+        font-size: $font-size-14;
+        font-weight: $font-weight-500;
+        margin-left: 10px;
+
+      }
+
+      .cards {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 10px;
+        margin-left: 10px;
+      }
+
+      .rezav-button-2 {
+        width: fit-content;
+        color: black;
+        opacity: 0.75;
+        font-size: $font-size-14;
+
+        &:hover {
+          opacity: 1;
+          background-color: transparent;
+          transform: scale(1.01);
+        }
+      }
+    }
+  }
+
+  &.empty {
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+
+    p {
+      font-size: $font-size-20;
+      font-family: $main-font;
+      color: $mauve-rezav;
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .ticket-details {
+  
+    header {
+
+      .ticket-name, .ticket-status {
+        white-space: wrap;
+        overflow: visible;
+        text-overflow: none;
+      }
+      .ticket-name {
+        font-size: $font-size-18;
+      }
+      .ticket-status {
+        font-size: $font-size-16;
+      }
+  }
+}}

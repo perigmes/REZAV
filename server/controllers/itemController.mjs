@@ -3,6 +3,7 @@ import db from "../db/conn.mjs";
 import path from "path";
 import { __dirname } from "../utils/pathHelper.js";
 import fs from "fs";
+
 export const GetItems = async (req, res) => {
   let collection = await db.collection("materiel");
   try {
@@ -39,6 +40,28 @@ export const GetItemById = async (req, res) => {
       });
   }
 };
+
+export const getItemsByIds = async (req, res) => {
+  let collection = await db.collection("materiel");
+
+  try {
+    const ids = req.body.ids;
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: "Le tableau d'IDs est invalide ou vide." });
+    }
+
+    const objectIds = ids.map(id => new ObjectId(id));
+
+    let result = await collection.find({ _id: { $in: objectIds } }).toArray();
+
+    res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur lors de la récupération des items par IDs." });
+  }
+};
+
 
 export const DeleteItem = async (req, res) => {
   let collection = await db.collection("materiel");

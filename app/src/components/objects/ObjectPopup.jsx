@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import { setInfoObject } from "../../features/demande/demandeSlice";
 import {
   selectObjInfos,
-  selectUSerInfos,
+  selectUserInfos,
 } from "../../features/demande/demandeSelector";
 import "../../assets/styles/popup.scss";
 import { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ import { ValidationModal } from "../alertDialog/ValidationModal";
 const ObjectPopup = ({ addingMode, closeFunction }) => {
   const dispatch = useDispatch();
   const infoObject = useSelector(selectObjInfos);
-  const userInfos = useSelector(selectUSerInfos);
+  const userInfos = useSelector(selectUserInfos);
   const [isConfirmated, setIsConfirmated] = useState(false);
   const [isConfirmating, setIsConfirmating] = useState(false);
   const [infos, setInfos] = useState(
@@ -232,7 +232,11 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
           </>
         ) : (
           <div className="formPopup">
-            <img src={preview} alt={infos.name} className="imgObject" />
+            <img src={preview || "/images/error-img.webp"}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/images/error-img.webp";
+                  }} alt={infos.name} className="imgObject" />
             <div className="object-infos">
               <h2 className="objects-filtered-title">{infos.categorie}</h2>
               <p id="name" name="name" className="w-100 text1">

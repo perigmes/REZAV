@@ -29,12 +29,6 @@ export const formatDateToDayMonthYear = dateString => {
   return `${day}/${month}/${year}`;
 }
 
-export const isDateInPast = dateString => {
-  const date = new Date(dateString);
-  const today = new Date();
-  return date < today;
-}
-
 export const formatDateToDateHourMinute = dateString => {
   const date = new Date(dateString);
 

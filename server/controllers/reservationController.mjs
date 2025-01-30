@@ -27,15 +27,30 @@ export const PostReservation = async (req, res) => {
 // GET pour récupérer les réservations
 export const GetReservation = async (req, res) => {
   try {
-    let collection = await db.collection("reservations");
-    let newDocument = req.body;
-    let result = await collection.find(newDocument).toArray();
+    const today = new Date();
 
-    res.status(200).json(result);
+    const reservationsCollection = db.collection('reservations');
+    const userReservations = await reservationsCollection.find().toArray();
+
+    const reservationStatusIds = [...new Set(userReservations.map(res => res.idStatus))];
+
+    const statusCollection = db.collection('reservation_status');
+    const relevantStatuses = await statusCollection
+      .find({ idStatus: { $in: reservationStatusIds } })
+      .toArray();
+
+    const reservationsWithStatus = userReservations.map(reservation => {
+      const status = relevantStatuses.find(stat => stat.idStatus === reservation.idStatus);
+      return {
+        ...reservation,
+        status: new Date(reservation.returnDate) < today ? 'finished' : (status ? status.status : null)
+      };
+    });
+
+    res.status(200).json(reservationsWithStatus);
   } catch (err) {
-    res
-      .status(500)
-      .json({ error: "Erreur lors de la récupération des réservations" });
+    console.error(err);
+    res.status(500).json({ error: "Erreur lors de la récupération des réservations" });
   }
 };
 
@@ -43,31 +58,44 @@ export const GetReservationsByUserId = async (req, res) => {
   try {
     let userId = req.params.userId;
     let collection = await db.collection("reservations");
-    let result = await collection.find({ userId: userId }).toArray();
-    res.status(200).json(result);
-  } catch {
-    res
-      .status(500)
-      .json({
-        error:
-          "Erreur lors de la récupération des réservations de l'utilisateur",
-      });
+    let userReservations = await collection.find({ userId: userId }).toArray();
+
+    const reservationStatusIds = [...new Set(userReservations.map(res => res.idStatus))];
+    
+    const statusCollection = db.collection('reservation_status');
+    const relevantStatuses = await statusCollection
+      .find({ idStatus: { $in: reservationStatusIds } })
+      .toArray();
+    
+    const today = new Date();
+    const reservationsWithStatus = userReservations.map(reservation => {
+      const status = relevantStatuses.find(stat => stat.idStatus === reservation.idStatus);
+      return { 
+        ...reservation, 
+        status: new Date(reservation.returnDate) < today ? 'finished' : (status ? status.status : null) 
+      };
+    });
+    
+    res.status(200).json(reservationsWithStatus);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Erreur lors de la récupération des réservations de l'utilisateur",
+    });
   }
 };
 
 export const GetLast5AcceptedReservationsByUserId = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const today = new Date().toISOString();
+    const today = new Date();
 
     const reservationsCollection = db.collection("reservations");
     const userReservations = await reservationsCollection
       .find({ userId })
       .toArray();
 
-    const reservationStatuses = [
-      ...new Set(userReservations.map((res) => res.idStatus)),
-    ];
+    const reservationStatuses = [...new Set(userReservations.map(res => res.idStatus))];
 
     const statusCollection = db.collection("reservation_status");
     const relevantStatuses = await statusCollection
@@ -75,29 +103,23 @@ export const GetLast5AcceptedReservationsByUserId = async (req, res) => {
       .toArray();
 
     const filteredReservations = userReservations
-      .filter((reservation) => {
-        const status = relevantStatuses.find(
-          (stat) => stat.idStatus === reservation.idStatus
-        );
-        const isAccepted = status && status.status === "accepted";
-        const isExpired =
-          reservation.returnDate &&
-          new Date(reservation.returnDate) < new Date(today);
-
-        return isAccepted || isExpired;
+      .map(reservation => {
+        const status = relevantStatuses.find(stat => stat.idStatus === reservation.idStatus);
+        return {
+          ...reservation,
+          status: new Date(reservation.returnDate) < today ? 'finished' : (status ? status.status : null)
+        };
       })
+      .filter(reservation => reservation.status === "accepted" || reservation.status === "finished")
       .sort((a, b) => new Date(b.reservationDate) - new Date(a.reservationDate))
       .slice(0, 5);
 
     res.status(200).json(filteredReservations);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        error:
-          "Erreur lors de la récupération des réservations pertinentes de l'utilisateur",
-      });
+    res.status(500).json({
+      error: "Erreur lors de la récupération des réservations pertinentes de l'utilisateur",
+    });
   }
 };
 

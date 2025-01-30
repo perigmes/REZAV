@@ -4,7 +4,7 @@ import {
   selectLast3Demandes,
   selectLast5ValidReservations,
   selectObjects,
-  selectUSerInfos,
+  selectUserInfos,
 } from "../features/demande/demandeSelector";
 import {
   getLast3Demandes,
@@ -16,11 +16,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import { useNavigate } from "react-router-dom";
+import { clearSelectedTicket, setSelectedTicket } from "../features/demande/demandeSlice";
 
 const TableauBord = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector(selectUSerInfos);
+  const user = useSelector(selectUserInfos);
 
   useEffect(() => {
     dispatch(getLast5ValidReservations(user.idUser));
@@ -30,7 +31,6 @@ const TableauBord = () => {
   const last5ValidReservations = useSelector(selectLast5ValidReservations);
   const last3Demandes = useSelector(selectLast3Demandes);
   const allObjects = useSelector(selectObjects);
-  console.log(last3Demandes);
 
   const uniqueObjects = allObjects.reduce((acc, obj) => {
     if (!acc.some((item) => item.name === obj.name)) {
@@ -69,12 +69,11 @@ const TableauBord = () => {
               {last5ValidReservations.map((reservation, index) => (
                 <div
                   key={reservation._id}
-                  className={
-                    "reservation-item" +
-                    (isDateInPast(reservation.returnDate)
-                      ? " finished"
-                      : " accepted")
-                  }
+                  className={`reservation-item ${reservation.status}`}
+                  onClick={() => {
+                    dispatch(setSelectedTicket(reservation));
+                    navigate("/mes-demarches");
+                  }}
                 >
                   <div className="color"></div>
                   <div className="infos">
@@ -82,13 +81,14 @@ const TableauBord = () => {
                       {reservation.projectName}
                     </p>
                     <p className="date">
-                      {formatDateToDayMonthYear(reservation.reservationDate)} -{" "}
-                      {formatDateToDayMonthYear(reservation.returnDate)}
+                      {formatDateToDayMonthYear(reservation.reservationDate)} - {formatDateToDayMonthYear(reservation.returnDate)}
                     </p>
                     <p className="status">
-                      {isDateInPast(reservation.returnDate)
+                      {reservation.status === "accepted"
+                        ? "Validée"
+                        : reservation.status === "finished"
                         ? "Terminée"
-                        : "Validée"}
+                        : "Erreur"}
                     </p>
                   </div>
                   <span className="material-symbols-rounded">
@@ -97,7 +97,14 @@ const TableauBord = () => {
                 </div>
               ))}
             </div>
-            <button className="tab-sec-btn" onClick={() => navigate("/mes-demarches")}>Consulter mes réservations</button>
+            <button
+              className="tab-sec-btn"
+              onClick={() => {
+                dispatch(clearSelectedTicket());
+                navigate("/mes-demarches");
+              }}            >
+              Consulter mes réservations
+            </button>
           </section>
           <div className="double-section">
             <section className="tab-section materiel">
@@ -119,13 +126,13 @@ const TableauBord = () => {
                 >
                   {uniqueObjects.map((object) => (
                     <SwiperSlide key={object._id}>
-                      <img 
-                        src={object.picture || "/images/error-img.webp"} 
+                      <img
+                        src={object.picture || "/images/error-img.webp"}
                         onError={(e) => {
-                          e.target.onerror = null; 
-                          e.target.src = "/images/error-img.webp"; 
+                          e.target.onerror = null;
+                          e.target.src = "/images/error-img.webp";
                         }}
-                        alt={object.name} 
+                        alt={object.name}
                       />
                     </SwiperSlide>
                   ))}
@@ -146,7 +153,13 @@ const TableauBord = () => {
 
               <h4 className="titre-4">Voir le matériel</h4>
               <p>Voir le matériel et accéder à la réservation</p>
-              <button className="tab-sec-btn" onClick={() => navigate("/list-objects")}>
+              <button
+                className="tab-sec-btn"
+                onClick={() => {
+                  dispatch(clearSelectedTicket());
+                  navigate("/mes-demarches");
+                }}
+              >
                 Accéder à la liste du matériel
               </button>
             </section>
@@ -161,6 +174,10 @@ const TableauBord = () => {
                   <div
                     key={reservation._id}
                     className={"reservation-item " + reservation.status}
+                    onClick={() => {
+                      dispatch(setSelectedTicket(reservation));
+                      navigate("/mes-demarches");
+                    }}
                   >
                     <div className="color"></div>
                     <div className="infos">
@@ -185,7 +202,12 @@ const TableauBord = () => {
                   </div>
                 ))}
               </div>
-              <button className="tab-sec-btn" onClick={() => navigate("/mes-demarches")}>Accéder à mes demandes</button>
+              <button
+                className="tab-sec-btn"
+                onClick={() => navigate("/mes-demarches")}
+              >
+                Accéder à mes demandes
+              </button>
             </section>
           </div>
         </div>
