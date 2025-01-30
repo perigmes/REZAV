@@ -154,6 +154,17 @@ export const getReservationByUserId = createAsyncThunk(
   }
 );
 
+export const getUser = createAsyncThunk('user',async ({},{rejectWithValue})=>{
+    try{
+        const response = await axios.get(`${URL_API_RESERVATIONS}/user`);
+        console.log(response.data);
+        return response.data;
+    } catch(e){
+        return rejectWithValue(error.response.data.error.message);
+    }
+});
+
+
 export const addObject = createAsyncThunk(
   "reservation/addObject",
   async ({ data }, { rejectWithValue }) => {

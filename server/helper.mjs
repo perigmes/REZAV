@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 // Fonction pour envoyer un e-mail
-export const sendConfirmationEmail = async (reservation) => {
+export const sendConfirmationEmail = async (reservation,user) => {
     const transporter = nodemailer.createTransport({
         host: "smtp.univ-lemans.fr", // Ou tout autre service SMTP
         secure:true,
@@ -16,13 +16,13 @@ const acceptUrl = `http://localhost:3000/reservation-confirmation/accept/${reser
 const rejectUrl = `http://localhost:3000/reservation-confirmation/reject/${reservation.idStatus}`;
 
 const mailOptions = {
-    from: "clementine.prouteau.etu@univ-lemans.fr",
+    from: 'clementine.prouteau.etu@univ-lemans.fr',
     to: "perigmes@gmail.com", // Remplacez par l'e-mail de l'étudiant
     subject: "Confirmation de réservation",
     text: `Une nouvelle réservation a été soumise. Projet: ${reservation.projectName}`,
     html: `
         <h1>Nouvelle réservation</h1>
-        <p><strong>Nom de l'étudiant :</strong> clem prouteau</p>
+        <p><strong>Nom de l'étudiant :</strong> ${user.firstName+' '+ user.lastName}</p>
         <p><strong>Nom du projet :</strong> ${reservation.projectName}</p>
         <p><strong>Date de réservation :</strong> ${reservation.reservationDate}</p>
         <p><strong>Date de retour :</strong> ${reservation.returnDate}</p>
@@ -41,7 +41,7 @@ const mailOptions = {
     
         <p>Merci de vérifier la réservation.</p>
         <p>Cordialement,</p>
-        <p><em>Votre équipe</em></p>
+        <p><em>L'équipe de REZAV</em></p>
     `,
     attachments: [
         {
@@ -67,8 +67,8 @@ export const sendResponseEmail = async (justification) => {
         },
     });
      const mailOptions = {
-        from: "clementine.prouteau.etu@univ-lemans.fr",
-        to: "perigmes@gmail.com", //A mettre email de l'étudiant
+        from: "perigmes@gmail.com",
+        to: "clementine.prouteau.etu@univ-lemans.fr", 
         subject: "Confirmation de réservation",
         html: `
             <h1>Votre réservation a été ${justification?'refusée': 'acceptée'}</h1>

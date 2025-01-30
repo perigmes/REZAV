@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addObject,loadMaterielByDate, addReservation, deleteObject, getLast3Demandes, getLast5ValidReservations, loadMateriel, loadReservation, updateObject, GetReservationByUserId, getReservationByUserId, loadMaterielByIds } from './reservationsAsyncAction';
+import { addObject,loadMaterielByDate, addReservation, deleteObject, getLast3Demandes, getLast5ValidReservations, loadMateriel, loadReservation, updateObject, GetReservationByUserId, getReservationByUserId, loadMaterielByIds, getUser } from './reservationsAsyncAction';
 import { getDatePlusDays } from '../../utils/tools';
 
 const demandeSlice = createSlice({
@@ -254,6 +254,9 @@ const demandeSlice = createSlice({
       .addCase(loadMaterielByIds.rejected, (state, action) => {
         state.loadingObjects = false;
         state.errors.apiErrorObjectsLoad = action.payload;
+
+      .addCase(getUser.fulfilled,(state,action)=>{
+        state.user = action.payload;
       })
   },
 });

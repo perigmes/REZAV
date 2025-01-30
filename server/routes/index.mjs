@@ -35,3 +35,12 @@ router.get('/reservation/statuses', getAllStatuses);
 router.get("/reservation/user/:userId/lastValid", GetLast5AcceptedReservationsByUserId);
 router.get("/reservation/user/:userId/lastInvalid", GetLast3DemandesByUserId)
 
+// Route pour récupérer l'utilisateur authentifié
+router.get('/user', (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Utilisateur non authentifié" });
+    }
+    // Renvoie l'utilisateur authentifié
+    res.status(200).json({ user: req.user });
+  });
+  
