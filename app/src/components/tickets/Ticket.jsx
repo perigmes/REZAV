@@ -1,39 +1,31 @@
-import { useDispatch } from "react-redux";
-import { setselectedReservation, setStatus, setIsActive } from "../../features/tickets/ticketSlice";
+import { formatDateToDayMonthYear } from "../../utils/tools";
+import "../../assets/styles/ticket.scss";
+import { selectSelectedTicket } from "../../features/demande/demandeSelector";
+import { useDispatch, useSelector } from "react-redux";
+import { clearSelectedTicket, setSelectedTicket } from "../../features/demande/demandeSlice";
 
-function Ticket({ reservation, listOfStatuses }) {
+function Ticket({ reservation }) {
   const dispatch = useDispatch();
+  const selectedTicket = useSelector(selectSelectedTicket);
 
-  // Vérifie si listOfStatuses est un tableau avant d'utiliser `find`
-  const reservationStatus = Array.isArray(listOfStatuses)
-    ? listOfStatuses.find((status) => status.idStatus === reservation.idStatus)
-    : null;
-  const returnDate = new Intl.DateTimeFormat("fr-FR").format(new Date(reservation.returnDate));
-  const reservationDate = new Intl.DateTimeFormat("fr-FR").format(new Date(reservation.reservationDate));
 
-  const returnDateObj = new Date(reservation.returnDate); 
-  const currentDateObj = new Date();
 
-// Calculer le texte du statut
-const statusText = currentDateObj > returnDateObj ? 'passed' : reservationStatus?.status || "Statut inconnu";
-
-  function handleClick() {
-    dispatch(setselectedReservation(reservation._id));
-    dispatch(setStatus(statusText));
-    dispatch(setIsActive(true));
-  }
-
+  const { projectName, reservationDate, returnDate, status } = reservation;
+  const statusTxt = (status === "finished") ? "Terminée" :
+    (status === "accepted") ? "Validée" :
+    (status === "rejected") ? "Rejetée" :
+    (status === "pending") ? "En attente" : "Erreur";
+  const dates = `${formatDateToDayMonthYear(reservationDate)} - ${formatDateToDayMonthYear(returnDate)}`;
   return (
-    <div className="ticket" onClick={handleClick}>
-      <div className="title-ticket">
-        <h3>{reservation.projectName}</h3>
-        <span className="datetime2">
-          Date : {reservationDate} au{" "}
-          {returnDate}
-        </span>
+    <div className={`ticket ${status} ${selectedTicket && selectedTicket._id === reservation._id ? 'active' : ''}`} onClick={() => { selectedTicket && selectedTicket._id === reservation._id ? dispatch(clearSelectedTicket()) : dispatch(setSelectedTicket(reservation));}}>
+      <div className="ticket-infos">
+        <h3 className="ticket-name" title={projectName}>{projectName}</h3>
+        <span className="ticket-date" title={dates}>{dates}</span>
+        <span className="ticket-status" title={statusTxt}>{statusTxt}</span>
       </div>
-      <span className="material-symbols-rounded">arrow_forward_ios</span>
-      <div className={`color-status ${statusText}`}></div>
+      <div className="ticket-color">
+        <span className="material-symbols-rounded">arrow_forward_ios</span>
+      </div>
     </div>
   );
 }

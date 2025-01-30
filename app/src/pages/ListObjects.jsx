@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import {
   selectObjects,
   selectObjInfos,
-  selectUSerInfos,
+  selectUserInfos,
   selectSearchBarre,
   selectObjectsFiltered,
   selectLoadingObjects,
@@ -28,7 +28,7 @@ const ListObjects = () => {
   const searchBarre = useSelector(selectSearchBarre);
   const isLoading = useSelector(selectLoadingObjects);
   const stateObjInfos = useSelector(selectObjInfos);
-  const userInfos = useSelector(selectUSerInfos);
+  const userInfos = useSelector(selectUserInfos);
   const errors = useSelector(selectErrors);
   const objIsSelectable = useSelector(selectObjIsSelectable);
   
@@ -81,8 +81,6 @@ const ListObjects = () => {
 
     }
   }, [searchBarre, baseObjects]);
-
-  console.log(objectsListFiltered);
 
   return (
     <div className="main-content objects-list">

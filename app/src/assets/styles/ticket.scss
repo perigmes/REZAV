@@ -1,0 +1,120 @@
+@use "variables" as *;
+
+.ticket {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 2%;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: $main-font;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: -7.5px 5px 5px 0px rgba(0, 0, 0, 0.15), 0px -1px 2px 0px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    height: fit-content;
+    min-height: 75px;
+
+    &.active {
+        span.material-symbols-rounded {
+            transform: rotate(180deg);
+        }
+    }
+
+    &:hover {
+        transform: scale(1.025);
+    }
+
+    &.accepted {
+        color: $dark-green-rezav;
+
+        .ticket-color {
+            background-color: $status-green;
+            
+        }
+    }
+    &.rejected {
+        color: $dark-red-rezav;
+
+        .ticket-color {
+            background-color: $status-red; 
+        }
+    }
+    &.pending {
+        color: $dark-blue-rezav;
+
+        .ticket-color {
+            background-color: $status-blue;
+        }
+    }
+    &.finished {
+        color: black;
+        
+        .ticket-color {
+            background-color: $status-gray;
+        }
+    }
+
+    .ticket-infos {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 2px;
+        width: 79%;
+        padding: 10px;
+        box-sizing: border-box;
+
+        .ticket-name {
+            font-size: $font-size-16;
+            font-weight: $font-weight-600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .ticket-date {
+            font-size: $font-size-14;
+            font-weight: $font-weight-500;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .ticket-status {
+            font-size: $font-size-12;
+            font-weight: $font-weight-500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    .ticket-color {
+        width: 19%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        box-sizing: border-box;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 40% 100%);
+
+        span.material-symbols-rounded {
+            padding: 0 20%;
+            transition: all 0.3s ease;
+        }
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .ticket {
+        max-width: 450px;
+
+        .ticket-infos {
+    
+            .ticket-name, .ticket-date {
+                white-space: wrap;
+                overflow: visible;
+                text-overflow: none;
+            }
+            
+    }
+}
+  }
+  
