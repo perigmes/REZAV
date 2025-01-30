@@ -27,7 +27,6 @@ app.use(cors({
 }));
 
 app.use('/api',router);
-app.use('/pictures', express.static(path.join(__dirname,'..', 'pictures')));
 
 app.use(
   session({
