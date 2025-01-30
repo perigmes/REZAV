@@ -1,14 +1,14 @@
-import { sendResponseEmail, sendConfirmationEmail } from "../helper.js";
+import { sendResponseEmail, sendConfirmationEmail } from "../helper.mjs";
 import db from "../db/conn.mjs";
 import path from "path";
 export const PostReservation = async (req, res) => {
+  const user= req.user
   let collection = db.collection("reservations");
   let collection2 = db.collection("reservation_status");
 
   try {
     // Vérification du fichier
     const filePath = req.file?.path;
-    console.log("📂 Fichier reçu :", filePath);
 
     // Parsing des données JSON
     let newDocument = {
@@ -38,7 +38,7 @@ export const PostReservation = async (req, res) => {
     await collection2.insertOne(newStatus);
 
     // Envoi de l'e-mail de confirmation
-    sendConfirmationEmail(newDocument).catch((emailError) => {
+    sendConfirmationEmail(newDocument,user).catch((emailError) => {
       console.error("❌ Erreur lors de l'envoi de l'e-mail:", emailError.message);
     });
 
