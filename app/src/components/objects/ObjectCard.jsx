@@ -129,13 +129,13 @@ const ObjectCard = ({ object }) => {
           }}
         >
           <img
-            src={picture }            
+            src={picture}            
             loading="lazy"
             alt={name}
-            onError={(e) => {
-              e.target.onerror = null; 
-              e.target.src = "/images/error-img.webp"; 
-            }}
+            // onError={(e) => {
+            //   e.target.onerror = null; 
+            //   e.target.src = "/images/error-img.webp"; 
+            // }}
             style={{ width: "100%", height: "auto", objectFit: "cover", margin: 0, padding: 0 }}
           />
         </Box>
