@@ -1,0 +1,20 @@
+{
+    "@class": "org.apereo.cas.services.CasRegisteredService",
+    "serviceId": "^http://localhost:8080.*",
+    "name": "localhost",
+    "id": 8080,
+    "logoutType": "BACK_CHANNEL",
+    "logoutUrl": "http://localhost:8080/logout",
+    "evaluationOrder": 1,
+    "accessStrategy": {
+        "@class": "org.apereo.cas.services.DefaultRegisteredServiceAccessStrategy",
+        "enabled": true,
+        "ssoEnabled": true
+    },
+    "attributeReleasePolicy": {
+        "@class": "org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy",
+        "allowedAttributes": ["java.util.ArrayList", ["uid", "mail", "firstName", "lastName"]]
+    },
+    "allowedToProxy": true,
+    "anonymousAccess": false
+}

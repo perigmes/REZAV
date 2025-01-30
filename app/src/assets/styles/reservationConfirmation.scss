@@ -1,0 +1,58 @@
+@use "variables" as *;
+
+.main-content.reservation-conf {
+  width: 100%;
+  height: 100%;
+  form {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    .input-txt {
+      textarea {
+        max-width: 600px;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.rejected-checkbox, .accepted-checkbox {
+  display: flex;
+  gap: 10px;
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  input[type="checkbox"]:checked + label {
+    background-color: $mauve-rezav;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 0px;
+      width: 4px;
+      height: 10px;
+      border: solid $white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      display: block;
+    }
+  }
+  input[type="checkbox"]:not(:checked) + label:hover {
+    background-color: $mauve-rezav-20;
+  }
+  p {
+    font-family: $main-font;
+    font-size: $font-size-14;
+    color: $mauve-rezav;
+    font-weight: $font-weight-500;
+  }
+}
+
+

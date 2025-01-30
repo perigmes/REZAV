@@ -1,0 +1,2 @@
+keystore type = PKCS12
+keystore password = changeit
