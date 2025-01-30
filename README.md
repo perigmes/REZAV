@@ -12,8 +12,17 @@ REZAV est une application de gestion de réservations du matériel audiovisuel d
 - Modification du materiel disponible
 - Consultation des réservations passées
 
-## Installation
+## Technologies utilisées
 
+- Front-end : React.js, Scss
+- Back-end : Node.js, Express.js
+- Base de données : MongoDB
+- Autres outils : Git, Docker.
+
+### Prérequis
+- Node.js (v20.11.1)
+
+## Installation
 1. Clonez le dépôt :
     ```bash
     git clone https://github.com/votre-utilisateur/rezav.git
@@ -56,6 +65,6 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 
 - **Clémentine Prouteau** - *Développeur principal* - [perigmes](https://github.com/perigmes)
 - **Pierrick Breaud** - *Développeur principal* - [Pierrickbrd](https://github.com/Pierrickbrd)
-- **Charlie Charron** - *Développeur principal* - [QW6D3](https://github.com/perigmes)
+- **Charlie Charron** - *Développeur principal* - [Charlie](https://github.com/qw6d3)
 - **Thomas Blanchard** - *Développeur principal* - [Blathox](https://github.com/Blathox)
 
