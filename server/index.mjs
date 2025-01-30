@@ -27,7 +27,7 @@ app.use(cors({
 }));
 
 app.use('/api',router);
-app.use('/pictures', express.static(path.join(__dirname,'..', 'picturees')));
+app.use('/pictures', express.static(path.join(__dirname,'..', 'pictures')));
 
 app.use(
   session({
@@ -57,7 +57,10 @@ app.get("/auth/cas", casLogin);
 
 // Servir les fichiers statiques de React 
 // app.use(express.static(path.join(__dirname, '../app/build')));
+app.use(express.static(path.join(__dirname, '../../app/build')));
+
 app.use(express.static('/var/www/app'));
+
 app.use('/pictures', express.static('/app/pictures'));
 
 // Route de callback CAS
