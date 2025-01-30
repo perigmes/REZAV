@@ -41,8 +41,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
+  console.log("Utilisateur authentifié :", req.user);  // Pour déboguer
   next();
 });
+
 
 app.use((req, res, next) => {
   if (req.isAuthenticated()) {
