@@ -21,6 +21,20 @@ import dayjs from "dayjs";
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
+export const formatDateToDayMonthYear = dateString => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${day}/${month}/${year}`;
+}
+
+export const isDateInPast = dateString => {
+  const date = new Date(dateString);
+  const today = new Date();
+  return date < today;
+}
+
 export const formatDateToDateHourMinute = dateString => {
   const date = new Date(dateString);
 
