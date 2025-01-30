@@ -39,6 +39,27 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+// backend stockage utilisateur
+app.use((req, res, next) => {
+  if (req.isAuthenticated()) {
+    app.locals.currentUser = req.user; // stocke l'utilisateur globalement
+  } else {
+    app.locals.currentUser = null;
+  }
+  next();
+});
+
+//frontend récupère l’utilisateur
+app.get("/api/user", (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: "Utilisateur non authentifié" });
+  }
+  res.status(200).json({ user: req.user });
+});
+
 app.use((req, res, next) => {
   next();
 });
