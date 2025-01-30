@@ -34,38 +34,15 @@ app.use(
     secret: "secret-key",
     resave: false,
     saveUninitialized: true,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24, // Durée de vie du cookie (1 jour ici)
-    },
   })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-// backend stockage utilisateur
 app.use((req, res, next) => {
-  if (req.isAuthenticated()) {
-    req.user = req.session.user;  // L'utilisateur est disponible dans req.user
-  } else {
-    req.user = null;
-  }
   next();
 });
-
-//frontend récupère l’utilisateur
-app.get("/api/user", (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ message: "Utilisateur non authentifié" });
-  }
-  res.status(200).json({ user: req.user });
-});
-
-app.use((req, res, next) => {
-  console.log("Utilisateur authentifié :", req.user);  // Pour déboguer
-  next();
-});
-
 
 app.use((req, res, next) => {
   if (req.isAuthenticated()) {
@@ -74,6 +51,8 @@ app.use((req, res, next) => {
   return casLogin(req, res, next);
 });
 
+// Route pour déclencher l'authentification CAS
+app.get("/auth/cas", casLogin);
 
 // Servir les fichiers statiques de React 
 // app.use(express.static(path.join(__dirname, '../app/build')));
