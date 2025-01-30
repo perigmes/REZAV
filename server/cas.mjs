@@ -40,7 +40,7 @@ passport.use(
               { $set: userData },
               { new: true }
             );
-        
+            
             return done(null, updatedUser);
           }
         
@@ -60,8 +60,10 @@ passport.use(
 
 passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser((id, done) => {
-  const user = { id, username: id };
-  done(null, user);
+  User.findById(id,(err,user)=>{
+    done(null, user);
+
+  })
 });
 
 export const casLogin = function(req, res, next) { 
@@ -94,6 +96,7 @@ export const casCallback = (req, res, next) => {
     }
 
     req.logIn(user, (err) => {
+      req.session.user = user;
       if (err) {
         console.error("❌ Erreur lors de la connexion de l'utilisateur :", err);
         return next(err);

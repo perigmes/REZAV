@@ -34,6 +34,9 @@ app.use(
     secret: "secret-key",
     resave: false,
     saveUninitialized: true,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // Durée de vie du cookie (1 jour ici)
+    },
   })
 );
 
@@ -43,9 +46,9 @@ app.use(passport.session());
 // backend stockage utilisateur
 app.use((req, res, next) => {
   if (req.isAuthenticated()) {
-    app.locals.currentUser = req.user; // stocke l'utilisateur globalement
+    req.user = req.session.user;  // L'utilisateur est disponible dans req.user
   } else {
-    app.locals.currentUser = null;
+    req.user = null;
   }
   next();
 });
