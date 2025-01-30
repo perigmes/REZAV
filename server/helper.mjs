@@ -1,6 +1,8 @@
 import nodemailer from "nodemailer";
 // Fonction pour envoyer un e-mail
 export const sendConfirmationEmail = async (reservation) => {
+    const BASE_URL = "https://lammi-saes5-01.univ-lemans.fr";
+
     const transporter = nodemailer.createTransport({
         host: "smtp.univ-lemans.fr", // Ou tout autre service SMTP
         secure:true,
@@ -12,8 +14,8 @@ export const sendConfirmationEmail = async (reservation) => {
         tls: { rejectUnauthorized: false }
     });
 
-const acceptUrl = `/reservation-confirmation/accept/${reservation.idStatus}`;
-const rejectUrl = `/reservation-confirmation/reject/${reservation.idStatus}`;
+const acceptUrl = `${BASE_URL}/reservation-confirmation/accept/${reservation.idStatus}`;
+const rejectUrl = `${BASE_URL}/reservation-confirmation/reject/${reservation.idStatus}`;
 
 const mailOptions = {
     from: 'clementine.prouteau.etu@univ-lemans.fr',
