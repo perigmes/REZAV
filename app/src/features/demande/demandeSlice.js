@@ -146,7 +146,7 @@ const demandeSlice = createSlice({
       .addCase(loadMateriel.fulfilled, (state, action) => {
         state.objects = action.payload;
         state.objects.map(
-          (obj) => (obj.picture = 'http://localhost:5000/'+obj.picture)
+          (obj) => (obj.picture = +obj.picture)
         );
         state.loadingObjects = false;
         state.errors.apiErrorObjectsLoad = null;
@@ -246,7 +246,7 @@ const demandeSlice = createSlice({
       .addCase(loadMaterielByIds.fulfilled, (state, action) => {
         state.ticketObjects = action.payload;
         state.ticketObjects.map(
-          (obj) => (obj.picture = 'http://localhost:5000/' + obj.picture)
+          (obj) => (obj.picture =  obj.picture)
         );
         state.loadingObjects = false;
         state.errors.apiErrorObjectsLoad = null;

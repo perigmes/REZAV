@@ -47,7 +47,7 @@ const mailOptions = {
     `,
     attachments: [
         {
-            filename: "plan_implatation.pdf", // Nom du fichier dans l'email
+            filename: "plan_implantation.pdf", // Nom du fichier dans l'email
             path: reservation.implementationPlan, // Chemin du fichier stocké
             contentType: "application/pdf",
         },
