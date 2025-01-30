@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 // Fonction pour envoyer un e-mail
-export const sendConfirmationEmail = async (reservation,user) => {
+export const sendConfirmationEmail = async (reservation) => {
     const transporter = nodemailer.createTransport({
         host: "smtp.univ-lemans.fr", // Ou tout autre service SMTP
         secure:true,
@@ -22,7 +22,7 @@ const mailOptions = {
     text: `Une nouvelle réservation a été soumise. Projet: ${reservation.projectName}`,
     html: `
         <h1>Nouvelle réservation</h1>
-        <p><strong>Nom de l'étudiant :</strong> ${user.firstName+' '+ user.lastName}</p>
+        <p><strong>Nom de l'étudiant :</strong> Clémentine Prouteau</p>
         <p><strong>Nom du projet :</strong> ${reservation.projectName}</p>
         <p><strong>Date de réservation :</strong> ${reservation.reservationDate}</p>
         <p><strong>Date de retour :</strong> ${reservation.returnDate}</p>
