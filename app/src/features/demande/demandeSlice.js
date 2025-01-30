@@ -21,14 +21,14 @@ const demandeSlice = createSlice({
     formValidation: false,
     user: {
       _id: "test",
-      email: "pierrick53breaud@gmail.com",
-      role: "student",
-      affiliation: "student",
+      email: "perigmes@gmail.com",
+      role: "admin",
+      affiliation: "professor",
       firstName: "Pierrick",
       lastName: "Breaud",
       idUser: "i2200257",
     },
-    dataDemande: {
+    dataDemande: {  
       id: "",
       userId: "",
       startDT: getDatePlusDays(2),
@@ -36,7 +36,7 @@ const demandeSlice = createSlice({
       name: "",
       desc: "",
       justif: "",
-      plan: "",
+      plan: null,
       group: [
         {
           firstName: "Pierrick",
@@ -71,6 +71,9 @@ const demandeSlice = createSlice({
       } else if (state.formStep === 2) {
         state.formStep = 1;
       }
+    },
+    setFileData: (state, action) => {
+      state.dataDemande.plan = action.payload;
     },
     setError: (state, action) => {
       state.errors[action.payload.field]= action.payload.value;
@@ -191,7 +194,7 @@ const demandeSlice = createSlice({
             return obj;
           }
         });
-      })      
+      })
       .addCase(updateObject.rejected, (state, action) => {
         state.errors.apiErrorObjectsLoad = action.payload;
       })
@@ -203,19 +206,22 @@ const demandeSlice = createSlice({
         state.objects.push(action.payload);
       })      
       .addCase(addObject.rejected, (state, action) => {
-        state.errors.apiErrorAdd = action.payload;})
+        state.errors.apiErrorAdd = action.payload;
+      })
 
+      .addCase(deleteObject.pending, (state) => {})
       .addCase(deleteObject.fulfilled, (state, action) => {
-          state.objects = state.objects.filter((obj) => obj._id !== action.payload);
+        state.objects = state.objects.filter((obj) => obj._id !== action.payload);
       })
       .addCase(deleteObject.rejected, (state, action) => {
-        state.errors.apiErrorObjectsDelete = action.payload;
+        state.errors.apiErrorObjectsLoad = action.payload;
       })
 
       .addCase(getLast5ValidReservations.pending, (state) => {})
       .addCase(getLast5ValidReservations.fulfilled, (state, action) => {
         state.last5ValidReservations = action.payload;
       })
+      
       .addCase(getLast3Demandes.pending, (state) => {})
       .addCase(getLast3Demandes.fulfilled, (state, action) => {
         state.last3Demandes = action.payload;
@@ -255,6 +261,7 @@ export const {
   setSearchBarre,
   setFilter,
   setErrorFormDemande,
+  setFileData,
   setObjIsSelectable,
   selectObject,
   deselectObject,

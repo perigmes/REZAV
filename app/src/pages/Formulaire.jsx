@@ -2,48 +2,35 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectDataDemande,
-  selectFormStep,
-  selectFormValidation,
   selectObjects,
 } from "../features/demande/demandeSelector";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate } from 'react-router-dom';
+import { addReservation } from "../features/demande/reservationsAsyncAction";
+import { v4 as uuid } from 'uuid';
 import {
-  setFormValidation,
+   setFormValidation,
   updateDataDemande,
+  clearDataDemande
 } from "../features/demande/demandeSlice";
 import { formatDateToDateHourMinute } from "../utils/tools";
 import "../assets/styles/formulaire.scss";
 import MembreManager from "../components/formulaire/MembreManager";
-import { Box, Modal } from "@mui/joy";
+import { Button } from "@mui/base";
 
 export const Formulaire = () => {
   const objects = useSelector(selectObjects);
-  const formStep = useSelector(selectFormStep);
   const dataDemande = useSelector(selectDataDemande);
-  const isFormValide = useSelector(selectFormValidation);
   const dispatch = useDispatch();
   const group = useSelector(selectDataDemande).group;
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (
-      dataDemande.startDT === "" ||
-      dataDemande.returnDT === "" ||
-      dataDemande.objects.length === 0
-    ) {
-      navigate("/list-objects");
-    }
-  }, []);
-
+  const [formStep, setFormStep] = useState(1);
   const filteredObjects = objects.filter((obj) =>
     dataDemande.objects.includes(obj._id)
   );
-
   const [fileName, setFileName] = useState("Déposez votre plan ici"); // État pour le nom du fichier
   const [checkboxResp, setCheckboxResp] = useState(false);
   const [luApprouve, setLuApprouve] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reservation,setReservation]= useState(dataDemande);
 
   const TD = [
     { id: 0, grp: "-" },
@@ -59,7 +46,15 @@ export const Formulaire = () => {
   ];
 
   const [membresG, setMembresG] = useState(group);
-
+  useEffect(() => {
+    if (
+      dataDemande.startDT === "" || 
+      dataDemande.returnDT === "" || 
+      dataDemande.objects.length === 0
+    ) {
+      navigate('/list-objects');
+    }
+  }, []);
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -67,7 +62,49 @@ export const Formulaire = () => {
     } else {
       setFileName("Déposez votre plan ici");
     }
+    setReservation({ ...reservation, implementationPlan: file });
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formStep === 1) {
+      setFormStep(2);
+    } else {
+      const formData = new FormData();
+
+      // Ajout des données primitives
+      formData.append("projectName", reservation.name);
+      formData.append("projectDescription", reservation.desc);
+      formData.append("projectJustification", reservation.justif);
+      formData.append("reservationDate", reservation.startDT);
+      formData.append("returnDate", reservation.returnDT);
+
+      // Ajout des objets JSON sous forme de string
+      formData.append("groupMembers", JSON.stringify(reservation.group));
+      formData.append("items", JSON.stringify(reservation.objects));
+
+      // Ajout du fichier PDF
+      if (reservation.implementationPlan instanceof File) {
+        formData.append("implementationPlan", reservation.implementationPlan);
+      } else {
+        console.error("⚠️ Aucun fichier PDF valide détecté.");
+      }
+
+      // Génération d'un ID unique pour le statut
+      const idStatus = uuid();
+      formData.append("idStatus", idStatus);
+
+      const reservation_status = {
+        idStatus: idStatus,
+        status: "pending",
+      };
+      formData.append("reservation_status", JSON.stringify(reservation_status));
+
+      // Envoi via Redux
+      dispatch(addReservation({ reservation: formData })).unwrap();
+      navigate('/mes-demarches');
+      dispatch(clearDataDemande());    
+}};
 
   const handleMembersChange = (updatedMembers) => {
     setMembresG(updatedMembers);
@@ -83,8 +120,7 @@ export const Formulaire = () => {
     );
 
     const checkboxRespValid = checkboxResp;
-    const luApprouveValid =
-      luApprouve.trim().toLowerCase() === "lu et approuvé";
+    const luApprouveValid = luApprouve.trim().toLowerCase() === "lu et approuvé";
 
     const isValid = allMembersValid && checkboxRespValid && luApprouveValid;
 
@@ -99,6 +135,7 @@ export const Formulaire = () => {
   }, [membresG, checkboxResp, luApprouve]);
 
   const handleChangeInput = (newValue, id) => {
+    setReservation({ ...reservation, [id]: newValue });
     dispatch(updateDataDemande({ id, value: newValue }));
   };
 
@@ -108,7 +145,7 @@ export const Formulaire = () => {
         <header>
           <h3 className="titre-3">Mes articles sélectionnés</h3>
           <span>
-            Du {formatDateToDateHourMinute(dataDemande.startDT)} au{" "}
+            Du {formatDateToDateHourMinute(dataDemande.startDT)} au {" "}
             {formatDateToDateHourMinute(dataDemande.returnDT)}
           </span>
         </header>
@@ -128,14 +165,7 @@ export const Formulaire = () => {
         <header>
           <h3 className="titre-3">Formulaire de demande</h3>
         </header>
-        <span
-          className="rezav-button-2 list-btn-popup"
-          onClick={() => setIsModalOpen(true)}
-          onKeyDown={() => setIsModalOpen(true)}
-        >
-          <span className="material-symbols-rounded">fact_check</span>
-          Matériel selectionné
-        </span>
+
         <fieldset className="step-field-1">
           <h4>Votre Projet</h4>
           <div className="rezav-input input-txt">
@@ -168,7 +198,6 @@ export const Formulaire = () => {
               name="plan"
               onChange={(e) => {
                 handleFileChange(e);
-                handleChangeInput(e.target.value, "plan");
               }}
             />
             <label htmlFor="plan" className="material-symbols-rounded">
@@ -204,10 +233,7 @@ export const Formulaire = () => {
               checked={checkboxResp}
               onChange={(e) => setCheckboxResp(e.target.checked)}
             />
-            <label
-              className="rezav-checkbox-label"
-              htmlFor="checkboxResp"
-            ></label>
+            <label className="rezav-checkbox-label" htmlFor="checkboxResp"></label>
             <p>
               En cochant cette case, je déclare prendre le matériel désigné en
               charge, en bon état. Je certifie également que ce matériel ne sera
@@ -228,56 +254,16 @@ export const Formulaire = () => {
             />
           </div>
         </fieldset>
-      </form>
-      <Modal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+        <Button onClick={()=>{
+          if(formStep===2){
+            setFormStep(1);
+          }else{
+            navigate('/list-objects');
+          }
         }}
-      >
-        <Box
-          sx={{
-            width: "75%",
-            maxWidth: "none",
-            height: "75%",
-            backgroundColor: "#FAFAFA",
-            padding: 2,
-            display: "flex",
-            flexDirection: "column",
-            boxShadow: 24,
-            borderRadius: 10,
-          }}
-        >
-          <button
-            className="material-symbols-rounded btnClose"
-            onClick={() => setIsModalOpen(false)}
-          >
-            close
-          </button>
-          <div className="res-list-obj">
-            <header>
-              <h3 className="titre-3">Mes articles sélectionnés</h3>
-              <span>
-                Du {formatDateToDateHourMinute(dataDemande.startDT)} au{" "}
-                {formatDateToDateHourMinute(dataDemande.returnDT)}
-              </span>
-            </header>
-            <div>
-              {filteredObjects.map((object) => (
-                <div className="object-list-item" key={object._id}>
-                  <span className="title">{object.name}</span>
-                  <span className="status">Disponible</span>
-                  <span className="material-symbols-rounded icon">check</span>
-                  <div className="color-status"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Box>
-      </Modal>
+        >Précédent</Button>
+        <Button onClick={handleSubmit}>{formStep===2?'Valider':'Suivant'}</Button>
+      </form>
     </div>
   );
 };

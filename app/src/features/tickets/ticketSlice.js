@@ -1,22 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { loadReservations, loadAllStatusesReservation } from './ticketAsyncAction.js';
 
-
 const ticketSlice = createSlice({
   name: "reservations",
   initialState: {
     reservations: [],
     selectedReservation: "",
+   
     loadingReservation: false,
     loadingStatus: false,
     errors: {
       apiErrorLoad: null,
     },
-
     statusReservations: [],
     selectedStatus: "",
     isActive: false,
-
   },
   reducers: {
     setReservations: (state, action) => {
@@ -37,7 +35,6 @@ const ticketSlice = createSlice({
       // Chargement des réservations
       .addCase(loadReservations.pending, (state) => {
         state.loadingReservation = true;
-
         state.errors.apiErrorLoad = null;
       })
       .addCase(loadReservations.fulfilled, (state, action) => {

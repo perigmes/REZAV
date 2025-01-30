@@ -20,7 +20,7 @@ router.delete("/items/:id", DeleteItem);
 router.post("/items",upload.single('picture'), AddItem);
 
 //routes reservation
-router.post("/reservation", PostReservation);
+router.post("/reservation",upload.single('implementationPlan'), PostReservation);
 
 router.get("/reservation", GetReservation);
 router.get("/reservation/user/:userId", GetReservationsByUserId);

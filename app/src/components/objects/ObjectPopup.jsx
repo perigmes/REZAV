@@ -55,6 +55,7 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     formData.append("categorie", infos.categorie);
     formData.append("name", infos.name);
@@ -95,6 +96,7 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
         >
           close
         </button>
+        
         {userInfos.role === "admin" ? (
           <>
             <form onSubmit={handleSubmit} method="post">
@@ -264,3 +266,4 @@ const ObjectPopup = ({ addingMode, closeFunction }) => {
 };
 
 export default ObjectPopup;
+
