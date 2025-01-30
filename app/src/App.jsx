@@ -28,11 +28,9 @@ const NavFormBtnsLayout = () => {
   return (
     <>
       <Outlet />
-      <NavFormBtns />
     </>
   );
 };
-
 
 export default function App() {
   const dispatch = useDispatch();
@@ -46,19 +44,24 @@ export default function App() {
       <Header />
       <main>
         <MainHeader />
-          <Routes>
-            <Route path="/" element={<TableauBord />} />
-            <Route element={<NavFormBtnsLayout />}>
-              <Route path="/list-objects" element={<ListObjects />} />
-              <Route path="/formulaire-reservation" element={<Formulaire />} />
-            </Route>
-            <Route
-              path="/reservation-confirmation/:response/:id"
-              element={<Reservation />}
-            />
-            <Route path="/mes-demarches" element={<Demarches />} />
-            <Route path="/reservation-confirmation/test" element={<Reservation/>}/>
-          </Routes>
+        <Routes>
+          <Route path="/" element={<TableauBord />} />
+          <Route
+            path="/list-objects"
+            element={
+              <>
+                <ListObjects />
+                <NavFormBtns />
+              </>
+            }
+          />
+          <Route path="/formulaire-reservation" element={<Formulaire />} />
+          <Route
+            path="/reservation-confirmation/:response/:id"
+            element={<Reservation />}
+          />
+          <Route path="/mes-demarches" element={<Demarches />} />
+        </Routes>
       </main>
     </BrowserRouter>
   );

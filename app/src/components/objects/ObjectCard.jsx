@@ -3,7 +3,7 @@ import {
   selectObjIsSelectable,
   selectSelectedObjects,
 } from "../../features/demande/demandeSelector";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   deselectObject,
   selectObject,
@@ -38,6 +38,12 @@ const ObjectCard = ({ object }) => {
       dispatch(setInfoObject(object));
     }
   };
+
+  useEffect(() => {
+    if (objIsSelectable === false) {
+      setIsSelected(false);
+    }
+  }, [objIsSelectable]);
 
   return (
     <Card
@@ -88,7 +94,7 @@ const ObjectCard = ({ object }) => {
                   border: "#6d6b9e 2px solid",
                   backgroundColor: isSelected
                     ? "#6d6b9e"
-                    : "#FAFAFA",
+                    : "transparent",
                   "--Icon-color": "#FAFAFA",
                   "&:hover": {
                     backgroundColor: isSelected ? "#6d6b9e" : "rgba(109, 107, 158, 0.2)",

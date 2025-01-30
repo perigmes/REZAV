@@ -7,8 +7,7 @@ import { router } from "./routes/index.mjs";
 import cors from "cors";
 import mongoose from "mongoose";
 import path from "path";
-import { fileURLToPath } from "url";
-
+import { __dirname } from "./utils/pathHelper.js";
 const PORT = process.env.PORT || 5000;
 const app = express();
 
@@ -56,9 +55,6 @@ app.use((req, res, next) => {
   }
   return casLogin(req, res, next);
 });
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Servir les fichiers statiques de React 
 // app.use(express.static(path.join(__dirname, '../app/build')));

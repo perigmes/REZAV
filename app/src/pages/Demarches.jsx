@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "../assets/styles/demarches.scss";
 import {
+  selectActiveTabTicket,
   selectLoadingReservations,
   selectReservations,
   selectSelectedTicket,
@@ -44,7 +45,33 @@ const Demarches = () => {
     }
   }, [isDesktop, selectedTicket]);
 
-  const reservations = useSelector(selectReservations);
+  const allReservations = useSelector(selectReservations);
+  const activeTabTicket = useSelector(selectActiveTabTicket);
+
+  const reservations = useMemo(() => {
+    switch (activeTabTicket) {
+      case "all-tickets":
+        return allReservations;
+  
+      case "demandes-tickets":
+        return allReservations.filter(
+          (reservation) => reservation.status === "pending" || reservation.status === "rejected"
+        );
+  
+      case "reservations-tickets":
+        return allReservations.filter(
+          (reservation) => reservation.status === "finished" || reservation.status === "accepted"
+        );
+  
+      case "admin-tickets":
+        return allReservations.filter(
+          (reservation) => reservation.userId === user.idUser
+        );
+  
+      default:
+        return [];
+    }
+  }, [allReservations, activeTabTicket, user]);
   const isLoading = useSelector(selectLoadingReservations);
 
   return (

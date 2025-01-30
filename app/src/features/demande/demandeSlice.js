@@ -7,6 +7,7 @@ const demandeSlice = createSlice({
   initialState: {
     objects: [],
     ticketObjects: [],
+    activeTabTicket: "all-tickets",
     objectsFiltered: [],
     reservations: [],
     selectedTicket: null,
@@ -131,6 +132,9 @@ const demandeSlice = createSlice({
     },
     setSelectedTicket: (state, action) => {
       state.selectedTicket = action.payload;
+    },
+    setActiveTabTicket: (state, action) => {
+      state.activeTabTicket = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -275,6 +279,7 @@ export const {
   updateSelectedObjects,
   clearSelectedTicket,
   setSelectedTicket,
+  setActiveTabTicket,
 } = demandeSlice.actions;
 
 export default demandeSlice.reducer;

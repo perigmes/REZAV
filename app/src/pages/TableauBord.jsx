@@ -11,7 +11,7 @@ import {
   getLast5ValidReservations,
 } from "../features/demande/reservationsAsyncAction";
 import { useEffect, useRef } from "react";
-import { formatDateToDayMonthYear, isDateInPast } from "../utils/tools";
+import { formatDateToDayMonthYear } from "../utils/tools";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css/bundle";
@@ -63,7 +63,7 @@ const TableauBord = () => {
             <header>
               <img src="/images/icon-reservations.svg" alt="" />
               <h4 className="titre-4">Historique de vos réservations</h4>
-              <p>Retrouvez ici vos réservations les plus récentes</p>
+              <p>{`Retrouvez ici ${user.role === "admin" ? "les" : "vos"} réservations les plus récentes`}</p>
             </header>
             <div className="list-reservations">
               {last5ValidReservations.map((reservation, index) => (
@@ -156,8 +156,7 @@ const TableauBord = () => {
               <button
                 className="tab-sec-btn"
                 onClick={() => {
-                  dispatch(clearSelectedTicket());
-                  navigate("/mes-demarches");
+                  navigate("/list-objects");
                 }}
               >
                 Accéder à la liste du matériel
@@ -167,7 +166,7 @@ const TableauBord = () => {
               <header>
                 <img src="/images/icon-demandes.svg" alt="" />
                 <h4 className="titre-4">Vos demandes</h4>
-                <p>Voici vos 3 dernières demandes</p>
+                <p>{`Voici ${user.role === "admin" ? "les" : "vos"} 3 demandes les plus récentes`}</p>
               </header>
               <div className="list-demandes">
                 {last3Demandes.map((reservation, index) => (

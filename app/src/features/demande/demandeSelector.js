@@ -23,10 +23,10 @@ export const selectFormValidation = (state) => state.demande.formValidation;
 export const selectLoadingObjects = (state) => state.demande.loadingObjects;
 export const selectLast5ValidReservations = (state) => state.demande.last5ValidReservations;
 export const selectLast3Demandes = (state) => state.demande.last3Demandes;
-export const selectLoadingObjects = (state) => state.demande.loadingObjects;
 export const selectLoadingReservations = (state) => state.demande.loadingReservations;
 export const selectSelectedTicket = (state) => state.demande.selectedTicket;
 export const selectTicketObjects = (state) => state.demande.ticketObjects;
+export const selectActiveTabTicket = (state) => state.demande.activeTabTicket;
 
 export const selectReservationDates = createSelector(
     [selectDataDemande],

@@ -9,7 +9,6 @@ function Ticket({ reservation }) {
   const selectedTicket = useSelector(selectSelectedTicket);
 
 
-
   const { projectName, reservationDate, returnDate, status } = reservation;
   const statusTxt = (status === "finished") ? "Terminée" :
     (status === "accepted") ? "Validée" :
