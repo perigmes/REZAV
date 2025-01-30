@@ -2,7 +2,7 @@ import express from "express";
 import { upload } from "../upload.mjs";
 
 import { PostReservation, GetReservation, UpdateReservationStatus,GetReservationsByUserId, GetLast5AcceptedReservationsByUserId, GetLast3DemandesByUserId, getAllStatuses } from "../controllers/reservationController.mjs";
-import { GetItems,GetItemById,EditItem,DeleteItem,AddItem,getItemsByDate } from "../controllers/itemController.mjs";
+import { GetItems,GetItemById,EditItem,DeleteItem,AddItem,getItemsByDate, getItemsByIds } from "../controllers/itemController.mjs";
 
 export const router = express.Router();
 
@@ -10,6 +10,8 @@ export const router = express.Router();
 router.get("/items", GetItems);
 router.get("/items/:id", GetItemById);
 router.get('/items/dates/:startDate/:endDate', getItemsByDate);
+
+router.post("/items/by-ids", getItemsByIds);
 
 router.patch("/items/:id", upload.single("picture"), EditItem);
 

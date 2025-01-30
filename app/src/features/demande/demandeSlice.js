@@ -1,13 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addObject,loadMaterielByDate, addReservation, deleteObject, getLast3Demandes, getLast5ValidReservations, loadMateriel, loadReservation, updateObject, getUser } from './reservationsAsyncAction';
+import { addObject,loadMaterielByDate, addReservation, deleteObject, getLast3Demandes, getLast5ValidReservations, loadMateriel, loadReservation, updateObject, GetReservationByUserId, getReservationByUserId, loadMaterielByIds, getUser } from './reservationsAsyncAction';
 import { getDatePlusDays } from '../../utils/tools';
 
 const demandeSlice = createSlice({
   name: "demande",
   initialState: {
     objects: [],
+    ticketObjects: [],
+    activeTabTicket: "all-tickets",
     objectsFiltered: [],
     reservations: [],
+    selectedTicket: null,
     last5ValidReservations: [],
     last3Demandes: [],
     objIsSelectable: false,
@@ -24,7 +27,7 @@ const demandeSlice = createSlice({
       affiliation: "professor",
       firstName: "Pierrick",
       lastName: "Breaud",
-      idUser: "testUser",
+      idUser: "i2200257",
     },
     dataDemande: {  
       id: "",
@@ -124,6 +127,15 @@ const demandeSlice = createSlice({
     updateSelectedObjects: (state, action) => {
       state.dataDemande.objects = action.payload;
     },
+    clearSelectedTicket: (state) => {
+      state.selectedTicket = null;
+    },
+    setSelectedTicket: (state, action) => {
+      state.selectedTicket = action.payload;
+    },
+    setActiveTabTicket: (state, action) => {
+      state.activeTabTicket = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -148,9 +160,7 @@ const demandeSlice = createSlice({
       })
       .addCase(loadMaterielByDate.fulfilled, (state, action) => {
           state.objectsFiltered = action.payload;
-      }
-    )
-
+      })
       .addCase(loadReservation.pending, (state) => {
         state.loadingReservations = true;
         state.errors.apiErrorReservationLoad = null;
@@ -220,6 +230,31 @@ const demandeSlice = createSlice({
       .addCase(getLast3Demandes.fulfilled, (state, action) => {
         state.last3Demandes = action.payload;
       })
+      .addCase(getReservationByUserId.pending, (state) => {
+        state.loadingReservations = true;
+        state.errors.apiErrorReservationLoad = null;
+      })
+      .addCase(getReservationByUserId.fulfilled, (state, action) => {
+        state.reservations = action.payload;
+        state.loadingReservations = false;
+        state.errors.apiErrorReservationLoad = null;
+      })
+      .addCase(loadMaterielByIds.pending, (state) => {
+        state.loadingObjects = true;
+        state.errors.apiErrorObjectsLoad = null;
+      })
+      .addCase(loadMaterielByIds.fulfilled, (state, action) => {
+        state.ticketObjects = action.payload;
+        state.ticketObjects.map(
+          (obj) => (obj.picture = 'http://localhost:5000/' + obj.picture)
+        );
+        state.loadingObjects = false;
+        state.errors.apiErrorObjectsLoad = null;
+      })
+      .addCase(loadMaterielByIds.rejected, (state, action) => {
+        state.loadingObjects = false;
+        state.errors.apiErrorObjectsLoad = action.payload;
+
       .addCase(getUser.fulfilled,(state,action)=>{
         state.user = action.payload;
       })
@@ -245,6 +280,9 @@ export const {
   setFormValidation,
   setSelectedObjects,
   updateSelectedObjects,
+  clearSelectedTicket,
+  setSelectedTicket,
+  setActiveTabTicket,
 } = demandeSlice.actions;
 
 export default demandeSlice.reducer;

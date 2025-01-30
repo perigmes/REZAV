@@ -1,8 +1,8 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   selectObjects,
   selectObjInfos,
-  selectUSerInfos,
+  selectUserInfos,
   selectSearchBarre,
   selectObjectsFiltered,
   selectLoadingObjects,
@@ -19,16 +19,17 @@ import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
 import Add from "@mui/icons-material/Add";
-import Alert from "@mui/joy/Alert";
-import ReportIcon from '@mui/icons-material/Report';
+import ErrorAlert from "../components/alertDialog/ErrorAlert";
+import { setError } from "../features/demande/demandeSlice";
 
 const ListObjects = () => {
+  const dispatch = useDispatch();
   const objects = useSelector(selectObjects);
   const objectsFiltered = useSelector(selectObjectsFiltered); // Liste filtrée par date (backend)
   const searchBarre = useSelector(selectSearchBarre);
   const isLoading = useSelector(selectLoadingObjects);
   const stateObjInfos = useSelector(selectObjInfos);
-  const userInfos = useSelector(selectUSerInfos);
+  const userInfos = useSelector(selectUserInfos);
   const errors = useSelector(selectErrors);
   const objIsSelectable = useSelector(selectObjIsSelectable);
   
@@ -82,8 +83,6 @@ const ListObjects = () => {
     }
   }, [searchBarre, baseObjects]);
 
-  console.log(objectsListFiltered);
-
   return (
     <div className="main-content objects-list">
       {isLoading ? (
@@ -121,22 +120,8 @@ const ListObjects = () => {
               />
             </ErrorBoundary>
           )}
-          {errors.errorSelectionForm &&
-          <Alert
-         
-          sx={{ alignItems: 'flex-start', position:'absolute', top: '5%', left: '60%', transform: 'translateX(-50%)', width: 'fit-content', padding: '10px 15px', borderRadius: '5px', backgroundColor: '#f8d7da', color: '#721c24', border: '1px solid #f5c6cb', zIndex: 9999 }}
-          startDecorator={<ReportIcon />}
-          variant="soft"
-          color='danger'
-        >
-          <div>
-            <div>Erreur</div>
-            <Typography level="body-sm" color='danger'>
-              {errors.errorSelectionForm}
-            </Typography>
-          </div>
-        </Alert>
-}
+          <ErrorAlert error={errors.errorSelectionForm} clearError={() => dispatch(setError({ field: "errorSelectionForm", value: "" }))}/>
+          
           {Object.keys(objectsListFiltered).map((category) => (
             <Box key={category} sx={{ marginBottom: "2vh", position: "relative", zIndex: 0 }}>
               <Divider

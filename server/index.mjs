@@ -51,6 +51,7 @@ app.use((req, res, next) => {
   return casLogin(req, res, next);
 });
 
+
 // Route pour déclencher l'authentification CAS
 app.get("/auth/cas", casLogin);
 

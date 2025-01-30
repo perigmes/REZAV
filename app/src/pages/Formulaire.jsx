@@ -3,14 +3,15 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   selectDataDemande,
   selectObjects,
+  selectUserInfos,
 } from "../features/demande/demandeSelector";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { addReservation } from "../features/demande/reservationsAsyncAction";
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 import {
-   setFormValidation,
+  setFormValidation,
   updateDataDemande,
-  clearDataDemande
+  clearDataDemande,
 } from "../features/demande/demandeSlice";
 import { formatDateToDateHourMinute } from "../utils/tools";
 import "../assets/styles/formulaire.scss";
@@ -30,7 +31,9 @@ export const Formulaire = () => {
   const [fileName, setFileName] = useState("Déposez votre plan ici"); // État pour le nom du fichier
   const [checkboxResp, setCheckboxResp] = useState(false);
   const [luApprouve, setLuApprouve] = useState("");
-  const [reservation,setReservation]= useState(dataDemande);
+  const [reservation, setReservation] = useState(dataDemande);
+  const user = useSelector(selectUserInfos);
+  
 
   const TD = [
     { id: 0, grp: "-" },
@@ -48,11 +51,11 @@ export const Formulaire = () => {
   const [membresG, setMembresG] = useState(group);
   useEffect(() => {
     if (
-      dataDemande.startDT === "" || 
-      dataDemande.returnDT === "" || 
+      dataDemande.startDT === "" ||
+      dataDemande.returnDT === "" ||
       dataDemande.objects.length === 0
     ) {
-      navigate('/list-objects');
+      navigate("/list-objects");
     }
   }, []);
   const handleFileChange = (event) => {
@@ -68,6 +71,10 @@ export const Formulaire = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formStep === 1) {
+      if (!dataDemande.name || !dataDemande.desc || !dataDemande.justif) {
+        alert("Veuillez remplir tous les champs obligatoires.");
+        return;
+      }
       setFormStep(2);
     } else {
       const formData = new FormData();
@@ -102,9 +109,10 @@ export const Formulaire = () => {
 
       // Envoi via Redux
       dispatch(addReservation({ reservation: formData })).unwrap();
-      navigate('/mes-demarches');
-      dispatch(clearDataDemande());    
-}};
+      navigate("/mes-demarches");
+      dispatch(clearDataDemande());
+    }
+  };
 
   const handleMembersChange = (updatedMembers) => {
     setMembresG(updatedMembers);
@@ -120,7 +128,8 @@ export const Formulaire = () => {
     );
 
     const checkboxRespValid = checkboxResp;
-    const luApprouveValid = luApprouve.trim().toLowerCase() === "lu et approuvé";
+    const luApprouveValid =
+      luApprouve.trim().toLowerCase() === "lu et approuvé";
 
     const isValid = allMembersValid && checkboxRespValid && luApprouveValid;
 
@@ -145,7 +154,7 @@ export const Formulaire = () => {
         <header>
           <h3 className="titre-3">Mes articles sélectionnés</h3>
           <span>
-            Du {formatDateToDateHourMinute(dataDemande.startDT)} au {" "}
+            Du {formatDateToDateHourMinute(dataDemande.startDT)} au{" "}
             {formatDateToDateHourMinute(dataDemande.returnDT)}
           </span>
         </header>
@@ -176,6 +185,7 @@ export const Formulaire = () => {
               id="name"
               name="name"
               value={dataDemande.name || ""}
+              required
               onChange={(e) => handleChangeInput(e.target.value, "name")}
             />
           </div>
@@ -186,6 +196,7 @@ export const Formulaire = () => {
               placeholder="Écrivez ici"
               name="desc"
               value={dataDemande.desc || ""}
+              required
               onChange={(e) => handleChangeInput(e.target.value, "desc")}
             ></textarea>
           </div>
@@ -196,6 +207,7 @@ export const Formulaire = () => {
               accept=".pdf, image/png, image/jpeg, image/webp"
               type="file"
               name="plan"
+              required
               onChange={(e) => {
                 handleFileChange(e);
               }}
@@ -213,6 +225,7 @@ export const Formulaire = () => {
               id="justif"
               name="justif"
               value={dataDemande.justif || ""}
+              required
               onChange={(e) => handleChangeInput(e.target.value, "justif")}
             ></textarea>
           </div>
@@ -231,9 +244,13 @@ export const Formulaire = () => {
               className="rezav-checkbox"
               type="checkbox"
               checked={checkboxResp}
+              required
               onChange={(e) => setCheckboxResp(e.target.checked)}
             />
-            <label className="rezav-checkbox-label" htmlFor="checkboxResp"></label>
+            <label
+              className="rezav-checkbox-label"
+              htmlFor="checkboxResp"
+            ></label>
             <p>
               En cochant cette case, je déclare prendre le matériel désigné en
               charge, en bon état. Je certifie également que ce matériel ne sera
@@ -249,20 +266,29 @@ export const Formulaire = () => {
               placeholder="Écrivez ici"
               id="luApprouve"
               name="luApprouve"
+              required
               value={luApprouve}
               onChange={(e) => setLuApprouve(e.target.value)}
             />
           </div>
         </fieldset>
-        <Button onClick={()=>{
-          if(formStep===2){
-            setFormStep(1);
-          }else{
-            navigate('/list-objects');
-          }
-        }}
-        >Précédent</Button>
-        <Button onClick={handleSubmit}>{formStep===2?'Valider':'Suivant'}</Button>
+        <div className="nav-form-btns">
+          <Button
+            className="rezav-button-1 prev-step"
+            onClick={() => {
+              if (formStep === 2) {
+                setFormStep(1);
+              } else {
+                navigate("/list-objects");
+              }
+            }}
+          >
+            Précédent
+          </Button>
+          <Button className="rezav-button-1" onClick={handleSubmit}>
+            {formStep === 2 ? "Valider" : "Suivant"}
+          </Button>
+        </div>
       </form>
     </div>
   );

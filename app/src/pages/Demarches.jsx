@@ -1,54 +1,132 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadReservations, loadAllStatusesReservation } from "../features/tickets/ticketAsyncAction.js";
-import { selectReservations, selectIsLoading, selectSelectedReservation, selectAllStatus } from "../features/tickets/ticketSelector";
-import TicketsList from "../components/tickets/TicketsList";
-import TicketDetails from "../components/tickets/TicketsDetails.jsx";
-import "../assets/styles/tickets.scss";
-import { selectUSerInfos } from "../features/demande/demandeSelector.js";
+import "../assets/styles/demarches.scss";
+import {
+  selectActiveTabTicket,
+  selectLoadingReservations,
+  selectReservations,
+  selectSelectedTicket,
+  selectUserInfos,
+} from "../features/demande/demandeSelector.js";
+import { getReservationByUserId } from "../features/demande/reservationsAsyncAction.js";
+import { loadReservations } from "../features/tickets/ticketAsyncAction.js";
+import Ticket from "../components/tickets/Ticket.jsx";
+import TicketDetails from "../components/tickets/TicketDetails.jsx";
+import "../assets/styles/ticketDetails.scss";
+import { Modal, Box } from "@mui/joy";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { clearSelectedTicket } from "../features/demande/demandeSlice.js";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 
 const Demarches = () => {
-  const userInfos = useSelector(selectUSerInfos);
-  const reservations = useSelector(selectReservations);
-  const filteredReservations = userInfos.role === 'admin' 
-    ? reservations 
-    : reservations.filter((reservation) => reservation.userId === userInfos.idUser);
-    
-
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectIsLoading);
-  const selectedReservationId = useSelector(selectSelectedReservation);
-  const statuses = useSelector(selectAllStatus);
+  const user = useSelector(selectUserInfos);
+  const isDesktop = useMediaQuery("(min-width: 800px)");
+  const selectedTicket = useSelector(selectSelectedTicket);
+  const [openModal, setOpenModal] = useState(false);
 
-
-  // Trouver la réservation sélectionnée
-  const selectedReservation = filteredReservations.find(
-    (reservation) => reservation._id === selectedReservationId
-  );
-  
   useEffect(() => {
-    dispatch(loadAllStatusesReservation())
-  },[dispatch])
-  useEffect(() => {
-    if (filteredReservations.length === 0) {
+    if (user.role === "admin") {
       dispatch(loadReservations());
+    } else {
+      dispatch(getReservationByUserId(user.idUser));
     }
-  }, [dispatch, filteredReservations]);
+  }, [dispatch, user.idUser]);
 
-  if (isLoading) {
-    return <div>Chargement des réservations...</div>;
-  }
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    dispatch(clearSelectedTicket());
+  };
+
+  useEffect(() => {
+    if (!isDesktop && selectedTicket) {
+      setOpenModal(true);
+    }
+  }, [isDesktop, selectedTicket]);
+
+  const allReservations = useSelector(selectReservations);
+  const activeTabTicket = useSelector(selectActiveTabTicket);
+
+  const reservations = useMemo(() => {
+    switch (activeTabTicket) {
+      case "all-tickets":
+        return allReservations;
+  
+      case "demandes-tickets":
+        return allReservations.filter(
+          (reservation) => reservation.status === "pending" || reservation.status === "rejected"
+        );
+  
+      case "reservations-tickets":
+        return allReservations.filter(
+          (reservation) => reservation.status === "finished" || reservation.status === "accepted"
+        );
+  
+      case "admin-tickets":
+        return allReservations.filter(
+          (reservation) => reservation.userId === user.idUser
+        );
+  
+      default:
+        return [];
+    }
+  }, [allReservations, activeTabTicket, user]);
+  const isLoading = useSelector(selectLoadingReservations);
+
   return (
     <div className="main-content demarches">
-      <TicketsList reservations={filteredReservations} listOfStatuses={statuses} />
-      {selectedReservation ? (
-        <TicketDetails reservation={selectedReservation} />
+      {isLoading ? (
+        <p>Chargement en cours...</p>
       ) : (
-        <div className='mobile-details'>Sélectionnez une réservation pour voir les détails</div>
+        <>
+          <div className="tickets-list">
+            {[...reservations].map((reservation) => (
+              <Ticket key={reservation._id} reservation={reservation} />
+            ))}
+          </div>
+          {isDesktop && !selectedTicket && (
+            <div className="ticket-details empty"></div>
+          )}
+          {isDesktop && (
+            <div
+              className={"ticket-details" + (!selectedTicket ? " empty" : "")}
+            >
+              {selectedTicket ? (
+                <TicketDetails
+                  ticket={selectedTicket}
+                  onClose={() => dispatch(clearSelectedTicket())}
+                />
+              ) : (
+                <p> Cliquez sur une démarche pour en voir les détails.</p>
+              )}
+            </div>
+          )}
+
+          {!isDesktop && (
+            <Modal open={openModal} onClose={handleCloseModal}>
+              <Box className="ticket-details">
+                <IconButton
+                  onClick={handleCloseModal}
+                  sx={{
+                    position: "absolute",
+                    top: "16px",
+                    right: "16px",
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+                <TicketDetails
+                  ticket={selectedTicket}
+                  onClose={handleCloseModal}
+                />
+              </Box>
+            </Modal>
+          )}
+        </>
       )}
     </div>
   );
-
 };
 
 export default Demarches;

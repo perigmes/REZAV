@@ -315,6 +315,7 @@ html {
     display: flex;
     flex-flow: column;
     gap: 5px;
+    cursor: text;
 
     input {
       color: $mauve-rezav;

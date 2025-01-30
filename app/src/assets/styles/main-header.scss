@@ -67,8 +67,10 @@
 }
 
 
-@media only screen and (max-width : 794px) {
+@media only screen and (max-width : 800px) {
     .main-hdr {
+
+        
         &.list-obj.selectable {
             grid-template-columns: auto;
             grid-template-rows: auto auto auto;
