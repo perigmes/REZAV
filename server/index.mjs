@@ -56,7 +56,7 @@ app.get("/auth/cas", casLogin);
 
 // Servir les fichiers statiques de React 
 // app.use(express.static(path.join(__dirname, '../app/build')));
-app.use(express.static(path.join(__dirname, '../../app/public')));
+app.use(express.static(path.join(__dirname, '../../app/build')));
 
 app.use(express.static('/var/www/app'));
 
@@ -75,11 +75,9 @@ app.get("/logout", logout);
 //   res.sendFile('/app/pictures/error-img.webp');
 // });
 
-
 // Rediriger toutes les routes vers React après authentification
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../app/build/index.html'));
+app.get('*', (req, res, next) => {
+  res.sendFile('/var/www/app/index.html');
 });
 
 // Lancer le serveur
