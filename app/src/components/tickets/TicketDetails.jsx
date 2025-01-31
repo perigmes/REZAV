@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectTicketObjects } from "../../features/demande/demandeSelector";
 import CardForTicket from "./CardForTicket";
 import { loadMaterielByIds } from "../../features/demande/reservationsAsyncAction";
+import { Link } from "react-router-dom";
 
 const TicketDetails = ({ ticket, onClose }) => {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ const TicketDetails = ({ ticket, onClose }) => {
           )
           .join(", ");
     }
+   
 
   return (
     <>
@@ -73,6 +75,12 @@ const TicketDetails = ({ ticket, onClose }) => {
             <span className="material-symbols-rounded">description</span>
             Voir le plan d'implantation
           </button>
+          {ticket.status === "pending" && 
+          <><Link className="rezav-button-2" to={`/reservation-confirmation/accept/${ticket.idStatus}`}>
+              Accepter
+            </Link><Link className="rezav-button-2" to={`reservation-confirmation/reject/${ticket.idStatus}`}>
+                Refuser
+              </Link></>}
         </div>
       </div>
     </>
