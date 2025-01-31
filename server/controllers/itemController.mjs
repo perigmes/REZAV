@@ -132,7 +132,22 @@ export const EditItem = async (req, res) => {
       picture: normalizedPath,
     }
   
+   // Mettre à jour les données dans la base de données
+   const result = await collection.findOneAndUpdate(
+    { _id: new ObjectId(id) },
+    { $set: newBody },
+    { returnDocument: "after" } 
+  );
+  res.status(200).json({ message: "Item modifié avec succès", result });
+
+    
+   
+
   
+  }} catch (err) {
+    res.status(500).json({ error: "Erreur lors de la modification de l'item" });
+  }
+  finally{
     if (oldPicturePath && oldPicturePath !== normalizedPath) {
       const oldFilePath = path.join(__dirname, "../", oldPicturePath); 
       fs.unlink(oldFilePath, (err) => {
@@ -147,19 +162,8 @@ export const EditItem = async (req, res) => {
       });
     }};
 
-    // Mettre à jour les données dans la base de données
-    const result = await collection.findOneAndUpdate(
-      { _id: new ObjectId(id) },
-      { $set: newBody },
-      { returnDocument: "after" } 
-    );
-
-  
-    res.status(200).json({ message: "Item modifié avec succès", result });
-  } catch (err) {
-    res.status(500).json({ error: "Erreur lors de la modification de l'item" });
   }
-};
+
 
 
 export const getItemsByDate = async (req, res) => {
