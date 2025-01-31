@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
+  selectDataDemande,
   selectObjIsSelectable,
-  selectSelectedObjects,
 } from "../../features/demande/demandeSelector";
 import { useEffect, useState } from "react";
 import {
@@ -19,7 +19,7 @@ import Box from "@mui/joy/Box";
 const ObjectCard = ({ object }) => {
   const { _id, name, picture } = object;
   const objIsSelectable = useSelector(selectObjIsSelectable);
-  const selectedObjects = useSelector(selectSelectedObjects);
+  const selectedObjects = useSelector(selectDataDemande).objects;
   const [isSelected, setIsSelected] = useState(selectedObjects.includes(_id));
 
   const dispatch = useDispatch();

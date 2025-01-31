@@ -4,7 +4,7 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import Typography from "@mui/joy/Typography";
 import Box from "@mui/joy/Box";
 
-const CardForTicket = ({ object, width = "75px", height = "auto" }) => {
+const CardForTicket = ({ object, width = "90px", height = "auto" }) => {
   const { name, picture } = object;
 
   return (

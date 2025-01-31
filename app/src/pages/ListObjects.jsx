@@ -8,6 +8,7 @@ import {
   selectLoadingObjects,
   selectErrors,
   selectObjIsSelectable,
+  selectDataDemande,
 } from "../features/demande/demandeSelector";
 import ObjectCard from "../components/objects/ObjectCard";
 import ObjectPopup from "../components/objects/ObjectPopup";
@@ -20,27 +21,58 @@ import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
 import Add from "@mui/icons-material/Add";
 import ErrorAlert from "../components/alertDialog/ErrorAlert";
-import { setError } from "../features/demande/demandeSlice";
+import { deselectObject, setError } from "../features/demande/demandeSlice";
 
 const ListObjects = () => {
   const dispatch = useDispatch();
   const objects = useSelector(selectObjects);
-  const objectsFiltered = useSelector(selectObjectsFiltered); // Liste filtrée par date (backend)
+  const objectsFiltered = useSelector(selectObjectsFiltered); 
   const searchBarre = useSelector(selectSearchBarre);
   const isLoading = useSelector(selectLoadingObjects);
   const stateObjInfos = useSelector(selectObjInfos);
   const userInfos = useSelector(selectUserInfos);
   const errors = useSelector(selectErrors);
   const objIsSelectable = useSelector(selectObjIsSelectable);
-  
-
+  const selectedObjects = useSelector(selectDataDemande).objects;
   const IsInfos = stateObjInfos._id ?? "";
   const [isAdding, setIsAdding] = useState(false);
   const [objectsListFiltered, setObjectsListFiltered] = useState({});
+  const [baseObjects, setBaseObjects] = useState(objects);
 
-  // Déterminer la source des objets : `objectsFiltered` si disponible, sinon `objects`
-  const baseObjects = objectsFiltered.length > 0 ? objectsFiltered : objects;
-  // Regroupement des objets par catégorie
+  useEffect(() => {
+    if (objectsFiltered?.length) {
+      setBaseObjects(objectsFiltered);
+
+      const missingIds = objects
+        .filter(obj => !objectsFiltered.some(filteredObj => filteredObj._id === obj._id))
+        .map(obj => obj._id);
+
+      const removedSelectedObjects = missingIds.filter(id => selectedObjects.includes(id));
+
+      removedSelectedObjects.forEach(id => {
+        dispatch(deselectObject(id));
+      });
+    } else {
+      setBaseObjects(objects);
+    }
+  }, [objects, objectsFiltered, selectedObjects, dispatch]);
+
+  if (objectsFiltered?.length) {
+    const missingIds = objects
+        .filter(obj => !objectsFiltered.some(filteredObj => filteredObj._id === obj._id))
+        .map(obj => obj._id);
+
+    console.log("IDs présents dans objects mais absents de objectsFiltered :", missingIds);
+
+    const removedSelectedObjects = missingIds.filter(id => selectedObjects.includes(id));
+
+    console.log("IDs communs entre missingIds et selectedObjects (removedSelectedObjects) :", removedSelectedObjects);
+
+    removedSelectedObjects.forEach(id => {
+        dispatch(deselectObject(id));
+    });
+}
+
   useEffect(() => {
     const groupedObjects = baseObjects.reduce((acc, objet) => {
       if (!acc[objet.categorie]) {

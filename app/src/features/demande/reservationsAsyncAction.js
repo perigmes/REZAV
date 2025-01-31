@@ -19,9 +19,14 @@ export const loadMaterielByDate = createAsyncThunk(
   "reservation/loadMaterialByDate",
   async ({ startDate, endDate }, { rejectWithValue }) => {
     try {
+      if (!startDate || !endDate) {
+        return [];
+      }
+
       const response = await axios.get(
         `${URL_API_RESERVATIONS}/items/dates/${startDate}/${endDate}`
       );
+
       return response.data;
     } catch (e) {
       return rejectWithValue(
@@ -30,6 +35,7 @@ export const loadMaterielByDate = createAsyncThunk(
     }
   }
 );
+
 
 export const loadReservation = createAsyncThunk(
   "reservation/loadReservation",
@@ -47,15 +53,25 @@ export const loadReservation = createAsyncThunk(
 
 export const addReservation = createAsyncThunk(
   "reservation/addReservation",
-  async ({ reservation, reservation_status }, { rejectWithValue }) => {
+  async ({ reservation }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${URL_API_RESERVATIONS}/reservation`, {
+      console.log("🔹 Test envoi FormData...");
+      console.log("🔹 Projet :", reservation.get("projectName"));
+      console.log("🔹 Fichier :", reservation.get("implementationPlan"));
+
+      const response = await axios.post(
+        `${URL_API_RESERVATIONS}/reservation`,
         reservation,
-        reservation_status,
-      });
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data.error.message);
+      return rejectWithValue(error.response?.data?.error?.message || "Erreur inconnue");
     }
   }
 );

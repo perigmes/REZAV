@@ -1,6 +1,7 @@
 import { sendResponseEmail, sendConfirmationEmail } from "../helper.mjs";
 import db from "../db/conn.mjs";
 import path from "path";
+
 export const PostReservation = async (req, res) => {
   let collection = db.collection("reservations");
   let collection2 = db.collection("reservation_status");
@@ -8,8 +9,8 @@ export const PostReservation = async (req, res) => {
   try {
     // Vérification du fichier
     const filePath = req.file?.path;
-    console.log("📂 Fichier reçu :", filePath);
-
+    console.log(filePath);
+    console.log(req.body);
     // Parsing des données JSON
     let newDocument = {
       projectName: req.body.projectName,
@@ -22,16 +23,17 @@ export const PostReservation = async (req, res) => {
       idStatus: req.body.idStatus,
       implementationPlan: null,
     };
-    console.log("📄 Nouvelle réservation :", newDocument);
+    console.log(":page_facing_up: Nouvelle réservation :", newDocument);
 
     let newStatus = JSON.parse(req.body.reservation_status);
-    console.log("📄 Nouveaux status :", newStatus);
+    console.log(":page_facing_up: Nouveaux status :", newStatus);
 
     // Ajout du fichier si présent
     if (filePath) {
       const normalizedPath = path.normalize(filePath).replace(/\\/g, "/");
       
       newDocument.implementationPlan = normalizedPath;
+      console.log(newDocument)
     }
     // Enregistrement en base de données
     await collection.insertOne(newDocument);
@@ -39,16 +41,16 @@ export const PostReservation = async (req, res) => {
 
     // Envoi de l'e-mail de confirmation
     sendConfirmationEmail(newDocument).catch((emailError) => {
-      console.error("❌ Erreur lors de l'envoi de l'e-mail:", emailError.message);
+      console.error(":x: Erreur lors de l'envoi de l'e-mail:", emailError.message);
     });
 
     res.status(200).json({
-      message: "✅ Réservation ajoutée avec succès",
+      message: ":white_check_mark: Réservation ajoutée avec succès",
       newDocument,
       newStatus,
     });
   } catch (err) {
-    res.status(500).json({ error: "❌ Erreur lors de l'ajout de la réservation" });
+    res.status(500).json({ error: ":x: Erreur lors de l'ajout de la réservation" });
   }
 };
 
@@ -170,7 +172,7 @@ export async function GetLast3DemandesByUserId(req, res) {
       .filter(reservation => {
         const status = relevantStatuses.find(stat => stat.idStatus === reservation.idStatus);
         return status && (status.status === 'pending' || status.status === 'rejected') &&
-          new Date(reservation.reservationDate) > today;
+          new Date(reservation.return) > today;
       })
       .map(reservation => {
         const status = relevantStatuses.find(stat => stat.idStatus === reservation.idStatus);

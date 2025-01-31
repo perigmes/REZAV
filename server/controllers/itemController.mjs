@@ -161,35 +161,44 @@ export const EditItem = async (req, res) => {
   }
 };
 
-
 export const getItemsByDate = async (req, res) => {
   let collection = db.collection("materiel");
   let reservations = db.collection("reservations");
+
   let StartDate = req.params.startDate;
   let EndDate = req.params.endDate;
 
   try {
-    // Récupérer les réservations qui chevauchent la période donnée
+    if (!StartDate || !EndDate) {
+      return res.status(200).json([]);
+    }
+
+    let startDateObj = new Date(StartDate);
+    let endDateObj = new Date(EndDate);
+
+    if (isNaN(startDateObj.getTime()) || isNaN(endDateObj.getTime())) {
+      return res.status(200).json([]);
+    }
+
     let resultResav = await reservations
-      .find({ 
-        $or: [
-          { reservationDate: { $lte: EndDate }, returnDate: { $gte: StartDate } } // Réservations qui chevauchent la période
-        ]
+      .find({
+        reservationDate: { $lte: endDateObj },
+        returnDate: { $gte: startDateObj }
       })
       .toArray();
-    // Extraire les IDs des items réservés
+
     let reservedItemIds = resultResav.flatMap(res => res.items).map(id => new ObjectId(id));
 
-    // Récupérer les items qui NE sont PAS dans la liste des réservés
     let result = await collection
-      .find({ _id: { $nin: reservedItemIds } }) // $nin = Not In
+      .find({ _id: { $nin: reservedItemIds } })
       .toArray();
 
     res.status(200).json(result);
   } catch (e) {
-    console.error(e);
+    console.error(" Erreur lors de la récupération des items :", e);
     res.status(500).json({ error: "Erreur lors de la récupération des items" });
   }
 };
+
 
 

@@ -1,12 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { 
-    selectErrorFormDemande, 
-    selectObjIsSelectable, 
-    selectReservationDates, 
-    selectSelectedObjects,
-    selectFormStep,
+     
+    selectObjIsSelectable,  
+    
     selectDataDemande,
-    selectFormValidation
+    
 } from "../../features/demande/demandeSelector";
 import { clearDataDemande, setObjIsSelectable, setFormStep, setErrorFormDemande, setError } from "../../features/demande/demandeSlice";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -21,9 +19,11 @@ const NavFormBtns = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { startDT, returnDT } = useSelector(selectReservationDates);
     const objIsSelectable = useSelector(selectObjIsSelectable);
-    const selectedObjects = useSelector(selectSelectedObjects);
+    useSelector(selectDataDemande);
+    const selectedObjects = useSelector(selectDataDemande).objects;
+    const startDT = useSelector(selectDataDemande).startDT;
+    const returnDT = useSelector(selectDataDemande).returnDT;
 
     const [prevStepTxt, setPrevStepTxt] = useState("");
     const [nextStepTxt, setNextStepTxt] = useState("");

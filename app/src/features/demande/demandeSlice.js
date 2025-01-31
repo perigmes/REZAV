@@ -6,9 +6,9 @@ const demandeSlice = createSlice({
   name: "demande",
   initialState: {
     objects: [],
+    objectsFiltered: [],
     ticketObjects: [],
     activeTabTicket: "all-tickets",
-    objectsFiltered: [],
     reservations: [],
     selectedTicket: null,
     last5ValidReservations: [],
@@ -19,7 +19,6 @@ const demandeSlice = createSlice({
     loadingReservations: false,
     filter: "category",
     formStep: 1,
-    formValidation: false,
     user: {
       _id: "test",
       email: "perigmes@gmail.com",
@@ -120,9 +119,6 @@ const demandeSlice = createSlice({
     },
     setReturnDT: (state, action) => {
       state.dataDemande.returnDT = action.payload;
-    },
-    setFormValidation: (state, action) => {
-      state.formValidation = action.payload;
     },
     updateSelectedObjects: (state, action) => {
       state.dataDemande.objects = action.payload;
@@ -274,7 +270,6 @@ export const {
   setStartDT,
   setReturnDT,
   setError,
-  setFormValidation,
   setSelectedObjects,
   updateSelectedObjects,
   clearSelectedTicket,

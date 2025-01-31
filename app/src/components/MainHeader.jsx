@@ -1,15 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectActiveTabTicket,
-  selectErrorFormDemande,
+  selectDataDemande,
   selectObjIsSelectable,
-  selectReservationDates,
   selectUserInfos,
 } from "../features/demande/demandeSelector";
 import { useLocation } from "react-router-dom";
 import {
   setActiveTabTicket,
-  setErrorFormDemande,
   setReturnDT,
   setSearchBarre,
   setStartDT,
@@ -35,24 +33,26 @@ import EventIcon from "@mui/icons-material/Event";
 
 const MainHeader = () => {
   const dispatch = useDispatch();
-  const objIsSelectable = useSelector(selectObjIsSelectable); // Indique si l'objet est sélectionnable
-  const { startDT, returnDT } = useSelector(selectReservationDates);
+  const objIsSelectable = useSelector(selectObjIsSelectable);
+  const startDT = useSelector(selectDataDemande).startDT;
+  const returnDT = useSelector(selectDataDemande).returnDT;  
   const location = useLocation();
   const refStartDate = useRef(null);
   const refReturnDate = useRef(null);
-  const errorFormDemande = useSelector(selectErrorFormDemande);
   const miniDate = dayjs(getDatePlusDays(2));
   const [startValue, setStartValue] = useState(dayjs(miniDate));
   const [returnValue, setReturnValue] = useState(null);
   const user = useSelector(selectUserInfos);
+  const [errorFormDemande, setErrorFormDemande] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     startDT ? setStartValue(dayjs(startDT)) : setStartValue(dayjs(miniDate));
     returnDT ? setReturnValue(dayjs(returnDT)) : setReturnValue(null);
-    if (startDT && returnDT) dispatch(loadMaterielByDate(startDT, returnDT));
+    console.log(startDT, returnDT);
+    dispatch(loadMaterielByDate( {startDate: startDT, endDate: returnDT}));
   }, [objIsSelectable, startDT, returnDT]);
 
-  const [errorMessage, setErrorMessage] = useState("");
   const handleDateChange = (type, newValue) => {
     let dateMinimale = dayjs(miniDate);
     if (type === "return") {
@@ -75,11 +75,11 @@ const MainHeader = () => {
     } else if (newValue?.isValid() && newValue.isBefore(dateMinimale)) {
       if (type === "start") {
         refStartDate.current?.parentElement.classList.add("error");
-        dispatch(setErrorFormDemande(true));
+        setErrorFormDemande(true);
         dispatch(setStartDT(""));
       } else if (type === "return") {
         refReturnDate.current?.parentElement.classList.add("error");
-        dispatch(setErrorFormDemande(true));
+        setErrorFormDemande(true);
         dispatch(setReturnDT(""));
       }
     } else if (!newValue?.isValid()) {

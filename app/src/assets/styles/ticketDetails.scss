@@ -84,7 +84,6 @@
         font-size: $font-size-14;
         font-weight: $font-weight-500;
         margin-left: 10px;
-
       }
 
       .cards {
@@ -92,6 +91,15 @@
         flex-flow: row wrap;
         gap: 10px;
         margin-left: 10px;
+        cursor: default;
+
+        p {
+          font-size: $font-size-12;
+          margin: 0 2px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
 
       .rezav-button-2 {

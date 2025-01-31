@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { addReservation } from "../features/demande/reservationsAsyncAction";
 import { v4 as uuid } from "uuid";
 import {
-  setFormValidation,
   updateDataDemande,
   clearDataDemande,
 } from "../features/demande/demandeSlice";
@@ -22,7 +21,7 @@ export const Formulaire = () => {
   const objects = useSelector(selectObjects);
   const dataDemande = useSelector(selectDataDemande);
   const dispatch = useDispatch();
-  const group = useSelector(selectDataDemande).group;
+  const group = dataDemande.group;
   const navigate = useNavigate();
   const [formStep, setFormStep] = useState(1);
   const filteredObjects = objects.filter((obj) =>
@@ -131,9 +130,6 @@ export const Formulaire = () => {
     const luApprouveValid =
       luApprouve.trim().toLowerCase() === "lu et approuvé";
 
-    const isValid = allMembersValid && checkboxRespValid && luApprouveValid;
-
-    dispatch(setFormValidation(isValid));
     if (allMembersValid) {
       dispatch(updateDataDemande({ id: "group", value: membresG }));
     }
