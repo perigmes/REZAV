@@ -57,8 +57,6 @@ app.get("/auth/cas", casLogin);
 // Servir les fichiers statiques de React 
 // app.use(express.static(path.join(__dirname, '../app/build')));
 app.use(express.static(path.join(__dirname, '../../app/public')));
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 app.use(express.static('/var/www/app'));
 
@@ -79,10 +77,9 @@ app.get("/logout", logout);
 
 
 // Rediriger toutes les routes vers React après authentification
-app.use(express.static(path.join(__dirname, '../REZAV/app/build')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../REZAV/app/build/index.html'));
+  res.sendFile(path.join(__dirname, '../../app/build/index.html'));
 });
 
 // Lancer le serveur
