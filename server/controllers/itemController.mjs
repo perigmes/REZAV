@@ -120,7 +120,6 @@ export const EditItem = async (req, res) => {
       return res.status(404).json({ error: "Élément non trouvé." });
     }
 
-    const oldPicturePath = existingItem.picture; 
     let newBody = req.body;
     // Nouveau chemin pour l'image
     if(filePath){
@@ -130,6 +129,22 @@ export const EditItem = async (req, res) => {
      newBody = {
       ...req.body,
       picture: normalizedPath,
+    }
+    const oldPicturePath = existingItem.picture; 
+
+    if (oldPicturePath && oldPicturePath !== normalizedPath) {
+      const oldFilePath = path.join(__dirname, "../", oldPicturePath); 
+      if(oldFilePath){
+      fs.unlink(oldFilePath, (err) => {
+        if (err) {
+          console.error(
+            "Erreur lors de la suppression de l'ancienne image : ",
+            err
+          );
+        } else {
+          console.log("Ancienne image supprimée : ", oldFilePath);
+        }
+      });}
     }
   
    // Mettre à jour les données dans la base de données
@@ -147,20 +162,7 @@ export const EditItem = async (req, res) => {
   }} catch (err) {
     res.status(500).json({ error: "Erreur lors de la modification de l'item" });
   }
-  finally{
-    if (oldPicturePath && oldPicturePath !== normalizedPath) {
-      const oldFilePath = path.join(__dirname, "../", oldPicturePath); 
-      fs.unlink(oldFilePath, (err) => {
-        if (err) {
-          console.error(
-            "Erreur lors de la suppression de l'ancienne image : ",
-            err
-          );
-        } else {
-          console.log("Ancienne image supprimée : ", oldFilePath);
-        }
-      });
-    }};
+  
 
   }
 
