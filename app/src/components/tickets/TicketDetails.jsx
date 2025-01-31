@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { formatDateToDateHourMinute } from "../../utils/tools";
 import { useDispatch, useSelector } from "react-redux";
-import { selectTicketObjects } from "../../features/demande/demandeSelector";
+import { selectTicketObjects, selectUserInfos } from "../../features/demande/demandeSelector";
 import CardForTicket from "./CardForTicket";
 import { loadMaterielByIds } from "../../features/demande/reservationsAsyncAction";
 import { Link } from "react-router-dom";
+import { userInfo } from "os";
 
 const TicketDetails = ({ ticket, onClose }) => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const TicketDetails = ({ ticket, onClose }) => {
     }, [dispatch, ticket.items]);
 
     const objects = useSelector(selectTicketObjects);
+    const user = useSelector(selectUserInfos);
 
     function formatGroupMembers(group) {
       const grouped = group.reduce((acc, member) => {
@@ -75,7 +77,7 @@ const TicketDetails = ({ ticket, onClose }) => {
             <span className="material-symbols-rounded">description</span>
             Voir le plan d'implantation
           </button>
-          {ticket.status === "pending" && 
+          {ticket.status === "pending" && user.role === "admin" &&
           <><Link className="rezav-button-2" to={`/reservation-confirmation/accept/${ticket.idStatus}`}>
               Accepter
             </Link><Link className="rezav-button-2" to={`/reservation-confirmation/reject/${ticket.idStatus}`}>
