@@ -8,8 +8,7 @@ import {
   selectSelectedTicket,
   selectUserInfos,
 } from "../features/demande/demandeSelector.js";
-import { getReservationByUserId } from "../features/demande/reservationsAsyncAction.js";
-import { loadReservations } from "../features/tickets/ticketAsyncAction.js";
+import { getReservationByUserId, loadReservation } from "../features/demande/reservationsAsyncAction.js";
 import Ticket from "../components/tickets/Ticket.jsx";
 import TicketDetails from "../components/tickets/TicketDetails.jsx";
 import "../assets/styles/ticketDetails.scss";
@@ -28,7 +27,7 @@ const Demarches = () => {
 
   useEffect(() => {
     if (user.role === "admin") {
-      dispatch(loadReservations());
+      dispatch(loadReservation());
     } else {
       dispatch(getReservationByUserId(user.idUser));
     }

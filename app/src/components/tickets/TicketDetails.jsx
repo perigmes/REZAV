@@ -78,7 +78,7 @@ const TicketDetails = ({ ticket, onClose }) => {
           {ticket.status === "pending" && 
           <><Link className="rezav-button-2" to={`/reservation-confirmation/accept/${ticket.idStatus}`}>
               Accepter
-            </Link><Link className="rezav-button-2" to={`reservation-confirmation/reject/${ticket.idStatus}`}>
+            </Link><Link className="rezav-button-2" to={`/reservation-confirmation/reject/${ticket.idStatus}`}>
                 Refuser
               </Link></>}
         </div>
