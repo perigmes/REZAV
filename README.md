@@ -41,8 +41,25 @@ REZAV est une application de gestion de réservations du matériel audiovisuel d
     ```ssh
      ssh etudiant@172.18.68.101 -L 27018:localhost:27017
      ```
-    lancer la VM: 
-    docker compose exec -ti reserver mongo -u etudiant -p SAE501
+5. lancer la VM: 
+    ```
+    docker compose up
+    ```
+6. Si noueau push sur le main, aller dans dossier REZAV
+
+    ```
+    cd REZAV
+    git pull 
+    docker compose --profile front-builder up -d --force-recreate
+    ```
+7. Retourner sur le dossier principal puis couper la vm : 
+    ```
+    docker ocmpose down
+    ```
+8. puis la relancer : 
+    ```
+    docker compose up
+    ```
 
 ## Contribuer
 
